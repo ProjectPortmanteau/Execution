@@ -1,0 +1,8 @@
+iLLPortStudios_Genesis/       <-- Your main project folder
+├── .git/                     <-- (This is hidden, created by `git init`)
+├── 00_RMM_PHILOSOPHY/
+├── 01_PROJECT_PORTMANTEAU_IP/
+├── 02_PFE_METHODOLOGY/
+├── 03_OPVS_PLATFORM/
+├── 04_RMM_PROFILE_METHOD/
+└── 05_STRATEGIC_ANALYSIS/
