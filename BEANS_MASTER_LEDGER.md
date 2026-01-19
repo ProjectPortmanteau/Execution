@@ -45,7 +45,7 @@ This ledger indexes the per-layer Bean files and key project artifacts in this r
 ---
 
 ## Provenance & Contributing
-- Provenance archive: beans/_sources.json — committed (detailed mapping of Bean ID → original source IDs).
+- Provenance archive: beans/_sources.json — committed (detailed mapping of Bean ID → original source IDs).(Genesis Bean Sources - NotebookLM)
 - CONTRIBUTING.md — committed (front-matter schema, naming rules, commit template).
 
 ---
