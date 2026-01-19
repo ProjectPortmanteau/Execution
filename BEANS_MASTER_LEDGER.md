@@ -1,24 +1,55 @@
-# BEANS_MASTER_LEDGER.md
-**Project:** Portmanteau (iLL Port Studios)
-**Classification:** Genesis Repository / Source of Truth
-**Architect:** Robert Miller (RMM)
-**Co-Pilot:** Sim-Boolean
-**Version:** 1.0 (Conceptual Phase Complete)
+# BEANS MASTER LEDGER
+
+Last updated: 2026-01-19 (by @ProjectPortmanteau via Copilot)
+
+This ledger indexes the per-layer Bean files and key project artifacts in this repository.
+
+## Overview
+- Purpose: Human- and machine-readable index for Beans (Layers 0–5) and related project files.
+- Status: Updated. Layers 0–5 committed. Provenance archive and CONTRIBUTING.md committed.
 
 ---
 
-## 📂 Table of Contents
-1.  [00_Philosophy: The Soul Code](beans/00_Philosophy.md)
-2.  [01_Layer_1: The Visionary Blueprint](beans/01_Layer_1_Visionary_Blueprint.md)
-3.  [02_Layer_2: The Narrative Roadmap](beans/02_Layer_2_Narrative_Roadmap.md)
-4.  [03_Layer_3: Execution & Scene Construction](beans/03_Layer_3_Execution.md)
-5.  [04_Layer_4: World Weaving (Lore)](beans/04_Layer_4_Lore.md)
-6.  [05_Layer_5: Process Chronicle (Behind the Curtain)](beans/05_Layer_5_Process.md)
-7.  [06_The_Stumpy_List: Major Solutions](beans/06_Stumpy_List.md)
-8.  [07_OPVS_Architecture: The Platform](beans/07_OPVS_OPVS_Architecture.md)
+## Ledger Entries
+
+- Layer 0 — Philosophy (cleaned)
+  - File: beans/00_Philosophy.md
+  - URL: https://github.com/ProjectPortmanteau/Execution/blob/main/beans/00_Philosophy.md
+  - Status: committed
+
+- Layer 1 — Visionary Blueprint (cleaned)
+  - File: beans/01_Layer_1_Visionary_Blueprint.md
+  - URL: https://github.com/ProjectPortmanteau/Execution/blob/main/beans/01_Layer_1_Visionary_Blueprint.md
+  - Status: committed
+
+- Layer 2 — Narrative Roadmap (cleaned)
+  - File: beans/02_Layer_2_Narrative_Roadmap.md
+  - URL: https://github.com/ProjectPortmanteau/Execution/blob/main/beans/02_Layer_2_Narrative_Roadmap.md
+  - Status: committed
+
+- Layer 3 — Execution & Scene Construction (cleaned)
+  - File: beans/03_Layer_3_Execution.md
+  - URL: https://github.com/ProjectPortmanteau/Execution/blob/main/beans/03_Layer_3_Execution.md
+  - Status: committed
+
+- Layer 4 — World Weaving (Lore & Physics) (cleaned)
+  - File: beans/04_Layer_4_Lore.md
+  - URL: https://github.com/ProjectPortmanteau/Execution/blob/main/beans/04_Layer_4_Lore.md
+  - Status: committed
+
+- Layer 5 — Process Chronicle (committed)
+  - File: beans/05_Layer_5_Process.md
+  - URL: https://github.com/ProjectPortmanteau/Execution/blob/main/beans/05_Layer_5_Process.md
+  - Status: committed
 
 ---
 
-This repository root file is the Master Index. It points to per-layer files under the /beans directory to keep the full ledger navigable and performant. Layers 1 and 2 have been expanded into individual files.
+## Provenance & Contributing
+- Provenance archive: beans/_sources.json — committed (detailed mapping of Bean ID → original source IDs).
+- CONTRIBUTING.md — committed (front-matter schema, naming rules, commit template).
 
-**[SYSTEM NOTE]:** *This Ledger is a living document. It represents the "Perfect Record" at the conclusion of the Conceptual Architecture Phase. Proceed to Act III.*
+---
+
+If anything else from our chat is missing, please tell me and I will add it in the next commit.
+
+(End of ledger)
