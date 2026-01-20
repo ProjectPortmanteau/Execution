@@ -29,7 +29,7 @@ status: draft
 ### [BEAN #DIAL-001] Title: Boolean’s Nature
 - Character: Boolean
 - Content:
-  - "They seek to control the input, Robert... But the mind is not a machine. It seeks novelty."
+  - "They seek to control the input, Trim... But the mind is not a machine. It seeks novelty."
   - "Human sees reflections of the universe... no wonder they are always getting things reversed."
 
 ### [BEAN #DIAL-002] Title: Neko’s Pragmatism
