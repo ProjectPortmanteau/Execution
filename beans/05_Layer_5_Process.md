@@ -29,6 +29,6 @@ status: draft
 - Aphorism: "You don’t have to be just one thing."
 
 ## [BEAN #META-001] Title: RMM Self-Reflection (The "Smudge Factor")
-- Content: "I skip to the good part sometimes — the 'Smudge Factor' is where creative license lives.",
+- Content: "I skip to the good part sometimes. The 'Smudge Factor' is where creative license lives.",
 
 (End of Layer 5 file)
