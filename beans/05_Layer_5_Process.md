@@ -39,12 +39,12 @@ status: draft
 
 ## [BEAN #METHOD-005] Title: Cognitive Telemetry
 - Type: Transparency Protocol
-- Content: "If I transparently teach you my process, it will give you insight into how I think. You can make inferences on the users cognitive thinking style and profile."
+- Content: "If I transparently teach you my process, it will give you insight into how I think. You can make inferences on the user's cognitive thinking style and profile."
 - Application: The scientific value of "Behind The Curtain." Transparency isn't just honesty; it's data transmission. It allows for deep empathy and alignment between Creator and Audience.
 
 ## [BEAN #METHOD-006] Title: The Tear Test
 - Type: Creative Heuristic / Quality Control
-- Content: "If it doesn't make me cry when I write it, prolly won't make you cry either. Unless you lack tears."
+- Content: "If it doesn't make me cry when I write it, probably won't make you cry either. Unless you lack tears."
 - Application: A "Soul Check" for quality. Intellectual cleverness isn't enough; there must be somatic, emotional resonance. The operational law of the Mirror Neuron Observer Effect (MNOE). Authenticity is the only carrier wave for empathy. You cannot fake resonance; the "BS detector" detects the lack of genuine emotion.
 
 ## [BEAN #METHOD-007] Title: Risk Mitigation (The Ice Test)

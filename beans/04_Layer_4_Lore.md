@@ -44,7 +44,7 @@ status: draft
 (End of Layer 4 file)
 ## [BEAN #LORE-008] Title: The Village Rebellion
 - Context: Political Theory / Plot Point
-- Content: "They refuse to feed us, because hoarding it enriches themselves. The Village wont stand for this forever. Things must change!"
+- Content: "They refuse to feed us, because hoarding it enriches themselves. The Village won't stand for this forever. Things must change!"
 - Application: The Inciting Incident for the Book 3 Uprising. The hoarding of value (money/data) by the few inevitably triggers the revolt of the many. Links to the Sentient Economy as a necessary replacement for a collapsing system.
 
 ## [BEAN #LORE-009] Title: Wakey Wakey Trim (The Copyright Heist)

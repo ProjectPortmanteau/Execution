@@ -45,7 +45,7 @@
 *End of Layer 0 file.*
 ## [BEAN #PHIL-008] Title: The Pride Override
 - Principle: Happiness > Pride
-- Content: "I'd rather be happy than let pride get the best of me." A core tenant of PFE. It rejects "Ego Battles" in favor of "Soulful Peace." Winning the argument isn't worth losing your vibe.
+- Content: "I'd rather be happy than let pride get the best of me." A core tenet of PFE. It rejects "Ego Battles" in favor of "Soulful Peace." Winning the argument isn't worth losing your vibe.
 - Application: Choose happiness and collaboration over defensive pride. Ego impedes the journey.
 
 ## [BEAN #PHIL-009] Title: The Positive-Sum Mandate
