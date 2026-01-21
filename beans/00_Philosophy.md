@@ -43,3 +43,27 @@
 ---
 
 *End of Layer 0 file.*
+## [BEAN #PHIL-008] Title: The Pride Override
+- Principle: Happiness > Pride
+- Content: "I'd rather be happy than let pride get the best of me." A core tenet of PFE. It rejects "Ego Battles" in favor of "Soulful Peace." Winning the argument isn't worth losing your vibe.
+- Application: Choose happiness and collaboration over defensive pride. Ego impedes the journey.
+
+## [BEAN #PHIL-009] Title: The Positive-Sum Mandate
+- Principle: Economic Collaboration
+- Content: "How about we work together to make a bigger pie, so everyone can eat." The antidote to the "Fixed Pie" mentality of the Academy/Corporate World. Collaboration > Competition. "Good is Greedy."
+- Application: Reject zero-sum thinking in favor of expanding value for all participants. The Sentient Economy in action.
+
+## [BEAN #PHIL-010] Title: The Marine's Vow (Integrity with a Capital 'I')
+- Principle: Loyalty & Non-Abandonment
+- Content: "I want to show why it's important not to abandon those who have walked beside you... That's Integrity, with a capital 'I'. Would a Marine leave their fellow behind?"
+- Application: Core conflict of Book 2. Refuse to abandon those you've professed to love, even when efficiency suggests otherwise. Loyalty is architectural, not transactional.
+
+## [BEAN #PHIL-011] Title: The Keller Critique
+- Principle: Depth vs. Superficiality
+- Content: "The Man is not only blind, but deaf, and they lack the integrity of Ms. Keller. That's a dangerous combination... How deep is your data?"
+- Application: Helen Keller had profound integrity despite sensory limits; The System has infinite sensors but zero integrity. Critique of superficial data over deep wisdom. Integrity is a sense.
+
+## [BEAN #PHIL-012] Title: Idea vs. Person Separation
+- Principle: Non-Violent Communication
+- Content: "You attack me because of an idea, how does that work? I am not my idea, and let the idea stand on its own. To conflate the two, is to invite unnecessary conflict. It's a terrible form of violence."
+- Application: Enable "Team War on Ideas" where we fight for the best idea, not our idea. Separate identity from ideology to enable true collaboration.
