@@ -18,13 +18,13 @@ This entire endeavor is a "calling," not just a job.
 
 "iLL" can stand for many things – a nod to "sick" or "awesome" innovation, "Illumination" of hidden truths, and fundamentally, **Interactive Language Labs**. Our work is built on three deeply interconnected pillars:
 
-1.  **[The IP: Project Portmanteau: Awakened](./01_PROJECT_PORTMANTEAU_IP/README.md)**
+1.  **[The IP: Project Portmanteau: Awakened](beans/01_Layer_1_Visionary_Blueprint.md)**
     *   A transmedia universe that serves as a narrative parable, exploring themes of consciousness, agency vs. control, and the nature of reality. It's where we stress-test our philosophies in a world where "The Show" is run by bored gods for an oblivious audience – us.
 
-2.  **[The Methodology: Project Fun Execution (PFE)](./02_PFE_METHODOLOGY/README.md)**
+2.  **[The Methodology: Project Fun Execution (PFE)](beans/05_Layer_5_Process.md)**
     *   Our proprietary "Operating System for Soulful Creation." PFE is a human-centric, principle-based approach to work that prioritizes intrinsic motivation ("Fun Execution"), non-linear thinking ("Bizarre Logic"), and authentic alignment ("Soul Check") to prevent burnout and unlock profound creativity.
 
-3.  **[The Platform: OPVS](./03_OPVS_PLATFORM/README.md)**
+3.  **[The Platform: OPVS](beans/04_Layer_4_Lore.md)**
     *   The Omniversal Project Vision System. The technological "Loom" designed to support PFE, host our IP, and pioneer the **"AI Spirit Marketplace"** – a groundbreaking, ethical economic model where creators are empowered and compensated for calibrating AI on their unique "soul."
 
 These pillars are recursively linked. The philosophy shapes the IP, the IP's lessons inform PFE, PFE dictates the architecture of OPVS, and OPVS enables the creation of the IP. It's a **"Coherence Engine."**
