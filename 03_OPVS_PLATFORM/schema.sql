@@ -11,7 +11,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email VARCHAR(255) NOT NULL UNIQUE,
-    wallet_address VARCHAR(255) NULL,  -- For MPC wallet
+    wallet_address TEXT NULL,  -- For MPC wallet (supports multiple blockchain formats)
     riss_score INTEGER NOT NULL DEFAULT 0,  -- "Resonance & Integrity Score"
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -35,9 +35,9 @@ CREATE TABLE beans (
     layer INTEGER NOT NULL CHECK (layer >= 1 AND layer <= 5),  -- Layer 1 to 5
     metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
     is_minted BOOLEAN NOT NULL DEFAULT FALSE,
-    token_id VARCHAR(255) NULL,
-    tx_hash VARCHAR(255) NULL,
-    ipfs_cid VARCHAR(255) NULL,
+    token_id TEXT NULL,  -- Flexible for various token ID formats
+    tx_hash TEXT NULL,  -- Supports transaction hashes from various blockchains
+    ipfs_cid TEXT NULL,  -- Supports CIDv0 and CIDv1 formats
     last_synced_at TIMESTAMP NULL,  -- For GitHub Sync
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
