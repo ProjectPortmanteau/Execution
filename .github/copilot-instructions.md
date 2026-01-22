@@ -62,17 +62,23 @@ Each "Bean" is an atomic unit of knowledge structured into six layers:
 - File naming convention: `beans/XX_Layer_X_<Name>.md` (e.g., `beans/01_Layer_1_Visionary_Blueprint.md`)
 - Never rename existing Bean files without updating references in BEANS_MASTER_LEDGER.md
 
-### Frontmatter Requirements (YAML)
-Every Bean file MUST include frontmatter at the top:
+### Bean Structure
+Bean files currently use a section-based format with `---` separators and inline Bean identifiers:
 
-```yaml
+```markdown
 ---
-id: stable-id-here          # e.g., layer-1, layer-0-philosophy
-title: Human-Readable Title
-tags: [tag1, tag2]         # Relevant categorization
-status: draft | verified | archived
 ---
+# Layer X: Title
+---
+---
+
+## [BEAN #ID] Title: Bean Name
+- Principle: ...
+- Content: ...
+- Application: ...
 ```
+
+**Note**: Beans are tracked in the `_sources.json` provenance system rather than individual file frontmatter. When adding new Beans, ensure they are properly registered in `_sources.json`.
 
 ### Source Attribution
 - **DO NOT** include inline `[Source ...]` citations in Bean files
@@ -104,13 +110,14 @@ Example: `Update beans/00_Philosophy.md — Copilot Agent`
 6. **Modify files without updating the ledger** — Keep BEANS_MASTER_LEDGER.md synchronized
 
 ### ALWAYS:
-1. **Preserve YAML frontmatter** in all Bean files
+1. **Preserve Bean structure** with proper `[BEAN #ID]` identifiers
 2. **Update BEANS_MASTER_LEDGER.md** when adding/modifying Beans
-3. **Follow the commit message template** for consistency
-4. **Check for cross-layer coherence** when making changes
-5. **Respect the PFE methodology** — "Fun Execution," "Bizarre Logic," and "Soul Check"
-6. **Use markdown formatting** consistent with existing files
-7. **Include context in commit messages** explaining the "why" of changes
+3. **Register new Beans in `beans/_sources.json`** with proper provenance
+4. **Follow the commit message template** for consistency
+5. **Check for cross-layer coherence** when making changes
+6. **Respect the PFE methodology** — "Fun Execution," "Bizarre Logic," and "Soul Check"
+7. **Use markdown formatting** consistent with existing files
+8. **Include context in commit messages** explaining the "why" of changes
 
 ## Key Concepts to Understand
 
@@ -130,18 +137,21 @@ The recursive relationship: Philosophy → IP → PFE → OPVS → back to Philo
 
 Since this is a documentation repository, validation is primarily about:
 
-1. **Format Validation**: Ensure YAML frontmatter is valid
+1. **Format Validation**: Ensure Bean structure follows the `[BEAN #ID]` format
 2. **Link Checking**: Verify internal links between Beans work correctly
 3. **Coherence Review**: Check that changes align with the layered architecture
 4. **Markdown Linting**: Maintain consistent markdown formatting
 5. **Ledger Sync**: Verify BEANS_MASTER_LEDGER.md is up-to-date
+6. **Provenance Tracking**: Ensure `_sources.json` is properly maintained
 
-### Commands (when applicable)
-```bash
-# Validate YAML frontmatter (if tooling is added)
-# Check for broken links
-# Lint markdown files
-```
+### Validation Checklist
+When making changes, verify:
+- [ ] Bean IDs are unique and follow naming conventions (e.g., `PHIL-001`, `LORE-005`)
+- [ ] All new Beans are registered in `beans/_sources.json`
+- [ ] BEANS_MASTER_LEDGER.md reflects the current state
+- [ ] Cross-references between layers are intact
+- [ ] Markdown formatting is consistent with existing files
+- [ ] Source citations are properly tracked in `_sources.json`
 
 ## Style Guidelines
 
@@ -202,17 +212,18 @@ This supports the PFE methodology outlined in Layer 5.
 Add new Bean: Layer 4 - RISS Mechanics
 
 ## Details
-- Created beans/04_RISS_Mechanics.md with full YAML frontmatter
+- Created BEAN #LORE-013 in beans/04_Layer_4_Lore.md
 - Added entry to BEANS_MASTER_LEDGER.md
 - Documented the Relational Intelligence Support System
 - Cross-referenced with Layer 5 PFE methodology
+- Registered in beans/_sources.json with provenance
 
 ## Rationale
 RISS is a core concept in the OPVS platform and needed dedicated documentation
 to support both technical implementation and narrative integration.
 
 ## Checklist
-- [x] YAML frontmatter included
+- [x] Bean ID assigned (LORE-013)
 - [x] Ledger updated
 - [x] Provenance added to _sources.json
 - [x] Cross-layer references checked
