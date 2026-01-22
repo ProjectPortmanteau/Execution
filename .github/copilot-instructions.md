@@ -165,20 +165,20 @@ When making changes, verify:
 - Use ATX-style headers (`#`, `##`, `###`)
 - Include blank lines around headers and lists
 - Use fenced code blocks with language identifiers
-- Keep lines reasonably length (soft wrap around 100-120 chars for readability)
+- Keep lines reasonably long (soft wrap around 100-120 chars for readability)
 - Use emphasis (`*italic*`, `**bold**`) sparingly and consistently
 
 ### Code Examples (when needed)
-```markdown
-<!-- Good: Clear context and purpose -->
-Example configuration for OPVS:
+
+Good: Clear context and purpose
+
 ```sql
+-- Example configuration for OPVS database
 CREATE TABLE beans (
     id VARCHAR(50) PRIMARY KEY,
     layer INT NOT NULL,
     status VARCHAR(20)
 );
-```
 ```
 
 ## Working with Issues & PRs
