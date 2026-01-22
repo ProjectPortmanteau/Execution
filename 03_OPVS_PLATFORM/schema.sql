@@ -5,6 +5,15 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- ============================================================================
+-- ENUMS
+-- ============================================================================
+-- Bean types enum
+CREATE TYPE bean_type AS ENUM ('SPARK', 'LORE', 'BLOCKER', 'SOLUTION');
+
+-- Resonance types enum for bean relationships
+CREATE TYPE resonance_type AS ENUM ('HARMONIZES_WITH', 'DISRUPTS', 'SUPPORTS', 'CONTRADICTS', 'EXTENDS', 'REFERENCES');
+
+-- ============================================================================
 -- TABLE: users
 -- ============================================================================
 -- Stores user information including wallet addresses and RISS scores
@@ -31,7 +40,7 @@ CREATE TABLE beans (
     user_id UUID NOT NULL,
     title VARCHAR(500) NOT NULL,
     content TEXT NOT NULL,  -- Markdown content
-    type VARCHAR(50) NOT NULL,  -- e.g., "SPARK", "LORE", "BLOCKER", "SOLUTION"
+    type bean_type NOT NULL,  -- SPARK, LORE, BLOCKER, or SOLUTION
     layer INTEGER NOT NULL CHECK (layer >= 1 AND layer <= 5),  -- Layer 1 to 5
     metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
     is_minted BOOLEAN NOT NULL DEFAULT FALSE,
@@ -67,7 +76,7 @@ CREATE INDEX idx_beans_metadata ON beans USING GIN(metadata);
 CREATE TABLE bean_strings (
     source_bean_id UUID NOT NULL,
     target_bean_id UUID NOT NULL,
-    resonance_type VARCHAR(50) NOT NULL,  -- e.g., "HARMONIZES_WITH", "DISRUPTS"
+    resonance_type resonance_type NOT NULL,  -- Type of relationship
     tension INTEGER NOT NULL CHECK (tension >= 1 AND tension <= 10),  -- Tension level 1-10
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     
@@ -81,7 +90,10 @@ CREATE TABLE bean_strings (
     CONSTRAINT chk_bean_strings_no_self_reference CHECK (source_bean_id != target_bean_id),
     
     -- Composite primary key to prevent duplicate connections
-    PRIMARY KEY (source_bean_id, target_bean_id)
+    PRIMARY KEY (source_bean_id, target_bean_id),
+    
+    -- Ensure bidirectional uniqueness: prevent both A->B and B->A
+    CONSTRAINT chk_bean_strings_unique_pair CHECK (source_bean_id < target_bean_id)
 );
 
 -- Index for reverse lookups (finding all beans connected TO a specific bean)
@@ -117,12 +129,12 @@ COMMENT ON COLUMN users.riss_score IS 'Resonance & Integrity Score - measures us
 COMMENT ON COLUMN users.wallet_address IS 'MPC wallet address for blockchain interactions';
 
 COMMENT ON TABLE beans IS 'Atomic units of work, ideas, or content in the OPVS system';
-COMMENT ON COLUMN beans.type IS 'Bean type: SPARK, LORE, BLOCKER, or SOLUTION';
+COMMENT ON COLUMN beans.type IS 'Bean type: SPARK, LORE, BLOCKER, or SOLUTION (enforced by ENUM)';
 COMMENT ON COLUMN beans.layer IS 'Layer number from 1 to 5';
 COMMENT ON COLUMN beans.metadata IS 'Additional flexible data stored as JSON';
 COMMENT ON COLUMN beans.is_minted IS 'Whether the bean has been minted as an NFT';
 COMMENT ON COLUMN beans.last_synced_at IS 'Last time this bean was synced with GitHub';
 
 COMMENT ON TABLE bean_strings IS 'Connections and relationships between beans';
-COMMENT ON COLUMN bean_strings.resonance_type IS 'Type of relationship: HARMONIZES_WITH, DISRUPTS, etc.';
+COMMENT ON COLUMN bean_strings.resonance_type IS 'Type of relationship (enforced by ENUM): HARMONIZES_WITH, DISRUPTS, SUPPORTS, CONTRADICTS, EXTENDS, or REFERENCES';
 COMMENT ON COLUMN bean_strings.tension IS 'Tension level of the relationship (1-10)';
