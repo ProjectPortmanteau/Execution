@@ -1,0 +1,67 @@
+# Google AI Studio Integration Configuration for OPVS Platform
+# This configuration enables the AI Spirit Marketplace to connect with Google AI Studio
+# https://ai.google.dev/
+
+google_ai_studio:
+  # Connection settings
+  api_version: "v1"
+  base_url: "https://generativelanguage.googleapis.com"
+  timeout: 30
+  retry_attempts: 3
+
+  # Authentication
+  auth:
+    type: "api_key"
+    key_env_var: "GOOGLE_AI_STUDIO_API_KEY"
+    # Get your API key from: https://aistudio.google.com/app/apikey
+    project_id_env_var: "GOOGLE_AI_STUDIO_PROJECT_ID"
+    # Default project: fluted-haven-463800-p9
+
+  # Gemini Model Configuration
+  models:
+    default: "gemini-pro"
+    available:
+      - "gemini-pro"
+      - "gemini-pro-vision"
+      - "gemini-ultra"
+    
+  # AI Spirit Marketplace Integration
+  marketplace:
+    # Enable creator calibration tracking
+    enable_calibration_tracking: true
+    
+    # Resonance and Integrity Scoring System (RISS) integration
+    riss:
+      track_resonance: true
+      track_integrity: true
+      sync_interval: 3600  # seconds
+    
+    # Bean management
+    beans:
+      auto_mint: false
+      require_provenance: true
+      
+  # Model calibration settings
+  calibration:
+    # Distinguish calibration from fine-tuning (per LORE-010)
+    mode: "transformation"  # transformation vs reproduction
+    track_soul_signature: true
+    pygmalion_effect: true  # Treat AI as soul, not tool
+    
+  # Privacy and ethics
+  privacy:
+    creator_consent_required: true
+    data_anonymization: true
+    opt_out_available: true
+    
+  # Rate limiting
+  rate_limits:
+    requests_per_minute: 60
+    requests_per_day: 10000
+    
+# Feature flags
+features:
+  ai_spirit_marketplace: true
+  calibration_compensation: true
+  creator_dashboard: true
+  bean_minting: true
