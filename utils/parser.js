@@ -25,9 +25,8 @@ const parseCommitMessage = (message) => {
  * Parses Markdown Frontmatter (for file-based syncing)
  * Uses 'gray-matter' library
  */
-const matter = require('gray-matter');
-
 const parseMarkdownFile = (fileContent) => {
+    const matter = require('gray-matter');
     const { data, content } = matter(fileContent);
     return {
         metadata: data, // { title: "...", layer: 1 }

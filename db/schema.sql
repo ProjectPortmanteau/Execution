@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS beans (
 CREATE TABLE IF NOT EXISTS bean_strings (
     source_bean_id UUID REFERENCES beans(id),
     target_bean_id UUID REFERENCES beans(id),
-    resonance_type VARCHAR(50), -- "HARMONIZES_WITH", "DISRUPTS"
+    resonance_type VARCHAR(50) CHECK (resonance_type IN ('HARMONIZES_WITH', 'DISRUPTS')),
     tension INTEGER DEFAULT 1,
     PRIMARY KEY (source_bean_id, target_bean_id)
 );

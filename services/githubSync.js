@@ -4,19 +4,35 @@ const { parseCommitMessage, parseMarkdownFile } = require('../utils/parser');
 // You'll need a GitHub API client or simple-git here
 // For MVP, we simulate processing a Webhook payload
 
+// Configuration constants
+const SYSTEM_USER_ID = "00000000-0000-0000-0000-000000000000"; // Placeholder for 'System/Robert'
+
 let db = null;
+let dbConnecting = null;
 
 const getDbConnection = async () => {
-    if (!db) {
-        db = new Client({ connectionString: process.env.DATABASE_URL });
-        await db.connect();
+    if (db) {
+        return db;
     }
-    return db;
+    
+    // Prevent race condition - if already connecting, wait for that promise
+    if (dbConnecting) {
+        return dbConnecting;
+    }
+    
+    dbConnecting = (async () => {
+        const client = new Client({ connectionString: process.env.DATABASE_URL });
+        await client.connect();
+        db = client;
+        dbConnecting = null;
+        return db;
+    })();
+    
+    return dbConnecting;
 };
 
 const handleGitHubPush = async (payload) => {
     const commits = payload.commits; // From GitHub Webhook JSON
-    const userId = "00000000-0000-0000-0000-000000000000"; // Placeholder for 'System/Robert'
     const dbClient = await getDbConnection();
 
     for (const commit of commits) {
@@ -36,7 +52,7 @@ const handleGitHubPush = async (payload) => {
                     RETURNING id
                 `;
                 const values = [
-                    userId, 
+                    SYSTEM_USER_ID, 
                     parsed.content, 
                     parsed.type, 
                     commit.id, 
@@ -53,7 +69,8 @@ const handleGitHubPush = async (payload) => {
                 }
 
             } catch (err) {
-                console.error("Error creating Bean:", err);
+                console.error(`Error creating Bean for commit ${commit.id}:`, err);
+                console.error(`Parsed content: ${JSON.stringify(parsed)}`);
             }
         } else {
             console.log("> Standard commit. No Bean created.");
