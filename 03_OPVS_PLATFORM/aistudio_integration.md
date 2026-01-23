@@ -34,8 +34,8 @@ Google AI Studio integration enables **calibration** (transformation) rather tha
 # Required
 export GOOGLE_AI_STUDIO_API_KEY="your-api-key-here"
 
-# Optional
-export GOOGLE_AI_STUDIO_PROJECT_ID="your-project-id"
+# Project ID (for tracking and organization)
+export GOOGLE_AI_STUDIO_PROJECT_ID="fluted-haven-463800-p9"
 ```
 
 ### Configuration
@@ -247,9 +247,10 @@ from opvs.google_ai_studio import GoogleAIStudioClient, CalibrationMode
 # Configure Google AI Studio
 genai.configure(api_key=os.getenv('GOOGLE_AI_STUDIO_API_KEY'))
 
-# Initialize OPVS client
+# Initialize OPVS client with your project ID
 client = GoogleAIStudioClient(
     api_key=os.getenv('GOOGLE_AI_STUDIO_API_KEY'),
+    project_id=os.getenv('GOOGLE_AI_STUDIO_PROJECT_ID', 'fluted-haven-463800-p9'),
     config_path='aistudio_config.yaml'
 )
 

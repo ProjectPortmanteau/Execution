@@ -17,15 +17,17 @@ class GoogleAIStudioClient:
     Enables Gemini model calibration tracking and RISS (Resonance & Integrity Scoring).
     """
     
-    def __init__(self, api_key: str, config: Optional[Dict] = None):
+    def __init__(self, api_key: str, project_id: Optional[str] = None, config: Optional[Dict] = None):
         """
         Initialize Google AI Studio client.
         
         Args:
             api_key: Google AI Studio API key (get from https://aistudio.google.com/app/apikey)
+            project_id: Optional Google Cloud project ID (e.g., "fluted-haven-463800-p9")
             config: Optional configuration dictionary
         """
         self.api_key = api_key
+        self.project_id = project_id
         self.base_url = "https://generativelanguage.googleapis.com"
         self.config = config or {}
         self.default_model = self.config.get("default_model", "gemini-pro")
@@ -40,6 +42,8 @@ class GoogleAIStudioClient:
         # In a real implementation, this would verify the API key
         print(f"🔐 Authenticating with Google AI Studio")
         print(f"   API Endpoint: {self.base_url}")
+        if self.project_id:
+            print(f"   Project ID: {self.project_id}")
         print(f"✅ Authentication verified")
         return True
         
@@ -235,6 +239,7 @@ def example_usage():
     
     # Configuration
     api_key = os.getenv("GOOGLE_AI_STUDIO_API_KEY", "demo_api_key")
+    project_id = os.getenv("GOOGLE_AI_STUDIO_PROJECT_ID", "fluted-haven-463800-p9")
     
     if api_key == "demo_api_key":
         print("\n⚠️  Using demo API key. Set GOOGLE_AI_STUDIO_API_KEY for real usage.")
@@ -243,6 +248,7 @@ def example_usage():
     # Initialize client
     client = GoogleAIStudioClient(
         api_key=api_key,
+        project_id=project_id,
         config={"default_model": "gemini-pro"}
     )
     

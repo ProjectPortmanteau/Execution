@@ -14,6 +14,8 @@ google_ai_studio:
     type: "api_key"
     key_env_var: "GOOGLE_AI_STUDIO_API_KEY"
     # Get your API key from: https://aistudio.google.com/app/apikey
+    project_id_env_var: "GOOGLE_AI_STUDIO_PROJECT_ID"
+    # Default project: fluted-haven-463800-p9
 
   # Gemini Model Configuration
   models:

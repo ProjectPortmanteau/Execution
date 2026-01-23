@@ -84,6 +84,7 @@ Platform for:
 2. **Configure Google AI Studio**
    ```bash
    export GOOGLE_AI_STUDIO_API_KEY="your-api-key"
+   export GOOGLE_AI_STUDIO_PROJECT_ID="fluted-haven-463800-p9"
    # Get your key from: https://aistudio.google.com/app/apikey
    ```
 
@@ -119,7 +120,8 @@ See `aistudio_example.py` for a complete working example.
 from opvs.google_ai_studio import GoogleAIStudioClient
 
 client = GoogleAIStudioClient(
-    api_key=os.getenv('GOOGLE_AI_STUDIO_API_KEY')
+    api_key=os.getenv('GOOGLE_AI_STUDIO_API_KEY'),
+    project_id=os.getenv('GOOGLE_AI_STUDIO_PROJECT_ID', 'fluted-haven-463800-p9')
 )
 session = client.start_calibration_session(
     creator_id="your_id",
