@@ -4,12 +4,20 @@ const { parseCommitMessage, parseMarkdownFile } = require('../utils/parser');
 // You'll need a GitHub API client or simple-git here
 // For MVP, we simulate processing a Webhook payload
 
-const db = new Client({ connectionString: process.env.DATABASE_URL });
-db.connect();
+let db = null;
+
+const getDbConnection = async () => {
+    if (!db) {
+        db = new Client({ connectionString: process.env.DATABASE_URL });
+        await db.connect();
+    }
+    return db;
+};
 
 const handleGitHubPush = async (payload) => {
     const commits = payload.commits; // From GitHub Webhook JSON
     const userId = "00000000-0000-0000-0000-000000000000"; // Placeholder for 'System/Robert'
+    const dbClient = await getDbConnection();
 
     for (const commit of commits) {
         console.log(`Processing Commit: ${commit.id}`);
@@ -35,7 +43,7 @@ const handleGitHubPush = async (payload) => {
                     commit.url
                 ];
                 
-                const res = await db.query(query, values);
+                const res = await dbClient.query(query, values);
                 console.log(`> Bean Created: ${res.rows[0].id}`);
                 
                 // 3. (Optional) Check for Crystallization Trigger
