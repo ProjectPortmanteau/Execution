@@ -14,6 +14,50 @@ Our mission is to diagnose these "broken systems" and, through a combination of 
 
 This entire endeavor is a "calling," not just a job.
 
+## Getting Started
+
+### How to Download This Repository
+
+There are several ways to download and work with this repository:
+
+#### Option 1: Clone with Git (Recommended)
+
+If you have Git installed, clone the repository using HTTPS:
+
+```bash
+git clone https://github.com/ProjectPortmanteau/Execution.git
+cd Execution
+```
+
+Or using SSH (if you have SSH keys configured):
+
+```bash
+git clone git@github.com:ProjectPortmanteau/Execution.git
+cd Execution
+```
+
+#### Option 2: Download as ZIP
+
+1. Click the green **"Code"** button at the top of this repository
+2. Select **"Download ZIP"**
+3. Extract the ZIP file to your desired location
+
+#### Option 3: GitHub Desktop
+
+1. Click the green **"Code"** button at the top of this repository
+2. Select **"Open with GitHub Desktop"**
+3. Choose your local path and clone
+
+### Setup (Optional)
+
+If you want to run the Node.js components:
+
+```bash
+npm install
+```
+
+This will install the necessary dependencies defined in `package.json`.
+
 ## The iLL Port Studios Ecosystem
 
 "iLL" can stand for many things – a nod to "sick" or "awesome" innovation, "Illumination" of hidden truths, and fundamentally, **Interactive Language Labs**. Our work is built on three deeply interconnected pillars:
