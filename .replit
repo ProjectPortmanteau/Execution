@@ -1,0 +1,19 @@
+run = "npm start"
+entrypoint = "index.js"
+
+[nix]
+channel = "stable-23_11"
+
+[env]
+NODE_ENV = "production"
+
+[gitHubImport]
+requiredFiles = [".replit", "package.json"]
+
+[deployment]
+run = ["sh", "-c", "npm start"]
+deploymentTarget = "cloudrun"
+
+[[ports]]
+localPort = 3000
+externalPort = 80
