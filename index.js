@@ -22,9 +22,11 @@ app.post('/api/webhooks/github', async (req, res) => {
     const signature = req.headers['x-hub-signature-256'] || req.headers['x-hub-signature'];
     const webhookSecret = process.env.GITHUB_WEBHOOK_SECRET;
     
+    // Convert raw body to string once
+    const rawBody = req.body.toString('utf8');
+    
     // Verify webhook signature for security
     if (webhookSecret) {
-        const rawBody = req.body.toString('utf8');
         const isValid = verifyGitHubSignature(rawBody, signature, webhookSecret);
         
         if (!isValid) {
@@ -39,11 +41,15 @@ app.post('/api/webhooks/github', async (req, res) => {
     
     console.log("GitHub Webhook Received ⚓");
     
-    // Parse JSON from raw body
-    const payload = JSON.parse(req.body.toString('utf8'));
-    await handleGitHubPush(payload);
-    
-    res.status(200).send('Sync Complete');
+    // Parse JSON from raw body with error handling
+    try {
+        const payload = JSON.parse(rawBody);
+        await handleGitHubPush(payload);
+        res.status(200).send('Sync Complete');
+    } catch (error) {
+        console.error('⚠️  Failed to parse webhook payload:', error.message);
+        return res.status(400).send('Bad Request: Invalid JSON payload');
+    }
 });
 
 // 3. The Graph API (For Frontend)
