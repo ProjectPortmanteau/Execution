@@ -55,6 +55,7 @@ jobs:
               );
               console.log('Commit logged successfully');
             } catch (err) {
+              console.error('Failed to log commit:', err.message);
               console.log('Sync log table may not exist yet, skipping...');
             } finally {
               await pool.end();
