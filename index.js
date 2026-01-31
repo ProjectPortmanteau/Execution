@@ -2,8 +2,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { handleGitHubPush } = require('./services/githubSync');
+const { verifyGitHubSignature } = require('./utils/webhookSecurity');
 
 const app = express();
+
+// Use raw body parser for webhook signature verification
+app.use('/api/webhooks/github', bodyParser.raw({ type: 'application/json' }));
 app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 3000;
@@ -15,11 +19,29 @@ app.get('/', (req, res) => {
 
 // 2. The Webhook Listener (Connect this URL to GitHub)
 app.post('/api/webhooks/github', async (req, res) => {
-    const signature = req.headers['x-hub-signature'];
-    // TODO: Verify signature for security
+    const signature = req.headers['x-hub-signature-256'] || req.headers['x-hub-signature'];
+    const webhookSecret = process.env.GITHUB_WEBHOOK_SECRET;
+    
+    // Verify webhook signature for security
+    if (webhookSecret) {
+        const rawBody = req.body.toString('utf8');
+        const isValid = verifyGitHubSignature(rawBody, signature, webhookSecret);
+        
+        if (!isValid) {
+            console.error('⚠️  Invalid webhook signature - possible security breach attempt');
+            return res.status(401).send('Unauthorized: Invalid signature');
+        }
+        
+        console.log('✓ Webhook signature verified');
+    } else {
+        console.warn('⚠️  GITHUB_WEBHOOK_SECRET not set - webhook verification disabled');
+    }
     
     console.log("GitHub Webhook Received ⚓");
-    await handleGitHubPush(req.body);
+    
+    // Parse JSON from raw body
+    const payload = JSON.parse(req.body.toString('utf8'));
+    await handleGitHubPush(payload);
     
     res.status(200).send('Sync Complete');
 });

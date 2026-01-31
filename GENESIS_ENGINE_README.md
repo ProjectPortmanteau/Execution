@@ -35,6 +35,12 @@ npm install
 ```bash
 export DATABASE_URL="postgresql://user:password@localhost:5432/opvs"
 export PORT=3000  # Optional, defaults to 3000
+export GITHUB_WEBHOOK_SECRET="your_secure_webhook_secret_here"
+```
+
+To generate a secure webhook secret:
+```bash
+openssl rand -hex 32
 ```
 
 ## Running the Server
@@ -71,12 +77,25 @@ Returns nodes and links for graph visualization (implementation pending).
 
 ## GitHub Webhook Setup
 
-1. Go to your GitHub repository Settings → Webhooks
-2. Add a new webhook with:
+1. Generate a secure webhook secret:
+```bash
+openssl rand -hex 32
+```
+
+2. Set the secret as an environment variable:
+```bash
+export GITHUB_WEBHOOK_SECRET="your_generated_secret"
+```
+
+3. Go to your GitHub repository Settings → Webhooks
+4. Add a new webhook with:
    - Payload URL: `https://your-server.com/api/webhooks/github`
    - Content type: `application/json`
+   - Secret: Use the same secret you generated in step 1
    - Events: Just the push event
-3. Save the webhook
+5. Save the webhook
+
+**Security Note:** The webhook signature is automatically verified using HMAC-SHA256. Requests with invalid signatures will be rejected with a 401 Unauthorized response.
 
 ## Database Schema
 
@@ -92,7 +111,8 @@ Returns nodes and links for graph visualization (implementation pending).
 
 ## Security Notes
 
-- TODO: Implement webhook signature verification (x-hub-signature)
+- ✅ **Webhook signature verification implemented** - All webhook requests are verified using HMAC-SHA256
+- Set `GITHUB_WEBHOOK_SECRET` environment variable with a secure random string (use `openssl rand -hex 32`)
 - Store sensitive credentials in environment variables
 - Use SSL/TLS for production deployments
 
