@@ -18,6 +18,7 @@ app.get('/', (req, res) => {
 });
 
 // 2. The Webhook Listener (Connect this URL to GitHub)
+// TODO: Add rate limiting middleware to prevent abuse (e.g., express-rate-limit)
 app.post('/api/webhooks/github', async (req, res) => {
     const signature = req.headers['x-hub-signature-256'] || req.headers['x-hub-signature'];
     const webhookSecret = process.env.GITHUB_WEBHOOK_SECRET;

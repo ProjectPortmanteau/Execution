@@ -115,6 +115,7 @@ export GITHUB_WEBHOOK_SECRET="your_generated_secret"
 - Set `GITHUB_WEBHOOK_SECRET` environment variable with a secure random string (use `openssl rand -hex 32`)
 - Store sensitive credentials in environment variables
 - Use SSL/TLS for production deployments
+- **Recommended:** Add rate limiting middleware (e.g., `express-rate-limit`) to prevent abuse of webhook endpoints
 
 ## Development
 
