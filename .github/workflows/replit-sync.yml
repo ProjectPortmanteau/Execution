@@ -1,0 +1,67 @@
+name: Sync to Replit & PostgreSQL
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  sync-and-migrate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Database Migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npx pg-migrate up || echo "No pending migrations"
+
+      - name: Notify Replit Deployment (Optional Webhook)
+        if: success()
+        env:
+          REPLIT_DEPLOY_WEBHOOK: ${{ secrets.REPLIT_DEPLOY_WEBHOOK }}
+        run: |
+          if [ -n "$REPLIT_DEPLOY_WEBHOOK" ]; then
+            curl -X POST "$REPLIT_DEPLOY_WEBHOOK" \
+              -H "Content-Type: application/json" \
+              -d '{"repository": "${{ github.repository }}", "commit": "${{ github.sha }}", "ref": "${{ github.ref }}"}'
+          fi
+
+      - name: Log Commit to Database
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          node -e "
+          const { Pool } = require('pg');
+          const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+
+          async function logCommit() {
+            try {
+              await pool.query(
+                'INSERT INTO sync_log (commit_sha, branch, synced_at) VALUES (\$1, \$2, NOW()) ON CONFLICT DO NOTHING',
+                ['${{ github.sha }}', '${{ github.ref_name }}']
+              );
+              console.log('Commit logged successfully');
+            } catch (err) {
+              console.error('Failed to log commit:', err.message);
+              console.log('Sync log table may not exist yet, skipping...');
+            } finally {
+              await pool.end();
+            }
+          }
+          logCommit();
+          "

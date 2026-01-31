@@ -40,3 +40,11 @@ CREATE TABLE IF NOT EXISTS bean_strings (
     tension INTEGER DEFAULT 1,
     PRIMARY KEY (source_bean_id, target_bean_id)
 );
+
+-- 5. Sync Log (GitHub Commit Tracking)
+CREATE TABLE IF NOT EXISTS sync_log (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    commit_sha VARCHAR(255) UNIQUE NOT NULL,
+    branch VARCHAR(255),
+    synced_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
