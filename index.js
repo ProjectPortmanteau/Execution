@@ -37,11 +37,29 @@ app.get('/', (req, res) => {
         .msg { margin-top: 1rem; padding: 0.75rem; border-radius: 4px; display: none; }
         .msg.success { display: block; background: #0d2818; border: 1px solid #238636; color: #3fb950; }
         .msg.error { display: block; background: #280d0d; border: 1px solid #da3633; color: #f85149; }
+        .links-section { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 1.5rem; margin-top: 2rem; }
+        .links-section h2 { color: #58a6ff; margin-top: 0; }
+        .links-section ul { list-style: none; padding: 0; margin: 0; }
+        .links-section li { margin: 0.75rem 0; }
+        .links-section a { color: #58a6ff; text-decoration: none; font-size: 1rem; }
+        .links-section a:hover { text-decoration: underline; color: #79c0ff; }
+        .links-section .link-desc { color: #8b949e; font-size: 0.85rem; margin-left: 0.25rem; }
     </style>
 </head>
 <body>
     <h1>OPVS Genesis Engine</h1>
     <p class="status">&#x1F7E2; ONLINE</p>
+
+    <div class="links-section">
+        <h2>Links</h2>
+        <ul>
+            <li><a href="https://github.com/ProjectPortmanteau" target="_blank" rel="noopener noreferrer">&#x1F310; Organization</a> <span class="link-desc">— ProjectPortmanteau on GitHub</span></li>
+            <li><a href="https://github.com/ProjectPortmanteau/Execution" target="_blank" rel="noopener noreferrer">&#x1F4C2; Repository</a> <span class="link-desc">— Source of truth (The Ark)</span></li>
+            <li><a href="https://github.com/ProjectPortmanteau/Execution/blob/main/spirit-calibration/SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md" target="_blank" rel="noopener noreferrer">&#x2B50; Spirit Calibration Blueprint</a> <span class="link-desc">— Genesis Blueprint V1.0</span></li>
+            <li><a href="https://github.com/ProjectPortmanteau/Execution/blob/main/BEANS_MASTER_LEDGER.md" target="_blank" rel="noopener noreferrer">&#x1F4D6; Bean Master Ledger</a> <span class="link-desc">— Index of all Beans</span></li>
+            <li><a href="/api/graph" target="_blank" rel="noopener noreferrer">&#x1F578;&#xFE0F; Graph API</a> <span class="link-desc">— Bean knowledge graph endpoint</span></li>
+        </ul>
+    </div>
 
     <div class="feedback-section">
         <h2>Share Your Feedback</h2>
