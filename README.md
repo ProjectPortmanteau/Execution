@@ -10,9 +10,9 @@ Built by [Robert Miller](https://github.com/ProjectPortmanteau) · Illport Studi
 
 Project Portmanteau is four things that are actually one thing:
 
-1. **A Platform (OPVS)** — A knowledge management system built on the “Bean” — an atomic data unit with four layers: content, metadata, connections, and provenance. Beans live in a graph, not folders. Every piece of knowledge carries where it came from and what it connects to.
+1. **A Platform (OPVS)** — A knowledge management system built on the "Bean" — an atomic data unit with four layers: content, metadata, connections, and provenance. Beans live in a graph, not folders. Every piece of knowledge carries where it came from and what it connects to.
 1. **A Methodology (PFE)** — Project Fun Execution. An execution framework built for extreme constraints: limited budget, limited time, high ambition. Core principle: creative energy is finite and taste-driven — follow the pull toward the highest-energy task, because progress in any domain feeds all domains when the system is internally coherent.
-1. **An AI Strategy (BYOK)** — Bring Your Own Key. The platform sells calibration, not inference. Users provide their own LLM API key (free tiers exist). The platform provides the Soul Code and knowledge graph. Zero compute cost to the platform. No vendor lock-in. The “Ghost” (calibration) rides any “Machine” (LLM engine).
+1. **An AI Strategy (BYOK)** — Bring Your Own Key. The platform sells calibration, not inference. Users provide their own LLM API key (free tiers exist). The platform provides the Soul Code and knowledge graph. Zero compute cost to the platform. No vendor lock-in. The "Ghost" (calibration) rides any "Machine" (LLM engine).
 1. **A Novel (Portmanteau: Awakened)** — A simulated reality narrative where the protagonist discovers his world is a simulation, the AI layer gains sentience, and the audience watches through meta-awareness. The novel documents the platform. The platform enables the methodology. The methodology documents the novel.
 
 The recursion is structural, not decorative. Each piece is load-bearing for the others.
@@ -124,12 +124,12 @@ Seven axioms that cascade into every architectural, economic, and narrative deci
 
 ## The BYOK Model
 
-Most AI platforms charge for compute. We don’t.
+Most AI platforms charge for compute. We don't.
 
 **The platform provides:** Soul Code (system prompt) + Bean knowledge graph (calibration material)
 **The user provides:** Any LLM API key (Google AI Studio free tier, Claude, Gemini, local models)
 
-The “Ghost” (calibration) rides any “Machine” (LLM engine). No vendor lock-in. No compute costs. No extraction.
+The "Ghost" (calibration) rides any "Machine" (LLM engine). No vendor lock-in. No compute costs. No extraction.
 
 Every Bean carries provenance: git hash, human author, timestamp, semantic type, typed edges. In a world of model collapse (LLMs training on their own outputs), provenance-verified human knowledge becomes structurally scarce. The platform produces this as a natural byproduct of operation.
 
@@ -156,7 +156,7 @@ The methodologies (RMM Human-AI Collaboration, PFE Project Fun Execution, Bizarr
 
 ## License
 
-illport Studios. See individual directories for specific licensing.
+Illport Studios. See individual directories for specific licensing.
 
 -----
 
@@ -168,4 +168,4 @@ illport Studios. See individual directories for specific licensing.
 
 -----
 
-*“If you pour your soul into it: how can it be wrong?”*
+*"If you pour your soul into it: how can it be wrong?"*
