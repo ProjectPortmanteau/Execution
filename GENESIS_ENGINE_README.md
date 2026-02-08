@@ -58,7 +58,19 @@ npm start
 ## API Endpoints
 
 ### `GET /`
-Health check endpoint. Returns "OPVS Genesis Engine: ONLINE 🟢"
+Health check endpoint. Returns the OPVS Genesis Engine homepage with a user feedback form.
+
+### `POST /api/feedback`
+Accepts user feedback submitted from the homepage form.
+
+**Request body (JSON):**
+- `name` (string, optional) - Submitter's name, defaults to "Anonymous"
+- `email` (string, optional) - Submitter's email
+- `message` (string, required) - Feedback message
+
+**Responses:**
+- `201` - Feedback accepted
+- `400` - Missing or invalid message
 
 ### `POST /api/webhooks/github`
 GitHub webhook endpoint. Processes push events and syncs commits with semantic tags to the database.
