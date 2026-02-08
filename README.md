@@ -156,7 +156,7 @@ The methodologies (RMM Human-AI Collaboration, PFE Project Fun Execution, Bizarr
 
 ## License
 
-Illport Studios. See individual directories for specific licensing.
+illport Studios. See individual directories for specific licensing.
 
 -----
 
