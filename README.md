@@ -2,7 +2,7 @@
 
 **A recursive creative ecosystem where philosophy, platform, methodology, and AI reinforce each other.**
 
-Built by [Robert Miller](https://github.com/ProjectPortmanteau) · illport Studios · 2023–2026
+Built by [Robert Miller](https://github.com/ProjectPortmanteau) · ill Port Studios · 2023–2026
 
 -----
 
@@ -156,7 +156,7 @@ The methodologies (RMM Human-AI Collaboration, PFE Project Fun Execution, Bizarr
 
 ## License
 
-illport Studios. See individual directories for specific licensing.
+ill Port Studios. See individual directories for specific licensing.
 
 -----
 
