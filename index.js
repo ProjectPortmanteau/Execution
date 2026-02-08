@@ -12,12 +12,111 @@ app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 3000;
 
-// 1. Health Check
+// In-memory feedback store (until DB is connected)
+const feedbackStore = [];
+
+// 1. Homepage with Feedback Section
 app.get('/', (req, res) => {
-    res.send('OPVS Genesis Engine: ONLINE 🟢');
+    res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPVS Genesis Engine</title>
+    <style>
+        body { font-family: sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; background: #0d1117; color: #c9d1d9; }
+        h1 { color: #58a6ff; }
+        .status { color: #3fb950; font-size: 1.2rem; margin-bottom: 2rem; }
+        .feedback-section { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 1.5rem; margin-top: 2rem; }
+        .feedback-section h2 { color: #58a6ff; margin-top: 0; }
+        label { display: block; margin-top: 1rem; color: #8b949e; }
+        input, textarea { width: 100%; padding: 0.5rem; margin-top: 0.25rem; background: #0d1117; border: 1px solid #30363d; border-radius: 4px; color: #c9d1d9; box-sizing: border-box; }
+        textarea { min-height: 100px; resize: vertical; }
+        button { margin-top: 1rem; padding: 0.6rem 1.5rem; background: #238636; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; }
+        button:hover { background: #2ea043; }
+        .msg { margin-top: 1rem; padding: 0.75rem; border-radius: 4px; display: none; }
+        .msg.success { display: block; background: #0d2818; border: 1px solid #238636; color: #3fb950; }
+        .msg.error { display: block; background: #280d0d; border: 1px solid #da3633; color: #f85149; }
+    </style>
+</head>
+<body>
+    <h1>OPVS Genesis Engine</h1>
+    <p class="status">&#x1F7E2; ONLINE</p>
+
+    <div class="feedback-section">
+        <h2>Share Your Feedback</h2>
+        <p>Help us build better substitutes. Your voice matters.</p>
+        <form id="feedbackForm">
+            <label for="name">Name (optional)</label>
+            <input type="text" id="name" name="name" placeholder="Your name">
+            <label for="email">Email (optional)</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com">
+            <label for="message">Message <span style="color:#f85149">*</span></label>
+            <textarea id="message" name="message" placeholder="Tell us what you think..." required></textarea>
+            <button type="submit">Send Feedback</button>
+        </form>
+        <div id="result" class="msg"></div>
+    </div>
+
+    <script>
+        document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const result = document.getElementById('result');
+            result.className = 'msg';
+            result.style.display = 'none';
+            const body = {
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                message: document.getElementById('message').value.trim()
+            };
+            try {
+                const res = await fetch('/api/feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    result.textContent = data.message;
+                    result.className = 'msg success';
+                    document.getElementById('feedbackForm').reset();
+                } else {
+                    result.textContent = data.error || 'Something went wrong.';
+                    result.className = 'msg error';
+                }
+            } catch (err) {
+                result.textContent = 'Network error. Please try again.';
+                result.className = 'msg error';
+            }
+        });
+    </script>
+</body>
+</html>`);
 });
 
-// 2. The Webhook Listener (Connect this URL to GitHub)
+// 2. Feedback Endpoint
+app.post('/api/feedback', (req, res) => {
+    const { name, email, message } = req.body || {};
+
+    if (!message || typeof message !== 'string' || !message.trim()) {
+        return res.status(400).json({ error: 'Message is required.' });
+    }
+
+    const feedback = {
+        id: require('crypto').randomUUID(),
+        name: (typeof name === 'string' ? name.trim() : '') || 'Anonymous',
+        email: typeof email === 'string' ? email.trim() : '',
+        message: message.trim(),
+        created_at: new Date().toISOString()
+    };
+
+    feedbackStore.push(feedback);
+    console.log(`Feedback received: ${feedback.id}`);
+
+    res.status(201).json({ message: 'Thank you for your feedback!' });
+});
+
+// 3. The Webhook Listener (Connect this URL to GitHub)
 // TODO: Add rate limiting middleware to prevent abuse (e.g., express-rate-limit)
 app.post('/api/webhooks/github', async (req, res) => {
     const signature = req.headers['x-hub-signature-256'] || req.headers['x-hub-signature'];
@@ -53,7 +152,7 @@ app.post('/api/webhooks/github', async (req, res) => {
     }
 });
 
-// 3. The Graph API (For Frontend)
+// 4. The Graph API (For Frontend)
 app.get('/api/graph', async (req, res) => {
     // Return Nodes/Strings for React Force Graph
     // Implementation pending DB query
