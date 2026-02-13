@@ -17,11 +17,14 @@ CREATE TABLE IF NOT EXISTS beans (
     title VARCHAR(255),
     content TEXT, -- Markdown content
     type VARCHAR(50), -- [SPARK], [BLOCKER], [SOLUTION], [LORE], [PODIUM]
-    layer INTEGER DEFAULT 1,
+    layer INTEGER DEFAULT 1 CHECK (layer >= 0 AND layer <= 6),
+    bean_id VARCHAR(50), -- Canonical Bean ID (e.g. PHIL-001, LORE-005)
+    status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'archived', 'draft')),
     
     -- Provenance (The Shadow Ledger)
     git_hash VARCHAR(255),
     git_url TEXT,
+    source_path TEXT, -- File path in the Ark repository
     
     -- Web3 (The Invisible Ledger)
     is_minted BOOLEAN DEFAULT FALSE,
