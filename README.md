@@ -114,7 +114,7 @@ Seven axioms that cascade into every architectural, economic, and narrative deci
 |Git-to-Mint pipeline        |✅ Live       |11 semantic tags, HMAC verification                        |
 |Spirit Calibration Blueprint|✅ Published  |Genesis Blueprint V1.0                                     |
 |Constellation view (BBI)    |✅ Live       |Force-directed graph visualization                         |
-|Cross-app auth              |✅ Wired      |Token-based external API                                   |
+|Cross-app auth              |✅ Wired      |GitHub OAuth via NeonAuth                                  |
 |BYOK provider abstraction   |🔧 In progress|Currently single-provider                                  |
 |Live Spirit demo            |🔧 In progress|Bean context injection built, streaming needs provider swap|
 |Web3 minting                |📋 Phase 2    |Schema fields ready, no contracts deployed                 |
