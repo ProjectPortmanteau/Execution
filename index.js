@@ -1,7 +1,7 @@
 // index.js
 const express = require('express');
 const bodyParser = require('body-parser');
-const { handleGitHubPush } = require('./services/githubSync');
+const { handleGitHubPush, syncArk } = require('./services/githubSync');
 const { verifyGitHubSignature } = require('./utils/webhookSecurity');
 
 const app = express();
@@ -174,7 +174,21 @@ app.get('/auth/callback/github', (req, res) => {
     res.redirect('/');
 });
 
-// 5. The Graph API (For Frontend)
+// 5. Ark Sync Endpoint (Safe Sync — turns the Ark light GREEN)
+app.get('/api/sync-ark', async (req, res) => {
+    try {
+        const token = process.env.GITHUB_TOKEN || null;
+        const result = await syncArk({ token });
+        const statusCode = result.status === 'RATE_LIMITED' ? 429
+            : result.status === 'ERROR' ? 502
+            : 200;
+        res.status(statusCode).json(result);
+    } catch (err) {
+        res.status(500).json({ status: 'ERROR', message: err.message, beans: [], errors: [] });
+    }
+});
+
+// 6. The Graph API (For Frontend)
 app.get('/api/graph', async (req, res) => {
     // Return Nodes/Strings for React Force Graph
     // Implementation pending DB query
