@@ -173,4 +173,107 @@ const syncArk = async (options = {}) => {
     return results;
 };
 
-module.exports = { handleGitHubPush, syncArk };
+/**
+ * persistBeanToSoil — Upserts a parsed GitHub bean into the database (Neon/Soil).
+ *
+ * Uses source_path as the unique key. If a bean with the same source_path exists,
+ * it updates the content and metadata. Otherwise, it inserts a new row.
+ *
+ * @param {object} dbClient - PostgreSQL client
+ * @param {object} bean - Parsed bean object from syncArk
+ * @returns {Promise<object>} The upserted bean row
+ */
+const persistBeanToSoil = async (dbClient, bean) => {
+    const query = `
+        INSERT INTO beans (user_id, title, content, type, layer, source_path, last_synced_at)
+        VALUES ($1, $2, $3, $4, $5, $6, NOW())
+        ON CONFLICT (source_path) WHERE source_path IS NOT NULL
+        DO UPDATE SET
+            title = EXCLUDED.title,
+            content = EXCLUDED.content,
+            layer = EXCLUDED.layer,
+            last_synced_at = NOW()
+        RETURNING id, title, source_path
+    `;
+
+    const title = bean.title || bean.path || 'Untitled Bean';
+    const layer = (bean.layer !== null && bean.layer !== undefined) ? bean.layer : null;
+    const content = bean.content || '';
+    const type = 'ARK'; // Beans synced from GitHub Ark
+
+    const values = [SYSTEM_USER_ID, title, content, type, layer, bean.path];
+    const res = await dbClient.query(query, values);
+    return res.rows[0];
+};
+
+/**
+ * syncArkToSoil — Full Ark-to-Soil sync.
+ *
+ * Fetches all beans from the GitHub Ark and persists them into the Neon database.
+ * Returns a detailed result with counts of created, updated, and failed beans.
+ *
+ * @param {object} [options] - Optional overrides
+ * @param {string} [options.token] - GitHub personal access token
+ * @returns {Promise<object>} Sync result with persisted counts
+ */
+const syncArkToSoil = async (options = {}) => {
+    // First, fetch beans from the Ark
+    const arkResult = await syncArk(options);
+
+    if (arkResult.status === 'ERROR' || arkResult.status === 'RATE_LIMITED') {
+        return arkResult;
+    }
+
+    // Then, persist each bean to the Soil (database)
+    const persistResults = { persisted: 0, failed: 0, details: [] };
+
+    try {
+        const dbClient = await getDbConnection();
+
+        for (const bean of arkResult.beans) {
+            try {
+                const row = await persistBeanToSoil(dbClient, bean);
+                persistResults.persisted++;
+                persistResults.details.push({
+                    path: bean.path,
+                    id: row.id,
+                    title: row.title,
+                    status: 'synced'
+                });
+            } catch (err) {
+                persistResults.failed++;
+                persistResults.details.push({
+                    path: bean.path,
+                    error: err.message,
+                    status: 'failed'
+                });
+            }
+        }
+    } catch (err) {
+        arkResult.status = 'ERROR';
+        arkResult.message = `Ark fetched but Soil connection failed: ${err.message}`;
+        return arkResult;
+    }
+
+    arkResult.persisted = persistResults.persisted;
+    arkResult.persistFailed = persistResults.failed;
+    arkResult.persistDetails = persistResults.details;
+    arkResult.message = `Sync complete: ${arkResult.beans.length} beans fetched from Ark, ${persistResults.persisted} persisted to Soil, ${persistResults.failed} failed.`;
+
+    return arkResult;
+};
+
+/**
+ * getAllBeansFromSoil — Fetches all beans from the Neon database.
+ *
+ * @returns {Promise<object[]>} Array of bean rows
+ */
+const getAllBeansFromSoil = async () => {
+    const dbClient = await getDbConnection();
+    const res = await dbClient.query(
+        'SELECT id, title, content, type, layer, bean_id, status, source_path, last_synced_at FROM beans ORDER BY layer, title'
+    );
+    return res.rows;
+};
+
+module.exports = { handleGitHubPush, syncArk, syncArkToSoil, getAllBeansFromSoil };
