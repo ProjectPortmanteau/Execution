@@ -48,6 +48,12 @@ jobs:
       - name: Log New Soil URL
         run: echo "Ephemeral Soil created at ${{ steps.create_neon_branch.outputs.db_url_with_pooler }}"
 
+      - name: Notify Soil of Ark Update
+        run: |
+          curl -X POST https://groove-graph.replit.app/api/webhooks/github \
+          -H "Content-Type: application/json" \
+          -d '{"ref": "${{ github.ref }}", "action": "sync"}'
+
   delete_neon_branch:
     name: Delete Neon Branch
     needs: setup
