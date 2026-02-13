@@ -292,10 +292,11 @@ const syncArkToSoil = async (options = {}) => {
         return arkResult;
     }
 
+    arkResult.fileCount = arkResult.beans.length;
     arkResult.persisted = persistResults.persisted;
     arkResult.persistFailed = persistResults.failed;
     arkResult.persistDetails = persistResults.details;
-    arkResult.message = `Sync complete: ${arkResult.beans.length} files fetched from Ark, ${persistResults.persisted} beans persisted to Soil, ${persistResults.failed} failed.`;
+    arkResult.message = `Sync complete: ${arkResult.beans.length} files fetched from Ark, ${persistResults.persisted} individual beans persisted to Soil, ${persistResults.failed} failed.`;
 
     return arkResult;
 };
