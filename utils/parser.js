@@ -106,7 +106,10 @@ const safeParseBeanFile = (filePath, rawText) => {
             if (layer === null) {
                 // Attempt to infer layer from filename (e.g. 00_Philosophy.md → 0)
                 const fileMatch = filePath.match(/(\d{2})_/);
-                if (fileMatch) layer = parseInt(fileMatch[1], 10);
+                if (fileMatch) {
+                    const parsed = parseInt(fileMatch[1], 10);
+                    if (parsed >= 0 && parsed <= 6) layer = parsed;
+                }
             }
 
             // Extract embedded Bean IDs from body

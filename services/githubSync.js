@@ -103,7 +103,7 @@ const syncArk = async (options = {}) => {
         const treeUrl = `https://api.github.com/repos/${ARK_OWNER}/${ARK_REPO}/git/trees/${ARK_BRANCH}?recursive=1`;
         const headers = { 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'OPVS-Genesis-Engine' };
         if (options.token) {
-            headers['Authorization'] = `token ${options.token}`;
+            headers['Authorization'] = `Bearer ${options.token}`;
         }
 
         const treeRes = await fetch(treeUrl, { headers });
@@ -123,7 +123,7 @@ const syncArk = async (options = {}) => {
 
         // 2. Filter for Bean files (beans/ or Beans/ directories, .json or .md)
         const beanFiles = (treeData.tree || []).filter((f) =>
-            (f.path.includes('beans/') || f.path.includes('Beans/')) &&
+            /^(beans|Beans)\//i.test(f.path) &&
             (f.path.endsWith('.json') || f.path.endsWith('.md')) &&
             f.type === 'blob'
         );
