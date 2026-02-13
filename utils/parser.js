@@ -88,6 +88,38 @@ const extractBeanIds = (text) => {
 };
 
 /**
+ * Splits a markdown file body into individual bean sections.
+ *
+ * Each section starts at a [BEAN #ID] header and runs until the next
+ * [BEAN #ID] header or end-of-file. Returns an array of objects:
+ *   { id, title, content }
+ *
+ * @param {string} text - The markdown body (after frontmatter removal)
+ * @returns {{ id: string, title: string, content: string }[]}
+ */
+const splitBeansFromFile = (text) => {
+    const beanPattern = /\[BEAN\s+#([A-Z]+-\d+)\]\s*(?:Title:\s*)?(.+)/gi;
+    const matches = [];
+    let match;
+
+    while ((match = beanPattern.exec(text)) !== null) {
+        matches.push({
+            id: match[1].toUpperCase(),
+            title: match[2].trim(),
+            startIndex: match.index,
+        });
+    }
+
+    if (matches.length === 0) return [];
+
+    return matches.map((m, i) => {
+        const endIndex = i + 1 < matches.length ? matches[i + 1].startIndex : text.length;
+        const content = text.slice(m.startIndex, endIndex).trim();
+        return { id: m.id, title: m.title, content };
+    });
+};
+
+/**
  * Safe Bean Parser — parses a single bean file (JSON or Markdown).
  * Returns { ok: true, data } on success, { ok: false, error } on failure.
  * Ensures one broken bean never crashes the entire sync.
@@ -134,6 +166,7 @@ module.exports = {
     parseMarkdownFile,
     normalizeLayer,
     extractBeanIds,
+    splitBeansFromFile,
     safeParseBeanFile,
     LAYER_MAP,
 };

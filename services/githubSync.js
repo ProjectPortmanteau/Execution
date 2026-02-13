@@ -1,6 +1,6 @@
 // services/githubSync.js
 const { Client } = require('pg');
-const { parseCommitMessage, parseMarkdownFile, safeParseBeanFile } = require('../utils/parser');
+const { parseCommitMessage, parseMarkdownFile, safeParseBeanFile, splitBeansFromFile } = require('../utils/parser');
 
 // Configuration constants
 const SYSTEM_USER_ID = "00000000-0000-0000-0000-000000000000"; // Placeholder for 'System/Robert'
@@ -185,13 +185,14 @@ const syncArk = async (options = {}) => {
  */
 const persistBeanToSoil = async (dbClient, bean) => {
     const query = `
-        INSERT INTO beans (user_id, title, content, type, layer, source_path, last_synced_at)
-        VALUES ($1, $2, $3, $4, $5, $6, NOW())
+        INSERT INTO beans (user_id, title, content, type, layer, bean_id, source_path, last_synced_at)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
         ON CONFLICT (source_path) WHERE source_path IS NOT NULL
         DO UPDATE SET
             title = EXCLUDED.title,
             content = EXCLUDED.content,
             layer = EXCLUDED.layer,
+            bean_id = EXCLUDED.bean_id,
             last_synced_at = NOW()
         RETURNING id, title, source_path
     `;
@@ -200,8 +201,9 @@ const persistBeanToSoil = async (dbClient, bean) => {
     const layer = (bean.layer !== null && bean.layer !== undefined) ? bean.layer : null;
     const content = bean.content || '';
     const type = 'ARK'; // Beans synced from GitHub Ark
+    const beanId = bean.bean_id || null;
 
-    const values = [SYSTEM_USER_ID, title, content, type, layer, bean.path];
+    const values = [SYSTEM_USER_ID, title, content, type, layer, beanId, bean.path];
     const res = await dbClient.query(query, values);
     return res.rows[0];
 };
@@ -230,23 +232,58 @@ const syncArkToSoil = async (options = {}) => {
     try {
         const dbClient = await getDbConnection();
 
-        for (const bean of arkResult.beans) {
-            try {
-                const row = await persistBeanToSoil(dbClient, bean);
-                persistResults.persisted++;
-                persistResults.details.push({
-                    path: bean.path,
-                    id: row.id,
-                    title: row.title,
-                    status: 'synced'
-                });
-            } catch (err) {
-                persistResults.failed++;
-                persistResults.details.push({
-                    path: bean.path,
-                    error: err.message,
-                    status: 'failed'
-                });
+        for (const fileBean of arkResult.beans) {
+            // Split file into individual bean sections
+            const sections = splitBeansFromFile(fileBean.content || '');
+
+            if (sections.length > 0) {
+                // Persist each embedded bean as its own row
+                for (const section of sections) {
+                    try {
+                        const row = await persistBeanToSoil(dbClient, {
+                            path: `${fileBean.path}#${section.id}`,
+                            title: section.title,
+                            content: section.content,
+                            layer: fileBean.layer,
+                            bean_id: section.id,
+                        });
+                        persistResults.persisted++;
+                        persistResults.details.push({
+                            path: fileBean.path,
+                            bean_id: section.id,
+                            id: row.id,
+                            title: row.title,
+                            status: 'synced'
+                        });
+                    } catch (err) {
+                        persistResults.failed++;
+                        persistResults.details.push({
+                            path: fileBean.path,
+                            bean_id: section.id,
+                            error: err.message,
+                            status: 'failed'
+                        });
+                    }
+                }
+            } else {
+                // No embedded beans found — persist the file as a single bean
+                try {
+                    const row = await persistBeanToSoil(dbClient, fileBean);
+                    persistResults.persisted++;
+                    persistResults.details.push({
+                        path: fileBean.path,
+                        id: row.id,
+                        title: row.title,
+                        status: 'synced'
+                    });
+                } catch (err) {
+                    persistResults.failed++;
+                    persistResults.details.push({
+                        path: fileBean.path,
+                        error: err.message,
+                        status: 'failed'
+                    });
+                }
             }
         }
     } catch (err) {
@@ -255,10 +292,11 @@ const syncArkToSoil = async (options = {}) => {
         return arkResult;
     }
 
+    arkResult.fileCount = arkResult.beans.length;
     arkResult.persisted = persistResults.persisted;
     arkResult.persistFailed = persistResults.failed;
     arkResult.persistDetails = persistResults.details;
-    arkResult.message = `Sync complete: ${arkResult.beans.length} beans fetched from Ark, ${persistResults.persisted} persisted to Soil, ${persistResults.failed} failed.`;
+    arkResult.message = `Sync complete: ${arkResult.beans.length} files fetched from Ark, ${persistResults.persisted} individual beans persisted to Soil, ${persistResults.failed} failed.`;
 
     return arkResult;
 };
