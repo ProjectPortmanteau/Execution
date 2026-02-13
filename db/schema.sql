@@ -35,6 +35,10 @@ CREATE TABLE IF NOT EXISTS beans (
     last_synced_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Unique partial index for Ark sync upsert (source_path must be unique when not null)
+CREATE UNIQUE INDEX IF NOT EXISTS idx_beans_source_path
+    ON beans (source_path) WHERE source_path IS NOT NULL;
+
 -- 4. Bean Strings (The Connections)
 CREATE TABLE IF NOT EXISTS bean_strings (
     source_bean_id UUID REFERENCES beans(id),

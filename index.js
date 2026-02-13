@@ -2,7 +2,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const { handleGitHubPush, syncArk } = require('./services/githubSync');
+const { handleGitHubPush, syncArk, syncArkToSoil, getAllBeansFromSoil } = require('./services/githubSync');
 const { verifyGitHubSignature } = require('./utils/webhookSecurity');
 
 const app = express();
@@ -197,6 +197,30 @@ app.get('/api/graph', async (req, res) => {
     // Return Nodes/Strings for React Force Graph
     // Implementation pending DB query
     res.json({ nodes: [], links: [] }); 
+});
+
+// 7. Ark-to-Soil Sync Endpoint — Pulls beans from GitHub (Ark) and persists them into Neon (Soil)
+app.get('/api/sync/ark-to-soil', async (req, res) => {
+    try {
+        const token = process.env.GITHUB_TOKEN || null;
+        const result = await syncArkToSoil({ token });
+        const statusCode = result.status === 'RATE_LIMITED' ? 429
+            : result.status === 'ERROR' ? 502
+            : 200;
+        res.status(statusCode).json(result);
+    } catch (err) {
+        res.status(500).json({ status: 'ERROR', message: err.message });
+    }
+});
+
+// 8. All Beans Endpoint — Returns all beans from the database (Soil)
+app.get('/api/all-beans', async (req, res) => {
+    try {
+        const beans = await getAllBeansFromSoil();
+        res.json({ status: 'OK', count: beans.length, beans });
+    } catch (err) {
+        res.status(500).json({ status: 'ERROR', message: err.message, beans: [] });
+    }
 });
 
 app.listen(PORT, () => {
