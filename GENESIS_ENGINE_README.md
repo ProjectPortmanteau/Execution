@@ -36,6 +36,7 @@ npm install
 export DATABASE_URL="postgresql://user:password@localhost:5432/opvs"
 export PORT=3000  # Optional, defaults to 3000
 export GITHUB_WEBHOOK_SECRET="your_secure_webhook_secret_here"
+export NEON_AUTH_URL="https://ep-damp-wildflower-aik1cjop.neonauth.c-4.us-east-1.aws.neon.tech"
 ```
 
 To generate a secure webhook secret:
@@ -87,6 +88,17 @@ GitHub webhook endpoint. Processes push events and syncs commits with semantic t
 ### `GET /api/graph`
 Returns nodes and links for graph visualization (implementation pending).
 
+### `GET /auth/callback/github`
+GitHub OAuth callback endpoint for NeonAuth. After a user authenticates with GitHub via NeonAuth, they are redirected here. NeonAuth handles token exchange and user syncing to the `neon_auth.users_sync` table.
+
+**Query parameters:**
+- `code` (string) - Authorization code from GitHub (handled by NeonAuth)
+- `error` (string, optional) - Error message if authentication failed
+
+**Responses:**
+- `302` - Redirects to homepage on success
+- `400` - Authentication failed or missing authorization code
+
 ## GitHub Webhook Setup
 
 1. Generate a secure webhook secret:
@@ -124,7 +136,9 @@ export GITHUB_WEBHOOK_SECRET="your_generated_secret"
 ## Security Notes
 
 - ✅ **Webhook signature verification implemented** - All webhook requests are verified using HMAC-SHA256
+- ✅ **NeonAuth GitHub OAuth** - Authentication handled by NeonAuth with user sync to `neon_auth.users_sync`
 - Set `GITHUB_WEBHOOK_SECRET` environment variable with a secure random string (use `openssl rand -hex 32`)
+- Set `NEON_AUTH_URL` environment variable with your NeonAuth project URL
 - Store sensitive credentials in environment variables
 - Use SSL/TLS for production deployments
 - **Recommended:** Add rate limiting middleware (e.g., `express-rate-limit`) to prevent abuse of webhook endpoints

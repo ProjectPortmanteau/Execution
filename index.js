@@ -152,7 +152,28 @@ app.post('/api/webhooks/github', async (req, res) => {
     }
 });
 
-// 4. The Graph API (For Frontend)
+// 4. Neon Auth - GitHub OAuth Callback
+// Callback URL: https://ep-damp-wildflower-aik1cjop.neonauth.c-4.us-east-1.aws.neon.tech/neondb/auth/callback/github
+// This endpoint handles the redirect after GitHub OAuth via NeonAuth
+app.get('/auth/callback/github', (req, res) => {
+    const { code, error } = req.query;
+
+    if (error) {
+        console.error('GitHub OAuth error:', error);
+        return res.status(400).send('Authentication failed. Please try again.');
+    }
+
+    if (!code) {
+        return res.status(400).send('Missing authorization code.');
+    }
+
+    console.log('GitHub OAuth callback received');
+    // NeonAuth handles token exchange and user sync to neon_auth.users_sync
+    // Redirect to homepage after successful authentication
+    res.redirect('/');
+});
+
+// 5. The Graph API (For Frontend)
 app.get('/api/graph', async (req, res) => {
     // Return Nodes/Strings for React Force Graph
     // Implementation pending DB query

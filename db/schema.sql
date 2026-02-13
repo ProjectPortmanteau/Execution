@@ -57,3 +57,17 @@ CREATE TABLE IF NOT EXISTS feedback (
     message TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 7. Neon Auth Users Sync
+-- NeonAuth automatically syncs authenticated users into this schema.
+-- Reference: https://neon.com/docs/auth/overview
+CREATE SCHEMA IF NOT EXISTS neon_auth;
+
+CREATE TABLE IF NOT EXISTS neon_auth.users_sync (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
+    image TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
