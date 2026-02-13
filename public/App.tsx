@@ -2,9 +2,14 @@ import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import yaml from "js-yaml";
 
+interface GraphData {
+    nodes: unknown[];
+    links: unknown[];
+}
+
 function App() {
-    const [graph, setGraph] = useState({ nodes: [], links: [] });
-    const [arkStatus, setArkStatus] = useState(null);
+    const [graph, setGraph] = useState<GraphData>({ nodes: [], links: [] });
+    const [arkStatus, setArkStatus] = useState<string | null>(null);
 
     useEffect(() => {
         fetch("/api/graph")
