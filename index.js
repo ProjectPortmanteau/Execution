@@ -154,12 +154,13 @@ app.post('/api/webhooks/github', async (req, res) => {
 
 // 4. Neon Auth - GitHub OAuth Callback
 // Callback URL: https://ep-damp-wildflower-aik1cjop.neonauth.c-4.us-east-1.aws.neon.tech/neondb/auth/callback/github
-// This endpoint handles the redirect after GitHub OAuth via NeonAuth
+// NeonAuth handles the full OAuth flow (token exchange, session creation, user sync).
+// This endpoint receives the final redirect after NeonAuth completes authentication.
 app.get('/auth/callback/github', (req, res) => {
-    const { code, error } = req.query;
+    const { code, error, error_description } = req.query;
 
     if (error) {
-        console.error('GitHub OAuth error:', error);
+        console.error(`GitHub OAuth error: ${error} - ${error_description || 'no description'}`);
         return res.status(400).send('Authentication failed. Please try again.');
     }
 
@@ -167,7 +168,7 @@ app.get('/auth/callback/github', (req, res) => {
         return res.status(400).send('Missing authorization code.');
     }
 
-    console.log('GitHub OAuth callback received');
+    console.log(`GitHub OAuth callback received at ${new Date().toISOString()}`);
     // NeonAuth handles token exchange and user sync to neon_auth.users_sync
     // Redirect to homepage after successful authentication
     res.redirect('/');
