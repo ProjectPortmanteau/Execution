@@ -1,5 +1,6 @@
 // index.js
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const { handleGitHubPush, syncArk } = require('./services/githubSync');
 const { verifyGitHubSignature } = require('./utils/webhookSecurity');
@@ -9,6 +10,9 @@ const app = express();
 // Use raw body parser for webhook signature verification
 app.use('/api/webhooks/github', bodyParser.raw({ type: 'application/json' }));
 app.use(bodyParser.json());
+
+// Serve static frontend files from public/
+app.use(express.static(path.join(__dirname, 'public')));
 
 const PORT = process.env.PORT || 3000;
 
