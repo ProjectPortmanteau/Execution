@@ -1,3 +1,5 @@
+> **NOTE:** These settings have not yet been applied. Follow the steps below to update the repository's public-facing metadata in the GitHub UI.
+
 # GitHub Repository Settings Guide
 
 Follow these steps to update the public-facing metadata for the **ProjectPortmanteau/Execution** repository.
