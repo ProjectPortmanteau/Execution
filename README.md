@@ -69,6 +69,8 @@ Execution/
 │   ├── README.md               # Public-facing guide
 │   ├── SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md  # The product
 │   └── CHANGELOG.md            # Version history
+├── roadmap/                    # Future architecture concepts
+│   └── PRINCIPLED_PLAYGROUND_CONCEPT.md  # Stage 3: Multi-agent negotiation
 ├── .github/                    # GitHub configuration
 ├── BEANS_MASTER_LEDGER.md      # Bean registry
 └── README.md                   # You are here
@@ -165,6 +167,12 @@ iLL Port Studios. See individual directories for specific licensing.
 - **Organization:** [ProjectPortmanteau](https://github.com/ProjectPortmanteau)
 - **Spirit Blueprint:** <spirit-calibration/>
 - **First crystallized commit:** [`f62c6568`](https://github.com/ProjectPortmanteau/Execution/commit/f62c6568) — `[PODIUM] The Krystallum Breathes`
+
+-----
+
+## Roadmap
+
+- **[The Principled Playground](roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md)** — Stage 3 concept: AI Spirit Agents & multi-agent negotiation architecture (future design, not current capability)
 
 -----
 
