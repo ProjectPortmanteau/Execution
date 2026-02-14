@@ -78,7 +78,7 @@ const seed = async () => {
 
     const client = new Client({
         connectionString: process.env.DATABASE_URL,
-        ssl: { rejectUnauthorized: false },
+        ssl: { rejectUnauthorized: true },
     });
     await client.connect();
     console.log('✅  Connected to Neon database.\n');
