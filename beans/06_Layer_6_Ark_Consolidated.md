@@ -1,8 +1,10 @@
 ---
 id: layer-6
-title: "Layer 6: The Ark — Consolidated Bean Registry"
-tags: [ark, consolidated, coherence-engine, google-ai-studio]
-status: canonical
+title: "The Ark — Consolidated Registry"
+layer: 6
+bean_count: 6
+status: verified
+last_updated: 2026-02-14
 ---
 
 # Layer 6: The Ark — Consolidated Bean Registry

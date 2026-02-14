@@ -1,8 +1,10 @@
 ---
 id: layer-5
-title: "Layer 5: Process Chronicle (Behind the Curtain)"
-tags: [process, methodology]
-status: draft
+title: "Process Chronicle"
+layer: 5
+bean_count: 13
+status: verified
+last_updated: 2026-02-14
 ---
 
 # Layer 5: Process Chronicle (Behind the Curtain)

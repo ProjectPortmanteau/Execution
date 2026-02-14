@@ -1,3 +1,12 @@
+---
+id: layer-2
+title: "Narrative Roadmap"
+layer: 2
+bean_count: 25
+status: verified
+last_updated: 2026-02-14
+---
+
 # 02_Layer_2_Narrative_Roadmap.md
 **Project:** Portmanteau: Awakened (Book 1)
 **Layer:** 2 (The Narrative Roadmap)

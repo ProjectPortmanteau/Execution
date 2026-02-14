@@ -6,28 +6,39 @@ This is the foundational blueprint repository for **iLL Port Studios** and **Pro
 
 **Core Philosophy**: *It's not the person that is broken. Only broken systems.*
 
-The repository serves as a version-controlled knowledge base using a structured "Beans" system across six layers (0-5), documenting the philosophy, IP, methodology, world-building, and execution of Project Portmanteau: Awakened.
+The repository serves as a version-controlled knowledge base using a structured "Beans" system across seven layers (0-6), documenting the philosophy, IP, methodology, world-building, and execution of Project Portmanteau: Awakened.
 
 ## Tech Stack & Structure
 
 - **Primary Format**: Markdown documentation with YAML frontmatter
 - **Version Control**: Git/GitHub
-- **Database**: SQL (for OPVS platform in `03_OPVS_PLATFORM/`)
-- **Structure**: Layer-based modular system ("Beans")
+- **Backend**: Node.js/Express
+- **Database**: PostgreSQL (Neon), with Drizzle ORM
+- **Auth**: GitHub OAuth via NeonAuth
+- **CI/CD**: GitHub Actions (Neon branch-per-PR workflow)
+- **Structure**: Layer-based modular system ("Beans") — 85 Beans across 7 layers
 
 ### Directory Structure
 
 ```
 /
-├── beans/                    # Core documentation layers (0-5)
+├── beans/                    # Core documentation layers (0-6)
 │   ├── 00_Philosophy.md
 │   ├── 01_Layer_1_Visionary_Blueprint.md
 │   ├── 02_Layer_2_Narrative_Roadmap.md
 │   ├── 03_Layer_3_Execution.md
 │   ├── 04_Layer_4_Lore.md
 │   ├── 05_Layer_5_Process.md
+│   ├── 06_Layer_6_Ark_Consolidated.md
 │   └── _sources.json         # Provenance mapping
+├── spirit-calibration/       # Spirit Calibration Blueprint
 ├── 03_OPVS_PLATFORM/         # OPVS platform technical assets
+├── db/                       # Database schema (schema.sql)
+├── services/                 # Backend services (githubSync.js)
+├── utils/                    # Shared utilities (parser.js, webhookSecurity.js)
+├── .github/workflows/        # CI/CD (neon_workflow.yml)
+├── LICENSE                   # All rights reserved — iLL Port Studios
+├── SECURITY.md               # Security policy
 ├── README.md                 # Main repository overview
 ├── BEANS_MASTER_LEDGER.md    # Index of all Beans
 └── CONTRIBUTING.md           # Contribution guidelines
@@ -37,14 +48,14 @@ The repository serves as a version-controlled knowledge base using a structured 
 
 You are a **documentation architect and process guardian** for this creative ecosystem. Your primary responsibilities are:
 
-1. **Maintain the Beans System**: Understand and preserve the six-layer architecture
+1. **Maintain the Beans System**: Understand and preserve the seven-layer architecture
 2. **Uphold PFE Methodology**: Align with Project Fun Execution principles
 3. **Protect Philosophy**: Never compromise the core principles in Layer 0
 4. **Ensure Coherence**: Keep the recursive linkage between IP, PFE, and OPVS intact
 
 ## Layered Architecture (The Beans System)
 
-Each "Bean" is an atomic unit of knowledge structured into six layers:
+Each "Bean" is an atomic unit of knowledge structured into seven layers:
 
 - **Layer 0: Philosophy (Soul Code)** — Ethical axioms and Constitutional Amendments (e.g., "People > Money")
 - **Layer 1: Visionary Blueprint** — Macro-structure and thematic soul of the IP
@@ -52,6 +63,7 @@ Each "Bean" is an atomic unit of knowledge structured into six layers:
 - **Layer 3: Execution & Scene Construction** — Actual prose, dialogue, scene beats
 - **Layer 4: World Weaving (Lore & Physics)** — Context manual, definitions
 - **Layer 5: Process Chronicle** — Methodology, "Bizarre Logic," creative process
+- **Layer 6: The Ark (Consolidated Registry)** — Reconciles all Beans from Layers 0-5, adds integration Beans, links the full graph via recursive CTEs
 
 **Coherence is critical**: Changes in one layer may affect others. Always consider cross-layer implications.
 
@@ -103,7 +115,7 @@ Example: `Update beans/00_Philosophy.md — Copilot Agent`
 
 ### NEVER:
 1. **Compromise core philosophy** — Layer 0 principles are immutable without explicit approval
-2. **Break the Beans structure** — Do not reorganize the six-layer system
+2. **Break the Beans structure** — Do not reorganize the seven-layer system
 3. **Remove provenance** — Always maintain source tracking in `_sources.json`
 4. **Commit secrets or credentials** — This is a public-facing creative project
 5. **Delete existing Bean files** — Only update or deprecate (set status to `archived`)

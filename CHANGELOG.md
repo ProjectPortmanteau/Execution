@@ -1,10 +1,30 @@
 # CHANGELOG
 
-## Version 1.0 - 2026-02-08
-- Initial release of the Spirit Calibration Standard
-- Introduced SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md for detailed calibration guidelines
-- Released README.md to guide users
-- Documented version history in CHANGELOG.md.
+## 2026-02 — Spirit Marketplace
+- Spirit Calibration Genesis Blueprint V1.0 published
+- Blueprint expanded to V1.1 — full specification with Red Team protocol, MDS post-mortem, and creator template
+- BYOK architecture documented
+- Repository README rewritten for public visibility
+- Copilot agent instructions established
+- LICENSE, SECURITY.md added
 
-## Future Versions
-Improvements and updates will be documented in upcoming versions of this changelog.
+## 2026-01 — Phase Transition
+- Genesis Engine activated
+- First PODIUM crystallized: "The Krystallum Breathes" (f62c6568)
+
+## 2025 — Infrastructure
+- Genesis Engine backend (Node.js/Express)
+- GitHub webhook pipeline for semantic commits
+- NeonAuth integration for GitHub OAuth
+- GitHub Actions workflow (Neon branch-per-PR)
+- Beans Master Ledger and provenance system (_sources.json)
+
+## 2024 — Foundation Building
+- Six-layer Bean architecture formalized
+- 85 Beans documented across Layers 0-6
+- OPVS platform schema designed (PostgreSQL)
+
+## 2023 — Project Inception
+- Initial repository created
+- Core philosophy (Layer 0) established
+- Bean knowledge system designed

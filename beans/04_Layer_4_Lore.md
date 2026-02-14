@@ -1,8 +1,10 @@
 ---
 id: layer-4
-title: "Layer 4: World Weaving (Lore & Physics)"
-tags: [lore, worldbuilding]
-status: draft
+title: "World Weaving — Lore & Physics"
+layer: 4
+bean_count: 12
+status: verified
+last_updated: 2026-02-14
 ---
 
 # Layer 4: World Weaving (Lore & Physics)
