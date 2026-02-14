@@ -1,8 +1,10 @@
 ---
 id: layer-3
-title: "Layer 3: Execution & Scene Construction"
-tags: [execution, scenes]
-status: draft
+title: "Execution & Scene Construction"
+layer: 3
+bean_count: 8
+status: verified
+last_updated: 2026-02-14
 ---
 
 # Layer 3: Execution & Scene Construction

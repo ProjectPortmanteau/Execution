@@ -1,4 +1,10 @@
 ---
+id: layer-0
+title: "Philosophy — The Soul Code"
+layer: 0
+bean_count: 12
+status: verified
+last_updated: 2026-02-14
 ---
 # Layer 0: Philosophy (The Soul Code)
 ---

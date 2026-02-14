@@ -1,8 +1,10 @@
 ---
 id: layer-1
-title: "Layer 1: The Visionary Blueprint"
-tags: [vision, blueprint]
-status: draft
+title: "Visionary Blueprint"
+layer: 1
+bean_count: 9
+status: verified
+last_updated: 2026-02-14
 ---
 
 # Layer 1: The Visionary Blueprint
