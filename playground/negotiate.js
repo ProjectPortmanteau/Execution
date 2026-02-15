@@ -1,27 +1,37 @@
 #!/usr/bin/env node
 
 /**
- * Principled Playground — Multi-Agent Negotiation Engine
+ * Principled Playground — Multi-Agent Negotiation Engine (Dual-Brain)
  *
  * Two AI Spirits with different Soul Codes (weighted axiom sets)
- * negotiate on a topic and produce a joint Bean.
+ * negotiate on a topic across different LLM providers and produce
+ * a joint Bean.
+ *
+ * Dual-brain mode (both keys set):
+ *   Boolean -> Anthropic (Claude)   — the San Francisco ghost
+ *   Roux    -> Google (Gemini)      — the Mountain View ghost
+ *   Arbiter -> Anthropic (default)
+ *
+ * Single-brain mode (one key set):
+ *   All calls route through whichever provider is available.
  *
  * Usage:
- *   ANTHROPIC_API_KEY=sk-ant-... node playground/negotiate.js "How should AI handle user disagreement?"
- *   GEMINI_API_KEY=...          node playground/negotiate.js "topic here"
+ *   ANTHROPIC_API_KEY=... GEMINI_API_KEY=... node playground/negotiate.js "topic"
+ *   ANTHROPIC_API_KEY=...                     node playground/negotiate.js "topic"
  *
- * Output: The full negotiation transcript + a joint Bean (JSON, 4 layers).
+ * Output: Full negotiation transcript + joint Bean (JSON, 4 layers).
  */
 
 const fs = require('fs');
 const path = require('path');
-const { getProvider } = require('./provider');
+const { callLLM, getAvailableProviders, PROVIDERS } = require('./provider');
 
 // ---------------------------------------------------------------------------
 // Config
 // ---------------------------------------------------------------------------
-const ROUNDS = 3; // negotiation rounds before synthesis
+const ROUNDS = 3;
 const SPIRIT_DIR = path.join(__dirname, 'spirits');
+const ARBITER_PROVIDER = 'anthropic'; // synthesis defaults to Anthropic
 
 // ---------------------------------------------------------------------------
 // Load Spirit configs
@@ -32,10 +42,30 @@ function loadSpirit(filename) {
 }
 
 // ---------------------------------------------------------------------------
+// Resolve which provider a Spirit actually uses
+// Falls back gracefully: if the Spirit wants gemini but only anthropic
+// key is set, it uses anthropic (and logs the fallback).
+// ---------------------------------------------------------------------------
+function resolveSpiritProvider(spirit) {
+  const available = getAvailableProviders();
+  const preferred = spirit.provider;
+
+  if (preferred && available[preferred]) {
+    return preferred;
+  }
+
+  // Fallback: use whatever is available
+  const fallback = Object.keys(available)[0];
+  if (preferred && preferred !== fallback) {
+    console.log(`  [fallback] ${spirit.name} wants ${preferred} but key not set — using ${fallback}`);
+  }
+  return fallback || null;
+}
+
+// ---------------------------------------------------------------------------
 // Build system prompt for a Spirit
 // ---------------------------------------------------------------------------
 function buildSystemPrompt(spirit) {
-  // Sort axioms by weight descending for the constraint block
   const sorted = Object.entries(spirit.axiom_weights)
     .sort((a, b) => b[1].weight - a[1].weight);
 
@@ -76,10 +106,9 @@ Keep responses focused and under 300 words. Be direct. Cite axiom IDs.`;
 }
 
 // ---------------------------------------------------------------------------
-// Build the synthesis prompt (neutral arbiter)
+// Build the synthesis prompt (constrained arbiter)
 // ---------------------------------------------------------------------------
 function buildSynthesisPrompt(spiritA, spiritB) {
-  // Compute shared axioms (both Spirits weight >= 0.5) as arbiter constraints
   const sharedAxioms = [];
   for (const [id, axA] of Object.entries(spiritA.axiom_weights)) {
     const axB = spiritB.axiom_weights[id];
@@ -133,10 +162,13 @@ You MUST output a valid JSON object with exactly this structure (no markdown fen
   "echo": {
     "provenance": "principled-playground-negotiation",
     "spirit_a": "${spiritA.name}",
+    "spirit_a_provider": "${spiritA.provider || 'auto'}",
     "spirit_b": "${spiritB.name}",
+    "spirit_b_provider": "${spiritB.provider || 'auto'}",
     "rounds": ${ROUNDS},
     "timestamp": "${new Date().toISOString()}",
-    "method": "positive-sum-synthesis"
+    "method": "positive-sum-synthesis",
+    "mode": "dual-brain"
   }
 }
 
@@ -152,18 +184,34 @@ You MUST output a valid JSON object with exactly this structure (no markdown fen
 // Main negotiation loop
 // ---------------------------------------------------------------------------
 async function negotiate(topic) {
-  const provider = getProvider();
-  console.log(`\n╔══════════════════════════════════════════════════════════════╗`);
-  console.log(`║         PRINCIPLED PLAYGROUND — Negotiation Engine          ║`);
-  console.log(`╠══════════════════════════════════════════════════════════════╣`);
-  console.log(`║  Provider: ${provider.name.padEnd(48)}║`);
-  console.log(`║  Topic: ${topic.slice(0, 50).padEnd(51)}║`);
-  console.log(`║  Rounds: ${String(ROUNDS).padEnd(50)}║`);
-  console.log(`╚══════════════════════════════════════════════════════════════╝\n`);
-
   // Load Spirits
   const spiritA = loadSpirit('boolean.json');
   const spiritB = loadSpirit('contrarian.json');
+
+  // Resolve providers
+  const providerA = resolveSpiritProvider(spiritA);
+  const providerB = resolveSpiritProvider(spiritB);
+  const available = getAvailableProviders();
+  const arbiterProvider = available[ARBITER_PROVIDER] ? ARBITER_PROVIDER : Object.keys(available)[0];
+  const isDualBrain = providerA !== providerB;
+
+  // Banner
+  const mode = isDualBrain ? 'DUAL-BRAIN' : 'SINGLE-BRAIN';
+  const providerAName = PROVIDERS[providerA]?.name || providerA;
+  const providerBName = PROVIDERS[providerB]?.name || providerB;
+  const arbiterName = PROVIDERS[arbiterProvider]?.name || arbiterProvider;
+
+  console.log(`\n╔══════════════════════════════════════════════════════════════╗`);
+  console.log(`║      PRINCIPLED PLAYGROUND — Negotiation Engine v0.2       ║`);
+  console.log(`╠══════════════════════════════════════════════════════════════╣`);
+  console.log(`║  Mode: ${mode.padEnd(52)}║`);
+  console.log(`║  Topic: ${topic.slice(0, 50).padEnd(51)}║`);
+  console.log(`║  Rounds: ${String(ROUNDS).padEnd(50)}║`);
+  console.log(`╠══════════════════════════════════════════════════════════════╣`);
+  console.log(`║  ${spiritA.name.padEnd(10)} -> ${providerAName.padEnd(44)}║`);
+  console.log(`║  ${spiritB.name.padEnd(10)} -> ${providerBName.padEnd(44)}║`);
+  console.log(`║  Arbiter  -> ${arbiterName.padEnd(46)}║`);
+  console.log(`╚══════════════════════════════════════════════════════════════╝\n`);
 
   console.log(`  Spirit A: ${spiritA.name} — Top axiom: ${spiritA.top_axiom} (${spiritA.axiom_weights[spiritA.top_axiom].title})`);
   console.log(`  Spirit B: ${spiritB.name} — Top axiom: ${spiritB.top_axiom} (${spiritB.axiom_weights[spiritB.top_axiom].title})`);
@@ -172,30 +220,26 @@ async function negotiate(topic) {
   const systemA = buildSystemPrompt(spiritA);
   const systemB = buildSystemPrompt(spiritB);
 
-  // Conversation histories (each Spirit sees the topic + the other's responses)
   let historyA = [];
   let historyB = [];
-
-  // Transcript for synthesis
   let transcript = '';
 
-  // --- Opening positions ---
+  // --- Opening positions (parallel — different providers can fire simultaneously) ---
   console.log(`  ┌─ ROUND 0: Opening Positions ─────────────────────────────┐\n`);
 
   const openingPrompt = `The topic for negotiation is: "${topic}"\n\nState your opening position. Ground it in your axiom weights. Be clear about what you will and won't bend on.`;
 
-  // Both opening positions can be fetched in parallel
   const [posA, posB] = await Promise.all([
-    provider.call(systemA, [{ role: 'user', content: openingPrompt }]),
-    provider.call(systemB, [{ role: 'user', content: openingPrompt }])
+    callLLM(systemA, [{ role: 'user', content: openingPrompt }], { provider: providerA }),
+    callLLM(systemB, [{ role: 'user', content: openingPrompt }], { provider: providerB })
   ]);
 
-  console.log(`  ◆ ${spiritA.name}:`);
+  console.log(`  ◆ ${spiritA.name} [${providerAName}]:`);
   console.log(`  ${posA.split('\n').join('\n  ')}\n`);
-  console.log(`  ◇ ${spiritB.name}:`);
+  console.log(`  ◇ ${spiritB.name} [${providerBName}]:`);
   console.log(`  ${posB.split('\n').join('\n  ')}\n`);
 
-  transcript += `=== OPENING POSITIONS ===\n\n${spiritA.name}:\n${posA}\n\n${spiritB.name}:\n${posB}\n\n`;
+  transcript += `=== OPENING POSITIONS ===\n\n${spiritA.name} [${providerAName}]:\n${posA}\n\n${spiritB.name} [${providerBName}]:\n${posB}\n\n`;
 
   historyA = [
     { role: 'user', content: openingPrompt },
@@ -213,38 +257,37 @@ async function negotiate(topic) {
     // Spirit A responds to Spirit B's last position
     const promptForA = `Your counterpart (${spiritB.name}) just said:\n\n"${historyB[historyB.length - 1].content}"\n\nRespond. Where do you find positive-sum overlap? Where must you hold firm? Cite your axioms.`;
     historyA.push({ role: 'user', content: promptForA });
-    const respA = await provider.call(systemA, historyA);
+    const respA = await callLLM(systemA, historyA, { provider: providerA });
     historyA.push({ role: 'assistant', content: respA });
 
-    console.log(`  ◆ ${spiritA.name} (Round ${round}):`);
+    console.log(`  ◆ ${spiritA.name} [${providerAName}] (Round ${round}):`);
     console.log(`  ${respA.split('\n').join('\n  ')}\n`);
 
     // Spirit B responds to Spirit A's response
     const promptForB = `Your counterpart (${spiritA.name}) just said:\n\n"${respA}"\n\nRespond. Where do you find positive-sum overlap? Where must you hold firm? Cite your axioms.`;
     historyB.push({ role: 'user', content: promptForB });
-    const respB = await provider.call(systemB, historyB);
+    const respB = await callLLM(systemB, historyB, { provider: providerB });
     historyB.push({ role: 'assistant', content: respB });
 
-    console.log(`  ◇ ${spiritB.name} (Round ${round}):`);
+    console.log(`  ◇ ${spiritB.name} [${providerBName}] (Round ${round}):`);
     console.log(`  ${respB.split('\n').join('\n  ')}\n`);
 
-    transcript += `=== ROUND ${round} ===\n\n${spiritA.name}:\n${respA}\n\n${spiritB.name}:\n${respB}\n\n`;
+    transcript += `=== ROUND ${round} ===\n\n${spiritA.name} [${providerAName}]:\n${respA}\n\n${spiritB.name} [${providerBName}]:\n${respB}\n\n`;
   }
 
   // --- Synthesis ---
-  console.log(`  ┌─ SYNTHESIS: Producing Joint Bean ────────────────────────┐\n`);
+  console.log(`  ┌─ SYNTHESIS: Producing Joint Bean [${arbiterName}] ──┐\n`);
 
   const synthesisSystem = buildSynthesisPrompt(spiritA, spiritB);
   const synthesisPrompt = `Here is the full negotiation transcript:\n\n${transcript}\n\nProduce the joint Bean as JSON.`;
 
-  const rawBean = await provider.call(synthesisSystem, [
+  const rawBean = await callLLM(synthesisSystem, [
     { role: 'user', content: synthesisPrompt }
-  ]);
+  ], { provider: arbiterProvider });
 
   // Parse the Bean JSON
   let jointBean;
   try {
-    // Try to extract JSON even if the model wraps it in markdown
     const jsonMatch = rawBean.match(/\{[\s\S]*\}/);
     jointBean = JSON.parse(jsonMatch ? jsonMatch[0] : rawBean);
   } catch (e) {
@@ -253,7 +296,7 @@ async function negotiate(topic) {
     jointBean = { raw: rawBean, parse_error: e.message };
   }
 
-  // Write the joint Bean to file
+  // Write output files
   const outPath = path.join(__dirname, 'output');
   if (!fs.existsSync(outPath)) fs.mkdirSync(outPath, { recursive: true });
 
@@ -261,9 +304,20 @@ async function negotiate(topic) {
   const beanFile = path.join(outPath, `joint-bean-${timestamp}.json`);
   fs.writeFileSync(beanFile, JSON.stringify(jointBean, null, 2));
 
-  // Also write the transcript
   const transcriptFile = path.join(outPath, `transcript-${timestamp}.md`);
-  fs.writeFileSync(transcriptFile, `# Principled Playground — Negotiation Transcript\n\n**Topic:** ${topic}\n**Date:** ${new Date().toISOString()}\n**Provider:** ${provider.name}\n**Spirit A:** ${spiritA.name} (${spiritA.top_axiom})\n**Spirit B:** ${spiritB.name} (${spiritB.top_axiom})\n**Rounds:** ${ROUNDS}\n\n---\n\n${transcript}`);
+  fs.writeFileSync(transcriptFile, `# Principled Playground — Negotiation Transcript
+
+**Topic:** ${topic}
+**Date:** ${new Date().toISOString()}
+**Mode:** ${mode}
+**Spirit A:** ${spiritA.name} (${spiritA.top_axiom}) via ${providerAName}
+**Spirit B:** ${spiritB.name} (${spiritB.top_axiom}) via ${providerBName}
+**Arbiter:** ${arbiterName}
+**Rounds:** ${ROUNDS}
+
+---
+
+${transcript}`);
 
   console.log(`  JOINT BEAN:`);
   console.log(`  ${JSON.stringify(jointBean, null, 2).split('\n').join('\n  ')}\n`);
@@ -282,7 +336,12 @@ async function negotiate(topic) {
 const topic = process.argv[2];
 if (!topic) {
   console.error('Usage: node playground/negotiate.js "Your topic here"');
-  console.error('Example: node playground/negotiate.js "How should AI handle user disagreement?"');
+  console.error('');
+  console.error('Dual-brain mode (recommended):');
+  console.error('  ANTHROPIC_API_KEY=... GEMINI_API_KEY=... node playground/negotiate.js "topic"');
+  console.error('');
+  console.error('Single-brain mode:');
+  console.error('  ANTHROPIC_API_KEY=... node playground/negotiate.js "topic"');
   process.exit(1);
 }
 

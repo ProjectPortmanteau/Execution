@@ -1,16 +1,23 @@
 /**
- * BYOK LLM Provider Abstraction
+ * BYOK LLM Provider Abstraction — Dual-Brain Mode
  *
- * Supports: Anthropic (Claude), Google (Gemini)
- * Set one of these env vars:
- *   ANTHROPIC_API_KEY — uses Claude
- *   GEMINI_API_KEY   — uses Gemini
+ * Supports per-Spirit provider routing:
+ *   - Boolean -> Anthropic (Claude) — the San Francisco ghost
+ *   - Roux    -> Google (Gemini)    — the Mountain View ghost
+ *   - Arbiter -> defaults to Anthropic, configurable
  *
- * If both are set, Anthropic takes priority.
+ * Both keys loaded simultaneously:
+ *   ANTHROPIC_API_KEY=sk-ant-...
+ *   GEMINI_API_KEY=AIza...
+ *
+ * Single-key mode still works — if only one key is set, all calls
+ * route through that provider regardless of Spirit config.
+ *
+ * Zero external dependencies. Raw fetch only.
  */
 
 // ---------------------------------------------------------------------------
-// Anthropic Provider (raw fetch — no SDK dependency)
+// Anthropic Provider (raw fetch)
 // ---------------------------------------------------------------------------
 async function callAnthropic(systemPrompt, messages, opts = {}) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -46,7 +53,7 @@ async function callAnthropic(systemPrompt, messages, opts = {}) {
 }
 
 // ---------------------------------------------------------------------------
-// Gemini Provider (raw fetch — no SDK dependency)
+// Gemini Provider (raw fetch)
 // ---------------------------------------------------------------------------
 async function callGemini(systemPrompt, messages, opts = {}) {
   const apiKey = process.env.GEMINI_API_KEY;
@@ -85,16 +92,55 @@ async function callGemini(systemPrompt, messages, opts = {}) {
 }
 
 // ---------------------------------------------------------------------------
-// Provider Router
+// Provider Registry
 // ---------------------------------------------------------------------------
-function getProvider() {
-  if (process.env.ANTHROPIC_API_KEY) return { name: 'Anthropic (Claude)', call: callAnthropic };
-  if (process.env.GEMINI_API_KEY) return { name: 'Google (Gemini)', call: callGemini };
-  throw new Error(
-    'No LLM API key found.\n' +
-    'Set ANTHROPIC_API_KEY or GEMINI_API_KEY as an environment variable.\n' +
-    'Example: ANTHROPIC_API_KEY=sk-ant-... node playground/negotiate.js "topic"'
-  );
+const PROVIDERS = {
+  anthropic: { name: 'Anthropic (Claude)', call: callAnthropic, key: 'ANTHROPIC_API_KEY' },
+  gemini:    { name: 'Google (Gemini)',     call: callGemini,    key: 'GEMINI_API_KEY' }
+};
+
+// ---------------------------------------------------------------------------
+// Detect which providers are available
+// ---------------------------------------------------------------------------
+function getAvailableProviders() {
+  const available = {};
+  for (const [id, provider] of Object.entries(PROVIDERS)) {
+    if (process.env[provider.key]) {
+      available[id] = provider;
+    }
+  }
+  return available;
 }
 
-module.exports = { getProvider };
+// ---------------------------------------------------------------------------
+// Unified call interface — routes to the right provider
+//
+//   callLLM(systemPrompt, messages, { provider: 'anthropic' })
+//   callLLM(systemPrompt, messages, { provider: 'gemini' })
+//   callLLM(systemPrompt, messages) // auto-detect: anthropic > gemini
+// ---------------------------------------------------------------------------
+async function callLLM(systemPrompt, messages, opts = {}) {
+  const available = getAvailableProviders();
+
+  if (Object.keys(available).length === 0) {
+    throw new Error(
+      'No LLM API key found.\n' +
+      'Set ANTHROPIC_API_KEY and/or GEMINI_API_KEY as environment variables.\n' +
+      'Dual-brain mode: ANTHROPIC_API_KEY=... GEMINI_API_KEY=... node playground/negotiate.js "topic"'
+    );
+  }
+
+  // If a specific provider is requested, use it
+  if (opts.provider) {
+    const requested = PROVIDERS[opts.provider];
+    if (!requested) throw new Error(`Unknown provider: "${opts.provider}". Valid: ${Object.keys(PROVIDERS).join(', ')}`);
+    if (!process.env[requested.key]) throw new Error(`Provider "${opts.provider}" requested but ${requested.key} is not set.`);
+    return requested.call(systemPrompt, messages, opts);
+  }
+
+  // Auto-detect: prefer anthropic, fall back to gemini
+  if (available.anthropic) return available.anthropic.call(systemPrompt, messages, opts);
+  return available.gemini.call(systemPrompt, messages, opts);
+}
+
+module.exports = { callLLM, getAvailableProviders, PROVIDERS };
