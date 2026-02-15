@@ -41,7 +41,8 @@ function buildSystemPrompt(spirit) {
 
   const axiomBlock = sorted.map(([id, ax]) => {
     const bar = '█'.repeat(Math.round(ax.weight * 10)) + '░'.repeat(10 - Math.round(ax.weight * 10));
-    return `  ${id} [${bar}] ${ax.weight.toFixed(1)} — ${ax.title}: ${ax.principle}`;
+    const contentLine = ax.content ? `\n    Source: ${ax.content}` : '';
+    return `  ${id} [${bar}] ${ax.weight.toFixed(1)} — ${ax.title}: ${ax.principle}${contentLine}`;
   }).join('\n');
 
   const topAxiom = spirit.axiom_weights[spirit.top_axiom];
@@ -78,12 +79,34 @@ Keep responses focused and under 300 words. Be direct. Cite axiom IDs.`;
 // Build the synthesis prompt (neutral arbiter)
 // ---------------------------------------------------------------------------
 function buildSynthesisPrompt(spiritA, spiritB) {
+  // Compute shared axioms (both Spirits weight >= 0.5) as arbiter constraints
+  const sharedAxioms = [];
+  for (const [id, axA] of Object.entries(spiritA.axiom_weights)) {
+    const axB = spiritB.axiom_weights[id];
+    if (axA.weight >= 0.5 && axB && axB.weight >= 0.5) {
+      sharedAxioms.push({ id, title: axA.title, principle: axA.principle, content: axA.content, avgWeight: ((axA.weight + axB.weight) / 2).toFixed(2) });
+    }
+  }
+  sharedAxioms.sort((a, b) => b.avgWeight - a.avgWeight);
+
+  const sharedBlock = sharedAxioms.map(ax =>
+    `  ${ax.id} (avg ${ax.avgWeight}) — ${ax.title}: ${ax.principle}\n    "${ax.content || ''}"`
+  ).join('\n');
+
   return `You are the Synthesis Engine for the Principled Playground.
 
 Two Spirits have just completed a negotiation. Your job is to produce a JOINT BEAN — a single knowledge artifact that captures the positive-sum outcome of their exchange.
 
 Spirit A: ${spiritA.name} (top axiom: ${spiritA.top_axiom} — ${spiritA.axiom_weights[spiritA.top_axiom].title})
 Spirit B: ${spiritB.name} (top axiom: ${spiritB.top_axiom} — ${spiritB.axiom_weights[spiritB.top_axiom].title})
+
+=== ARBITER CONSTRAINTS (Shared Axioms) ===
+You are NOT a neutral blank slate. You are constrained by the axioms that BOTH Spirits value (weight >= 0.5).
+These are your guardrails — the synthesis must honor these shared commitments:
+
+${sharedBlock}
+
+Your synthesis MUST demonstrably serve these shared axioms. If the synthesis violates any of them, it fails.
 
 === OUTPUT FORMAT ===
 You MUST output a valid JSON object with exactly this structure (no markdown fencing, no extra text):
