@@ -1,12 +1,15 @@
 # CHANGELOG
 
-## 2026-02 — Spirit Marketplace
+## 2026-02 — Spirit Marketplace & Repository Audit
 - Spirit Calibration Genesis Blueprint V1.0 published
 - Blueprint expanded to V1.1 — full specification with Red Team protocol, MDS post-mortem, and creator template
 - BYOK architecture documented
 - Repository README rewritten for public visibility
 - Copilot agent instructions established
 - LICENSE, SECURITY.md added
+- Documentation reorganized: docs/ directory created for extended technical docs
+- GitHub Settings Guide updated with expanded topics, release instructions, and SEO guidance
+- Repository structure audit and discoverability improvements
 
 ## 2026-01 — Phase Transition
 - Genesis Engine activated
