@@ -2,6 +2,8 @@
 
 **A recursive creative ecosystem where philosophy, platform, methodology, and AI reinforce each other.**
 
+`knowledge-graph` · `ai-calibration` · `byok` · `spirit-marketplace` · `semantic-git` · `multi-agent` · `opvs`
+
 Built by [Robert Miller](https://github.com/ProjectPortmanteau) · iLL Port Studios · 2023–2026
 
 -----
@@ -96,8 +98,13 @@ Execution/
 │   ├── 03_Layer_3_Execution.md            # Layer 3 (8 Beans)
 │   ├── 04_Layer_4_Lore.md                 # Layer 4 (12 Beans)
 │   ├── 05_Layer_5_Process.md              # Layer 5 (13 Beans)
-│   ├── 06_Layer_6_Ark_Consolidated.md     # Layer 6 (6 Beans)
+│   ├── 06_Layer_6_Ark_Consolidated.md     # Layer 6: Ark (reconciles all 85)
 │   └── _sources.json           # Machine-readable provenance mapping
+├── docs/                       # Extended documentation
+│   └── GENESIS_ENGINE_README.md           # Backend technical docs
+├── roadmap/                    # Product roadmap
+│   └── PRINCIPLED_PLAYGROUND_CONCEPT.md   # Stage 3: Multi-agent negotiation
+├── spirit-calibration/         # Spirit Calibration artifacts
 ├── db/                         # Database schemas and migrations
 ├── services/                   # Backend services (GitHub sync, Ark-to-Soil)
 ├── utils/                      # Semantic parser, webhook security
@@ -106,9 +113,9 @@ Execution/
 │   └── workflows/              # Neon branch-per-PR automation
 ├── SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md  # ⭐ The Genesis Blueprint
 ├── BEANS_MASTER_LEDGER.md      # Bean registry index
-├── GENESIS_ENGINE_README.md    # Backend technical documentation
 ├── CONTRIBUTING.md             # Contribution guidelines
 ├── CHANGELOG.md                # Version history
+├── SECURITY.md                 # Security policy
 └── README.md                   # You are here
 ```
 
@@ -214,8 +221,10 @@ iLL Port Studios. See individual directories for specific licensing.
 
 - **Organization:** [ProjectPortmanteau](https://github.com/ProjectPortmanteau)
 - **Spirit Blueprint:** [SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md](SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md)
+- **Genesis Engine (Backend):** [docs/GENESIS_ENGINE_README.md](docs/GENESIS_ENGINE_README.md)
 - **Roadmap — Principled Playground:** [roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md](roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md)
 - **Beans Master Ledger:** [BEANS_MASTER_LEDGER.md](BEANS_MASTER_LEDGER.md)
+- **Security Policy:** [SECURITY.md](SECURITY.md)
 - **First crystallized commit:** [`f62c6568`](https://github.com/ProjectPortmanteau/Execution/commit/f62c6568) — `[PODIUM] The Krystallum Breathes`
 
 -----
