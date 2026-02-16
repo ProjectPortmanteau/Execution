@@ -101,6 +101,13 @@ Execution/
 ├── db/                         # Database schemas and migrations
 ├── services/                   # Backend services (GitHub sync, Ark-to-Soil)
 ├── utils/                      # Semantic parser, webhook security
+├── playground/                 # ⚡ Principled Playground v0.2 (dual-brain negotiation)
+│   ├── negotiate.js            # Multi-round negotiation engine
+│   ├── provider.js             # BYOK dual-brain provider abstraction
+│   ├── spirits/                # Spirit configs (Soul Code + axiom weights)
+│   │   ├── boolean.json        # Boolean → Anthropic (Claude)
+│   │   └── contrarian.json     # Roux → Google (Gemini)
+│   └── PRINCIPLED_PLAYGROUND.md # Full concept document
 ├── 03_OPVS_PLATFORM/           # Platform documentation and specs
 ├── .github/                    # CI/CD workflows, Copilot instructions
 │   └── workflows/              # Neon branch-per-PR automation
@@ -154,7 +161,8 @@ Seven axioms that cascade into every architectural, economic, and narrative deci
 |Constellation view (BBI)    |✅ Live       |Force-directed graph visualization                         |
 |Cross-app auth              |✅ Wired      |GitHub OAuth via NeonAuth                                  |
 |CI/CD (Neon branch-per-PR)  |✅ Active     |Ephemeral database branches, auto-cleanup                  |
-|BYOK provider abstraction   |🔧 In progress|Currently single-provider                                  |
+|BYOK provider abstraction   |✅ Live        |Dual-brain: per-Spirit routing across Anthropic + Gemini   |
+|Principled Playground       |✅ Prototype   |v0.2 — dual-brain negotiation, constrained arbiter, 4-layer Bean output|
 |Live Spirit demo            |🔧 In progress|Bean context injection built, streaming needs provider swap|
 |Web3 minting                |📋 Phase 2    |Schema fields ready, no contracts deployed                 |
 |Spirit Marketplace          |📋 Designed   |Blueprint template is the first artifact                   |
@@ -206,7 +214,7 @@ iLL Port Studios. See individual directories for specific licensing.
 |---|---|---|
 | 1 | **Groove-Shift with users** — Prove the knowledge graph has value | 🔧 Active |
 | 2 | **Spirit Marketplace** — Calibration templates as products | 📋 Designed |
-| 3 | **[The Principled Playground](roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md)** — Multi-agent negotiation where AI Spirits carry user principles as immutable constraints | 📋 Concept |
+| 3 | **[The Principled Playground](playground/PRINCIPLED_PLAYGROUND.md)** — Multi-agent negotiation where AI Spirits carry user principles as immutable constraints | ✅ Prototype ([v0.2](playground/README.md)) |
 
 -----
 
@@ -214,7 +222,7 @@ iLL Port Studios. See individual directories for specific licensing.
 
 - **Organization:** [ProjectPortmanteau](https://github.com/ProjectPortmanteau)
 - **Spirit Blueprint:** [SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md](SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md)
-- **Roadmap — Principled Playground:** [roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md](roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md)
+- **Principled Playground:** [playground/README.md](playground/README.md) (prototype) · [Full Concept](playground/PRINCIPLED_PLAYGROUND.md)
 - **Beans Master Ledger:** [BEANS_MASTER_LEDGER.md](BEANS_MASTER_LEDGER.md)
 - **First crystallized commit:** [`f62c6568`](https://github.com/ProjectPortmanteau/Execution/commit/f62c6568) — `[PODIUM] The Krystallum Breathes`
 
