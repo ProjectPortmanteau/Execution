@@ -102,6 +102,12 @@ Execution/
 │   └── _sources.json           # Machine-readable provenance mapping
 ├── docs/                       # Extended documentation
 │   └── GENESIS_ENGINE_README.md           # Backend technical docs
+├── playground/                  # Principled Playground prototype
+│   ├── negotiate.js             # Negotiation engine (3 rounds + synthesis)
+│   ├── provider.js              # BYOK dual-brain provider abstraction
+│   ├── spirits/                 # Spirit Soul Codes (Boolean, Roux)
+│   ├── PRINCIPLED_PLAYGROUND.md # Architecture docs
+│   └── README.md                # Usage guide
 ├── roadmap/                    # Product roadmap
 │   └── PRINCIPLED_PLAYGROUND_CONCEPT.md   # Stage 3: Multi-agent negotiation
 ├── spirit-calibration/         # Spirit Calibration artifacts
@@ -161,7 +167,7 @@ Seven axioms that cascade into every architectural, economic, and narrative deci
 |Constellation view (BBI)    |✅ Live       |Force-directed graph visualization                         |
 |Cross-app auth              |✅ Wired      |GitHub OAuth via NeonAuth                                  |
 |CI/CD (Neon branch-per-PR)  |✅ Active     |Ephemeral database branches, auto-cleanup                  |
-|BYOK provider abstraction   |🔧 In progress|Currently single-provider                                  |
+|BYOK provider abstraction   |✅ Live        |Dual-brain: Anthropic + Google via BYOK                    |
 |Live Spirit demo            |🔧 In progress|Bean context injection built, streaming needs provider swap|
 |Web3 minting                |📋 Phase 2    |Schema fields ready, no contracts deployed                 |
 |Spirit Marketplace          |📋 Designed   |Blueprint template is the first artifact                   |
@@ -213,7 +219,7 @@ iLL Port Studios. See individual directories for specific licensing.
 |---|---|---|
 | 1 | **Groove-Shift with users** — Prove the knowledge graph has value | 🔧 Active |
 | 2 | **Spirit Marketplace** — Calibration templates as products | 📋 Designed |
-| 3 | **[The Principled Playground](roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md)** — Multi-agent negotiation where AI Spirits carry user principles as immutable constraints | 📋 Concept |
+| 3 | **[The Principled Playground](roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md)** — Multi-agent negotiation where AI Spirits carry user principles as immutable constraints | 🔧 Prototype |
 
 -----
 
