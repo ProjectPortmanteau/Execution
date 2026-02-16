@@ -98,7 +98,7 @@ Execution/
 │   ├── 03_Layer_3_Execution.md            # Layer 3 (8 Beans)
 │   ├── 04_Layer_4_Lore.md                 # Layer 4 (12 Beans)
 │   ├── 05_Layer_5_Process.md              # Layer 5 (13 Beans)
-│   ├── 06_Layer_6_Ark_Consolidated.md     # Layer 6: Ark (reconciles all 85)
+│   ├── 06_Layer_6_Ark_Consolidated.md     # Layer 6 (6 Beans): Ark (reconciles all 85)
 │   └── _sources.json           # Machine-readable provenance mapping
 ├── docs/                       # Extended documentation
 │   └── GENESIS_ENGINE_README.md           # Backend technical docs
