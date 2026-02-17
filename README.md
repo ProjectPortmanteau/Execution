@@ -174,6 +174,50 @@ Seven axioms that cascade into every architectural, economic, and narrative deci
 
 -----
 
+## Platform Preview
+
+Visual documentation of the OPVS platform in action:
+
+### Boolean / Bean Forge
+*Fluid Mode / Crystallization Interface*
+
+![Boolean Bean Forge](docs/images/boolean_bean_forge.png)
+
+The Boolean Bean Forge allows dynamic creation and crystallization of Beans. Toggle between fluid editing mode and crystallization to lock knowledge into the graph.
+
+---
+
+### Forge a Bean
+*Bean Creation Interface*
+
+![Forge a Bean](docs/images/forge_a_bean.png)
+
+The Bean creation interface where users author new atomic knowledge units with full metadata, provenance tracking, and connection specification.
+
+---
+
+### Immune Connectome (BBI)
+*Force-Directed Graph Visualization*
+
+![Immune Connectome](docs/images/immune_connectome.png)
+
+The Constellation view (Brain-Boolean Interface) displays the knowledge graph as a force-directed network, showing the connections and relationships between Beans across all seven layers.
+
+---
+
+### The Signal
+*Landing Page*
+
+![The Signal](docs/images/the_signal.png)
+
+The platform's landing page, introducing users to the philosophy and architecture of Project Portmanteau.
+
+---
+
+> **Note:** Screenshot placeholders are currently in place. Actual high-resolution images should be added to `docs/images/` following the naming convention specified in [docs/images/README.md](docs/images/README.md).
+
+-----
+
 ## The BYOK Model
 
 Most AI platforms charge for compute. We don't.
