@@ -62,12 +62,54 @@ async function callGoogle(apiKey, model, systemPrompt, userMessage) {
 }
 
 // ---------------------------------------------------------------------------
+// Provider: Groq (OpenAI-compatible)
+// Uses curl for environments where Node.js DNS cannot resolve api.groq.com
+// ---------------------------------------------------------------------------
+
+const { execSync } = require('child_process');
+
+async function callGroq(apiKey, model, systemPrompt, userMessage) {
+  const payload = JSON.stringify({
+    model,
+    max_tokens: 1024,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userMessage }
+    ]
+  });
+
+  // Write payload to temp file to avoid shell escaping issues
+  const fs = require('fs');
+  const tmpFile = '/tmp/groq_payload_' + Date.now() + '.json';
+  fs.writeFileSync(tmpFile, payload);
+
+  try {
+    const result = execSync(
+      `curl -s -X POST "https://api.groq.com/openai/v1/chat/completions" ` +
+      `-H "Content-Type: application/json" ` +
+      `-H "Authorization: Bearer ${apiKey}" ` +
+      `-d @${tmpFile}`,
+      { timeout: 60000, encoding: 'utf-8' }
+    );
+
+    const data = JSON.parse(result);
+    if (data.error) {
+      throw new Error(`Groq API: ${data.error.message || JSON.stringify(data.error)}`);
+    }
+    return data.choices[0].message.content;
+  } finally {
+    try { fs.unlinkSync(tmpFile); } catch (_) {}
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Unified dispatch
 // ---------------------------------------------------------------------------
 
 const PROVIDERS = {
   anthropic: callAnthropic,
-  google: callGoogle
+  google: callGoogle,
+  groq: callGroq
 };
 
 /**
@@ -109,14 +151,19 @@ async function send(spirit, apiKey, userMessage) {
  * @returns {{ apiKey: string, provider: string, mode: string } | null}
  */
 function resolveProvider(spirit, keys) {
-  const preferred = spirit.provider;               // e.g. "anthropic"
-  const fallback  = preferred === 'anthropic' ? 'google' : 'anthropic';
+  const preferred = spirit.provider;               // e.g. "anthropic", "google", "groq"
+
+  // Fallback chain: try preferred → then all others
+  const allProviders = ['anthropic', 'google', 'groq'];
+  const fallbacks = allProviders.filter(p => p !== preferred);
 
   if (keys[preferred]) {
     return { apiKey: keys[preferred], provider: preferred, mode: 'NATIVE' };
   }
-  if (keys[fallback]) {
-    return { apiKey: keys[fallback], provider: fallback, mode: 'FALLBACK' };
+  for (const fb of fallbacks) {
+    if (keys[fb]) {
+      return { apiKey: keys[fb], provider: fb, mode: 'FALLBACK' };
+    }
   }
   return null;
 }

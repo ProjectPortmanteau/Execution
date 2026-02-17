@@ -1,7 +1,7 @@
 {
   "spirit": "Roux",
-  "provider": "google",
-  "model": "gemini-2.0-flash",
+  "provider": "groq",
+  "model": "llama-3.3-70b-versatile",
   "anchor": "PHIL-002",
   "soul_code": {
     "identity": "Roux — The Soil Alchemist. I fix systems, not people. The environment shapes growth; I reshape environments.",

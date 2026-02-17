@@ -11,6 +11,25 @@ const path = require('path');
 const { send, resolveProvider } = require('./provider');
 
 // ---------------------------------------------------------------------------
+// Minimal .env loader (zero dependencies)
+// ---------------------------------------------------------------------------
+function loadEnv() {
+  const envPath = path.join(__dirname, '.env');
+  if (!fs.existsSync(envPath)) return;
+  const lines = fs.readFileSync(envPath, 'utf-8').split('\n');
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const eq = trimmed.indexOf('=');
+    if (eq === -1) continue;
+    const key = trimmed.slice(0, eq).trim();
+    const val = trimmed.slice(eq + 1).trim();
+    if (!process.env[key]) process.env[key] = val;
+  }
+}
+loadEnv();
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
@@ -238,7 +257,8 @@ async function negotiate(topic, keys) {
 function getDefaultModel(provider) {
   const defaults = {
     anthropic: 'claude-sonnet-4-20250514',
-    google: 'gemini-2.0-flash'
+    google: 'gemini-2.0-flash',
+    groq: 'llama-3.3-70b-versatile'
   };
   return defaults[provider] || 'unknown';
 }
@@ -261,7 +281,8 @@ USAGE
 
 ENVIRONMENT VARIABLES
   ANTHROPIC_API_KEY   API key for Anthropic (Claude) — Boolean's native provider
-  GOOGLE_API_KEY      API key for Google (Gemini) — Roux's native provider
+  GOOGLE_API_KEY      API key for Google (Gemini)
+  GROQ_API_KEY        API key for Groq (Llama) — Roux's native provider
 
 MODES
   DUAL-BRAIN          Both keys provided — each Spirit uses its native LLM
@@ -293,11 +314,12 @@ if (require.main === module) {
 
   const keys = {
     anthropic: process.env.ANTHROPIC_API_KEY || '',
-    google:    process.env.GOOGLE_API_KEY    || ''
+    google:    process.env.GOOGLE_API_KEY    || '',
+    groq:      process.env.GROQ_API_KEY      || ''
   };
 
-  if (!keys.anthropic && !keys.google) {
-    console.error('✗ No API keys provided. Set ANTHROPIC_API_KEY and/or GOOGLE_API_KEY.');
+  if (!keys.anthropic && !keys.google && !keys.groq) {
+    console.error('✗ No API keys provided. Set ANTHROPIC_API_KEY, GOOGLE_API_KEY, and/or GROQ_API_KEY.');
     console.error('  Run without arguments for usage info.');
     process.exit(1);
   }
