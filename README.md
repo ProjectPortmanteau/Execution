@@ -100,6 +100,9 @@ Execution/
 │   ├── 05_Layer_5_Process.md              # Layer 5 (13 Beans)
 │   ├── 06_Layer_6_Ark_Consolidated.md     # Layer 6 (6 Beans): Ark (reconciles all 85)
 │   └── _sources.json           # Machine-readable provenance mapping
+├── bin/                        # CLI tools
+│   ├── viberank.js             # Bean philosophical alignment analyzer
+│   └── README.md               # CLI tools documentation
 ├── docs/                       # Extended documentation
 │   └── GENESIS_ENGINE_README.md           # Backend technical docs
 ├── playground/                  # Principled Playground prototype
@@ -196,6 +199,37 @@ Every Bean carries provenance: git hash, human author, timestamp, semantic type,
 - **Hosting:** Replit
 - **CI/CD:** GitHub Actions (Neon branch-per-PR)
 - **Version Control:** GitHub with semantic commit webhooks
+
+-----
+
+## CLI Tools
+
+### viberank
+
+`viberank` is a command-line tool that analyzes Beans and ranks them by philosophical alignment with Layer 0 (Soul Code) principles.
+
+```bash
+# Rank all beans
+npx viberank
+
+# Filter by layer
+npx viberank --layer 0
+
+# Show detailed output
+npx viberank --verbose
+```
+
+The tool calculates a "vibe score" based on:
+- Presence of Layer 0 philosophy keywords
+- Cross-references to foundational Beans
+- Structural alignment with Bean format
+
+Use cases:
+- **Quality Assurance** — Verify new Beans maintain philosophical coherence
+- **Discovery** — Find Beans with strong alignment to core principles
+- **Onboarding** — Identify which Beans to study first
+
+See [bin/README.md](bin/README.md) for full documentation.
 
 -----
 

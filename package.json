@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "OPVS Genesis Engine - The Backend for Project Portmanteau",
   "main": "index.js",
+  "bin": {
+    "viberank": "./bin/viberank.js"
+  },
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
