@@ -167,7 +167,7 @@ Seven axioms that cascade into every architectural, economic, and narrative deci
 |Constellation view (BBI)    |✅ Live       |Force-directed graph visualization                         |
 |Cross-app auth              |✅ Wired      |GitHub OAuth via NeonAuth                                  |
 |CI/CD (Neon branch-per-PR)  |✅ Active     |Ephemeral database branches, auto-cleanup                  |
-|BYOK provider abstraction   |✅ Live        |Dual-brain: Anthropic + Google via BYOK                    |
+|BYOK provider abstraction   |✅ Live        |Dual-brain: Anthropic + Grok via BYOK                    |
 |Live Spirit demo            |🔧 In progress|Bean context injection built, streaming needs provider swap|
 |Web3 minting                |📋 Phase 2    |Schema fields ready, no contracts deployed                 |
 |Spirit Marketplace          |📋 Designed   |Blueprint template is the first artifact                   |
