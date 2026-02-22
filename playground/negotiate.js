@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // playground/negotiate.js
-// Principled Playground v0.3 — Dual-Brain Multi-Agent Negotiation
-// Two AI Spirits negotiate across 3 rounds and produce a joint Bean.
+// Principled Playground v0.4 — Multi-Brain Multi-Agent Negotiation
+// Two AI Spirits negotiate across 3 rounds, produce a joint Bean,
+// and a third Spirit (Seer) stress-tests the result before it ships.
 // Zero external dependencies — raw fetch, BYOK from day one.
 
 'use strict';
@@ -142,12 +143,56 @@ function buildLoomPrompt(topic, booleanFinal, rouxFinal) {
     'Typed edges to related Beans or concepts that this synthesis connects to.',
     '',
     '### Echo (Provenance)',
-    '- Participants: Boolean, Roux',
+    '- Participants: Boolean, Roux (Seer stress-tests after synthesis)',
     '- Rounds: 3',
     '- Timestamp: <ISO timestamp>',
     '- Mode: <DUAL-BRAIN or SINGLE-BRAIN>',
     '',
     'Keep the total output under 400 words.'
+  ].join('\n');
+}
+
+/**
+ * Build the prompt for Seer's post-synthesis stress test.
+ * Seer interrogates the Joint Bean AFTER the Loom has produced it.
+ * This is Seer's native role: "the Spirit you invoke before you ship."
+ *
+ * @param {string} topic        - The negotiation topic
+ * @param {string} booleanFinal - Boolean's final-round response
+ * @param {string} rouxFinal    - Roux's final-round response
+ * @param {string} jointBean    - The Loom's synthesized output
+ * @returns {string}
+ */
+function buildStressTestPrompt(topic, booleanFinal, rouxFinal, jointBean) {
+  return [
+    'STRESS TEST — Post-Synthesis Evaluation',
+    '',
+    `Topic: "${topic}"`,
+    '',
+    'Two Spirits have negotiated this topic across 3 rounds. A synthesis engine',
+    '(The Loom) has produced a Joint Bean. Your role: stress-test before it ships.',
+    '',
+    '--- BOOLEAN (final position) ---',
+    booleanFinal,
+    '',
+    '--- ROUX (final position) ---',
+    rouxFinal,
+    '',
+    '--- JOINT BEAN (Loom synthesis) ---',
+    jointBean,
+    '',
+    'Apply your core axiom: "A plan that cannot survive its worst case was never a plan."',
+    '',
+    'Evaluate:',
+    '1. LOAD-BEARING ASSUMPTIONS — What assumptions does this synthesis rest on? Which are tested?',
+    '2. FAILURE MODES — What breaks at scale, under adversarial conditions, or when founding energy fades?',
+    '3. MISSING VOICES — Whose absence from this negotiation will matter?',
+    '4. VERDICT — HOLDS, HOLDS WITH CONDITIONS, or FRAGILE. Justify your verdict.',
+    '',
+    'If the Bean survives your interrogation, say so clearly.',
+    'A position that earns Seer\'s acceptance has earned its place.',
+    '',
+    'Keep your response under 400 words.'
   ].join('\n');
 }
 
@@ -241,15 +286,18 @@ function computeTensionScore(roundHistory) {
  * @param {string} brainMode
  * @param {object} boolean - Spirit config
  * @param {object} roux - Spirit config
+ * @param {object|null} seer - Spirit config (null if offline)
  * @param {object} booleanProvider
  * @param {object} rouxProvider
+ * @param {object|null} seerProvider
  * @param {Array}  roundHistory
  * @param {string} jointBean
+ * @param {string|null} stressTest - Seer's stress test output (null if skipped)
  * @param {object} tension
  * @param {string} startedAt
  * @returns {string} output file path
  */
-function saveOutput(topic, brainMode, boolean, roux, booleanProvider, rouxProvider, roundHistory, jointBean, tension, startedAt) {
+function saveOutput(topic, brainMode, boolean, roux, seer, booleanProvider, rouxProvider, seerProvider, roundHistory, jointBean, stressTest, tension, startedAt) {
   const slug = topic
     .toLowerCase()
     .replace(/[^a-z0-9 ]/g, '')
@@ -282,14 +330,30 @@ function saveOutput(topic, brainMode, boolean, roux, booleanProvider, rouxProvid
     `| ${r.round} | ${r.friction} | ${r.agreement} |`
   ).join('\n');
 
+  const spiritLines = [
+    `**Boolean:** ${boolean.spirit} → ${booleanProvider.provider} (${booleanProvider.mode})`,
+    `**Roux:** ${roux.spirit} → ${rouxProvider.provider} (${rouxProvider.mode})`
+  ];
+  if (seer && seerProvider) {
+    spiritLines.push(`**Seer:** ${seer.spirit} → ${seerProvider.provider} (${seerProvider.mode})`);
+  }
+
+  const stressTestSection = stressTest ? [
+    '---',
+    '',
+    '## Stress Test (Seer)',
+    '',
+    stressTest,
+    ''
+  ].join('\n') : '';
+
   const content = [
     `# Principled Playground — Negotiation Transcript`,
     '',
     `**Topic:** "${topic}"`,
     `**Date:** ${startedAt.slice(0, 10)}`,
     `**Mode:** ${brainMode}`,
-    `**Boolean:** ${boolean.spirit} → ${booleanProvider.provider} (${booleanProvider.mode})`,
-    `**Roux:** ${roux.spirit} → ${rouxProvider.provider} (${rouxProvider.mode})`,
+    ...spiritLines,
     '',
     '---',
     '',
@@ -320,9 +384,10 @@ function saveOutput(topic, brainMode, boolean, roux, booleanProvider, rouxProvid
     '',
     jointBean,
     '',
+    stressTestSection,
     '---',
     '',
-    `*Principled Playground v0.2 — iLL Port Studios*`,
+    `*Principled Playground v0.4 — iLL Port Studios*`,
     `*Generated: ${startedAt}*`
   ].join('\n');
 
@@ -357,10 +422,12 @@ function summarizePosition(rawResponse) {
 async function negotiate(topic, keys) {
   const boolean = loadSpirit('boolean.json');
   const roux    = loadSpirit('contrarian.json');
+  const seer    = loadSpirit('seer.json');
 
   // Resolve providers for each Spirit
   const booleanProvider = resolveProvider(boolean, keys);
   const rouxProvider    = resolveProvider(roux, keys);
+  const seerProvider    = resolveProvider(seer, keys);   // null if no key available
 
   if (!booleanProvider) {
     console.error('✗ No API key available for Boolean. Set ANTHROPIC_API_KEY or GOOGLE_API_KEY.');
@@ -370,16 +437,25 @@ async function negotiate(topic, keys) {
     console.error('✗ No API key available for Roux. Set GOOGLE_API_KEY or ANTHROPIC_API_KEY.');
     process.exit(1);
   }
+  // Seer is optional — stress-test phase skipped if no provider available
 
-  // Determine brain mode
-  const isDualBrain = booleanProvider.provider !== rouxProvider.provider;
-  const brainMode   = isDualBrain ? 'DUAL-BRAIN' : 'SINGLE-BRAIN';
+  // Determine brain mode by counting unique providers
+  const activeProviders = new Set([booleanProvider.provider, rouxProvider.provider]);
+  if (seerProvider) activeProviders.add(seerProvider.provider);
+  const brainMode = activeProviders.size >= 3 ? 'TRI-BRAIN'
+                  : activeProviders.size === 2 ? 'DUAL-BRAIN'
+                  : 'SINGLE-BRAIN';
 
-  divider(`PRINCIPLED PLAYGROUND v0.2`);
+  divider(`PRINCIPLED PLAYGROUND v0.4`);
   console.log(`  Topic:    ${topic}`);
   console.log(`  Mode:     ${brainMode}`);
   console.log(`  Boolean:  ${boolean.spirit} → ${booleanProvider.provider} (${booleanProvider.mode})`);
   console.log(`  Roux:     ${roux.spirit} → ${rouxProvider.provider} (${rouxProvider.mode})`);
+  if (seerProvider) {
+    console.log(`  Seer:     ${seer.spirit} → ${seerProvider.provider} (${seerProvider.mode})`);
+  } else {
+    console.log(`  Seer:     [offline — no provider available]`);
+  }
   console.log(`  Rounds:   ${ROUNDS} (parallel within each round)`);
   const startedAt = timestamp();
   console.log(`  Started:  ${startedAt}`);
@@ -387,6 +463,7 @@ async function negotiate(topic, keys) {
   // Override provider in spirit config for actual API calls if in fallback mode
   const booleanForCall = { ...boolean, provider: booleanProvider.provider, model: booleanProvider.provider === boolean.provider ? boolean.model : getDefaultModel(booleanProvider.provider) };
   const rouxForCall    = { ...roux, provider: rouxProvider.provider, model: rouxProvider.provider === roux.provider ? roux.model : getDefaultModel(rouxProvider.provider) };
+  const seerForCall    = seerProvider ? { ...seer, provider: seerProvider.provider, model: seerProvider.provider === seer.provider ? seer.model : getDefaultModel(seerProvider.provider) } : null;
 
   let booleanPos = null;
   let rouxPos    = null;
@@ -439,6 +516,18 @@ async function negotiate(topic, keys) {
   console.log(`  ✓ Joint Bean produced\n`);
   console.log(indent(jointBean));
 
+  // --- Seer Stress Test (optional — runs if Seer has a provider) ---
+  let stressTest = null;
+  if (seerForCall && seerProvider) {
+    divider('SEER — Stress Test');
+
+    const stressPrompt = buildStressTestPrompt(topic, booleanRaw, rouxRaw, jointBean);
+    console.log(`  ⟐ Seer is interrogating the Joint Bean...`);
+    stressTest = await send(seerForCall, seerProvider.apiKey, stressPrompt);
+    console.log(`  ✓ Stress test complete\n`);
+    console.log(indent(stressTest));
+  }
+
   // --- Tension Score ---
   const tension = computeTensionScore(roundHistory);
   divider('TENSION SCORE');
@@ -456,26 +545,28 @@ async function negotiate(topic, keys) {
 
   // --- Save Output File ---
   const outputPath = saveOutput(
-    topic, brainMode, boolean, roux,
-    booleanProvider, rouxProvider,
-    roundHistory, jointBean, tension, startedAt
+    topic, brainMode, boolean, roux, seer,
+    booleanProvider, rouxProvider, seerProvider,
+    roundHistory, jointBean, stressTest, tension, startedAt
   );
 
   divider('NEGOTIATION COMPLETE');
-  console.log(`  Mode:      ${brainMode}`);
-  console.log(`  Completed: ${timestamp()}`);
-  console.log(`  Rounds:    ${ROUNDS}`);
-  console.log(`  Tension:   ${tension.score} — ${tension.label}`);
-  console.log(`  Output:    ${outputPath}\n`);
+  console.log(`  Mode:        ${brainMode}`);
+  console.log(`  Completed:   ${timestamp()}`);
+  console.log(`  Rounds:      ${ROUNDS}`);
+  console.log(`  Stress Test: ${stressTest ? 'Seer (' + seerProvider.provider + ')' : 'skipped'}`);
+  console.log(`  Tension:     ${tension.score} — ${tension.label}`);
+  console.log(`  Output:      ${outputPath}\n`);
 
-  return { brainMode, jointBean, tension, outputPath };
+  return { brainMode, jointBean, stressTest, tension, outputPath };
 }
 
 function getDefaultModel(provider) {
   const defaults = {
     anthropic: 'claude-sonnet-4-20250514',
     google: 'gemini-2.0-flash',
-    groq: 'llama-3.3-70b-versatile'
+    groq: 'llama-3.3-70b-versatile',
+    openai: 'gpt-4o'
   };
   return defaults[provider] || 'unknown';
 }
@@ -491,26 +582,40 @@ function indent(text, spaces) {
 
 function printUsage() {
   console.log(`
-Principled Playground v0.2 — Dual-Brain Multi-Agent Negotiation
+Principled Playground v0.4 — Multi-Brain Multi-Agent Negotiation
 
 USAGE
   node playground/negotiate.js "<topic>"
 
+SPIRITS
+  Boolean   Architect of Door Number 3   (Anthropic / Claude)
+  Roux      Soil Alchemist               (Groq / Llama)
+  Seer      Stress-Tester                (OpenAI / GPT-4o)
+
 ENVIRONMENT VARIABLES
   ANTHROPIC_API_KEY   API key for Anthropic (Claude) — Boolean's native provider
-  GOOGLE_API_KEY      API key for Google (Gemini)
+  GOOGLE_API_KEY      API key for Google (Gemini) — fallback provider
   GROQ_API_KEY        API key for Groq (Llama) — Roux's native provider
+  OPENAI_API_KEY      API key for OpenAI (GPT-4o) — Seer's native provider
 
 MODES
-  DUAL-BRAIN          Both keys provided — each Spirit uses its native LLM
-  SINGLE-BRAIN        One key provided — both Spirits share a single LLM
+  TRI-BRAIN           3 unique providers — maximum cross-provider portability
+  DUAL-BRAIN          2 unique providers — each Spirit uses its native LLM
+  SINGLE-BRAIN        1 provider — all Spirits share a single LLM
+
+PROTOCOL
+  Rounds 1-3   Boolean and Roux negotiate in parallel (Promise.all)
+  Loom         Impartial synthesis produces a Joint Bean
+  Stress Test  Seer interrogates the Joint Bean (if provider available)
 
 EXAMPLES
-  # Dual-brain (recommended)
-  ANTHROPIC_API_KEY=sk-... GOOGLE_API_KEY=AI... node playground/negotiate.js "How should AI handle creative ownership?"
+  # Tri-brain (recommended — full portability proof)
+  ANTHROPIC_API_KEY=sk-... GROQ_API_KEY=gsk-... OPENAI_API_KEY=sk-... \\
+    node playground/negotiate.js "How should AI handle creative ownership?"
 
-  # Single-brain fallback
-  GOOGLE_API_KEY=AI... node playground/negotiate.js "What makes a system fair?"
+  # Dual-brain (Seer uses fallback)
+  ANTHROPIC_API_KEY=sk-... GROQ_API_KEY=gsk-... \\
+    node playground/negotiate.js "What makes a system fair?"
 
 OUTPUT
   A joint Bean with all 4 OPVS layers:
@@ -518,6 +623,7 @@ OUTPUT
     Shell    — Metadata (topic, type, anchors)
     Corona   — Connections to related concepts
     Echo     — Provenance (participants, rounds, timestamp, mode)
+  Plus Seer's stress-test verdict (if available).
 `);
 }
 
@@ -532,11 +638,12 @@ if (require.main === module) {
   const keys = {
     anthropic: process.env.ANTHROPIC_API_KEY || '',
     google:    process.env.GOOGLE_API_KEY    || '',
-    groq:      process.env.GROQ_API_KEY      || ''
+    groq:      process.env.GROQ_API_KEY      || '',
+    openai:    process.env.OPENAI_API_KEY    || ''
   };
 
-  if (!keys.anthropic && !keys.google && !keys.groq) {
-    console.error('✗ No API keys provided. Set ANTHROPIC_API_KEY, GOOGLE_API_KEY, and/or GROQ_API_KEY.');
+  if (!keys.anthropic && !keys.google && !keys.groq && !keys.openai) {
+    console.error('✗ No API keys provided. Set ANTHROPIC_API_KEY, GROQ_API_KEY, OPENAI_API_KEY, and/or GOOGLE_API_KEY.');
     console.error('  Run without arguments for usage info.');
     process.exit(1);
   }
