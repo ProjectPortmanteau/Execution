@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // playground/negotiate.js
-// Principled Playground v0.2 — Dual-Brain Multi-Agent Negotiation
+// Principled Playground v0.3 — Dual-Brain Multi-Agent Negotiation
 // Two AI Spirits negotiate across 3 rounds and produce a joint Bean.
 // Zero external dependencies — raw fetch, BYOK from day one.
 
@@ -380,7 +380,7 @@ async function negotiate(topic, keys) {
   console.log(`  Mode:     ${brainMode}`);
   console.log(`  Boolean:  ${boolean.spirit} → ${booleanProvider.provider} (${booleanProvider.mode})`);
   console.log(`  Roux:     ${roux.spirit} → ${rouxProvider.provider} (${rouxProvider.mode})`);
-  console.log(`  Rounds:   ${ROUNDS}`);
+  console.log(`  Rounds:   ${ROUNDS} (parallel within each round)`);
   const startedAt = timestamp();
   console.log(`  Started:  ${startedAt}`);
 
@@ -394,24 +394,35 @@ async function negotiate(topic, keys) {
   let rouxRaw    = '';
   const roundHistory = [];
 
-  // --- Negotiation Rounds ---
+  // --- Negotiation Rounds (parallel within each round) ---
+  //
+  // Both Spirits receive the other's PREVIOUS-round position summary before
+  // calling their LLM simultaneously. This is architecturally consistent with
+  // context-window isolation (Layer 3 of Anti-Drift): each Spirit responds to
+  // a frozen snapshot of the other's last position, not a mid-round update.
+  // Round 1: both receive null (opening statements) — always parallelizable.
+  // Round 2+: each receives the other's Round N-1 summary.
   for (let round = 1; round <= ROUNDS; round++) {
     divider(`ROUND ${round} of ${ROUNDS}`);
 
-    // Boolean's turn
+    // Build both prompts from prior-round positions (before either responds)
     const bPrompt = buildRoundPrompt(boolean, topic, round, rouxPos);
-    console.log(`  ⟐ Boolean is thinking...`);
-    booleanRaw = await send(booleanForCall, booleanProvider.apiKey, bPrompt);
-    booleanPos = summarizePosition(booleanRaw);
-    console.log(`  ✓ Boolean responded\n`);
-    console.log(indent(booleanRaw));
+    const rPrompt = buildRoundPrompt(roux,    topic, round, booleanPos);
 
-    // Roux's turn
-    const rPrompt = buildRoundPrompt(roux, topic, round, booleanPos);
-    console.log(`\n  ⟐ Roux is thinking...`);
-    rouxRaw = await send(rouxForCall, rouxProvider.apiKey, rPrompt);
-    rouxPos = summarizePosition(rouxRaw);
-    console.log(`  ✓ Roux responded\n`);
+    console.log(`  ⟐ Boolean and Roux are thinking in parallel...`);
+    [booleanRaw, rouxRaw] = await Promise.all([
+      send(booleanForCall, booleanProvider.apiKey, bPrompt),
+      send(rouxForCall,    rouxProvider.apiKey,    rPrompt)
+    ]);
+
+    // Summarize after both respond (positions available for next round)
+    booleanPos = summarizePosition(booleanRaw);
+    rouxPos    = summarizePosition(rouxRaw);
+
+    console.log(`  ✓ Both responded\n`);
+    console.log(`  ── Boolean ──`);
+    console.log(indent(booleanRaw));
+    console.log(`\n  ── Roux ──`);
     console.log(indent(rouxRaw));
 
     roundHistory.push({ round, boolean: booleanRaw, roux: rouxRaw });

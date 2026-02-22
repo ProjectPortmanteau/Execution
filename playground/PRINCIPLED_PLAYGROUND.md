@@ -81,7 +81,7 @@ The central risk of multi-agent interaction is convergence — LLM agents natura
 
 2. **Post-Generation Filtering** — The position summarizer strips raw reasoning before sharing with the other Spirit. Neither agent can pattern-match on the other's cognitive process.
 
-3. **Context Window Isolation** — Separate API calls per Spirit, per round. No shared state. Friction is preserved by architecture, not willpower.
+3. **Context Window Isolation** — Separate, parallel API calls per Spirit, per round. Both Spirits respond simultaneously to each other's *previous-round* position summary — not to a mid-round update. No shared state. Friction is preserved by architecture, not willpower.
 
 4. **RISS Reputation (Future)** — Behavioral drift from Soul Code triggers reputation slashing. Alignment failure has economic consequences.
 
@@ -105,10 +105,12 @@ This prototype implements the core negotiation protocol described in the [Princi
 |---------|--------|
 | Principle Exchange | ✅ Implemented (Soul Code → system prompt) |
 | 3-Round Negotiation | ✅ Implemented |
-| Context Window Isolation | ✅ Implemented (position summaries) |
+| Context Window Isolation | ✅ Implemented (position summaries, parallel calls) |
 | The Loom (synthesis) | ✅ Implemented |
 | Joint Bean Output | ✅ Implemented (4 layers) |
 | Dual-Brain Mode | ✅ Implemented (BYOK provider abstraction) |
+| Parallel Round Execution | ✅ Implemented (Promise.all — both Spirits call simultaneously) |
+| Tension Score | ✅ Implemented (0.0-1.0 friction/persistence metric, auto-saved) |
 | RISS Integration | 📋 Future (requires Stage 1 completion) |
 | Subgraph Anchoring | 📋 Future (requires Bean graph API) |
 | Integrity Gate | 📋 Future (requires RISS thresholds) |
