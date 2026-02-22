@@ -378,7 +378,7 @@ node playground/simulate.js "How should AI handle user disagreement?"
 | Item | Priority | Dependency |
 |------|----------|------------|
 | ~~Live dual-brain run with valid API keys~~ | ~~High~~ | **DONE** — Claude + Llama via Groq |
-| Tension score computation (0.0-1.0) | High | Corona layer spec in PRINCIPLED_PLAYGROUND.md |
+| ~~Tension score computation (0.0-1.0)~~ | ~~High~~ | **DONE** — friction/agreement marker analysis + persistence ratio, auto-saved per run |
 | Cross-provider Soul Code portability test | High | Run same Soul Code on 3+ providers |
 | RISS reputation integration | Medium | Stage 1 RISS completion |
 | Bean graph storage | Medium | Bean graph API |
