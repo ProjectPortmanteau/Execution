@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // playground/negotiate.js
-// Principled Playground v0.2 — Dual-Brain Multi-Agent Negotiation
+// Principled Playground v0.3 — Dual-Brain Multi-Agent Negotiation
 // Two AI Spirits negotiate across 3 rounds and produce a joint Bean.
 // Zero external dependencies — raw fetch, BYOK from day one.
 
@@ -152,6 +152,185 @@ function buildLoomPrompt(topic, booleanFinal, rouxFinal) {
 }
 
 // ---------------------------------------------------------------------------
+// Tension Score (0.0 – 1.0)
+// ---------------------------------------------------------------------------
+
+/**
+ * Compute a tension score for the negotiation.
+ *
+ * 0.0 = immediate consensus, no friction
+ * 1.0 = positions never moved, maximum friction
+ *
+ * Algorithm:
+ *   - Count friction markers (disagreement, challenge, push-back language)
+ *   - Count agreement markers (acceptance, concession language)
+ *   - Measure friction persistence: did friction hold through Round 3?
+ *   - Blend raw friction ratio (60%) with persistence (40%)
+ *
+ * @param {Array<{round: number, boolean: string, roux: string}>} roundHistory
+ * @returns {{ score: number, label: string, frictionCount: number, agreementCount: number, frictionPersistence: number }}
+ */
+function computeTensionScore(roundHistory) {
+  const FRICTION = [
+    /\bhowever\b/gi, /\bbut\b/gi, /\bpush.?back\b/gi, /\bchallenge\b/gi,
+    /\bdisagree\b/gi, /\breject\b/gi, /\binsufficient\b/gi, /\bnot enough\b/gi,
+    /\bhold firm\b/gi, /\bstill requires\b/gi, /\bcritically\b/gi,
+    /\bunless\b/gi, /\bwithout\b/gi, /\bmissing\b/gi, /\bfail\b/gi,
+    /\bwarn\b/gi, /\bproblematic\b/gi, /\bweaker\b/gi, /\bincomplete\b/gi,
+  ];
+  const AGREEMENT = [
+    /\bagree\b/gi, /\baccept\b/gi, /\backnowledge\b/gi,
+    /\bexactly\b/gi, /\bcorrect\b/gi, /\bvalid\b/gi, /\bincorporate\b/gi,
+    /\bembrace\b/gi, /\bwelcome\b/gi, /\bappreciate\b/gi, /\bconcur\b/gi,
+    /\bright\b/gi, /\bindeed\b/gi,
+  ];
+
+  function countIn(patterns, text) {
+    return patterns.reduce((n, p) => n + ((text.match(p) || []).length), 0);
+  }
+
+  function roundScore(r) {
+    const text = (r.boolean || '') + ' ' + (r.roux || '');
+    return { f: countIn(FRICTION, text), a: countIn(AGREEMENT, text) };
+  }
+
+  let totalF = 0, totalA = 0;
+  const perRound = roundHistory.map(r => {
+    const s = roundScore(r);
+    totalF += s.f;
+    totalA += s.a;
+    return s;
+  });
+
+  // Friction persistence: ratio of Round-3 friction to Round-1 friction
+  const r1f = perRound[0]?.f || 1;
+  const r3f = perRound[perRound.length - 1]?.f || 0;
+  const persistence = Math.min(1, r3f / r1f);
+
+  // Raw friction ratio
+  const rawRatio = totalF / (totalF + totalA + 1);
+
+  const score = Math.min(1, Math.max(0, rawRatio * 0.6 + persistence * 0.4));
+  const rounded = Math.round(score * 100) / 100;
+
+  let label;
+  if (rounded >= 0.8)      label = 'MAXIMUM — positions barely moved';
+  else if (rounded >= 0.6) label = 'HIGH — productive friction maintained';
+  else if (rounded >= 0.4) label = 'MEDIUM — convergence with maintained differences';
+  else if (rounded >= 0.2) label = 'LOW — significant agreement reached';
+  else                     label = 'MINIMAL — near-consensus';
+
+  return {
+    score: rounded,
+    label,
+    frictionCount: totalF,
+    agreementCount: totalA,
+    frictionPersistence: Math.round(persistence * 100) / 100,
+    perRound: perRound.map((s, i) => ({ round: i + 1, friction: s.f, agreement: s.a }))
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Output file writer
+// ---------------------------------------------------------------------------
+
+/**
+ * Save the full negotiation transcript and tension score to a markdown file.
+ *
+ * @param {string} topic
+ * @param {string} brainMode
+ * @param {object} boolean - Spirit config
+ * @param {object} roux - Spirit config
+ * @param {object} booleanProvider
+ * @param {object} rouxProvider
+ * @param {Array}  roundHistory
+ * @param {string} jointBean
+ * @param {object} tension
+ * @param {string} startedAt
+ * @returns {string} output file path
+ */
+function saveOutput(topic, brainMode, boolean, roux, booleanProvider, rouxProvider, roundHistory, jointBean, tension, startedAt) {
+  const slug = topic
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .substring(0, 60);
+
+  const prefix = brainMode === 'DUAL-BRAIN' ? 'negotiation-dual-brain' : 'negotiation-live';
+  const filename = `${prefix}-${slug}-${startedAt.replace(/[:.]/g, '-').replace('T', 'T').slice(0, 23)}.md`;
+  const outputDir = path.join(__dirname, 'output');
+  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+  const outputPath = path.join(outputDir, filename);
+
+  const roundSection = roundHistory.map(r => [
+    `### Round ${r.round}`,
+    '',
+    `**Boolean:**`,
+    '',
+    r.boolean,
+    '',
+    `**Roux:**`,
+    '',
+    r.roux,
+    '',
+    `*Friction markers: ${r._tension?.f ?? '?'} | Agreement markers: ${r._tension?.a ?? '?'}*`,
+    ''
+  ].join('\n')).join('\n---\n\n');
+
+  const tensionTable = tension.perRound.map(r =>
+    `| ${r.round} | ${r.friction} | ${r.agreement} |`
+  ).join('\n');
+
+  const content = [
+    `# Principled Playground — Negotiation Transcript`,
+    '',
+    `**Topic:** "${topic}"`,
+    `**Date:** ${startedAt.slice(0, 10)}`,
+    `**Mode:** ${brainMode}`,
+    `**Boolean:** ${boolean.spirit} → ${booleanProvider.provider} (${booleanProvider.mode})`,
+    `**Roux:** ${roux.spirit} → ${rouxProvider.provider} (${rouxProvider.mode})`,
+    '',
+    '---',
+    '',
+    '## Tension Score',
+    '',
+    `| Metric | Value |`,
+    `|--------|-------|`,
+    `| **Score** | **${tension.score}** |`,
+    `| Label | ${tension.label} |`,
+    `| Friction markers | ${tension.frictionCount} |`,
+    `| Agreement markers | ${tension.agreementCount} |`,
+    `| Friction persistence (R3/R1) | ${tension.frictionPersistence} |`,
+    '',
+    '**Per-round breakdown:**',
+    '',
+    `| Round | Friction | Agreement |`,
+    `|-------|----------|-----------|`,
+    tensionTable,
+    '',
+    '---',
+    '',
+    '## Negotiation Transcript',
+    '',
+    roundSection,
+    '---',
+    '',
+    '## Joint Bean (The Loom)',
+    '',
+    jointBean,
+    '',
+    '---',
+    '',
+    `*Principled Playground v0.2 — iLL Port Studios*`,
+    `*Generated: ${startedAt}*`
+  ].join('\n');
+
+  fs.writeFileSync(outputPath, content, 'utf-8');
+  return outputPath;
+}
+
+// ---------------------------------------------------------------------------
 // Position summarizer (context-window isolation)
 // ---------------------------------------------------------------------------
 
@@ -201,8 +380,9 @@ async function negotiate(topic, keys) {
   console.log(`  Mode:     ${brainMode}`);
   console.log(`  Boolean:  ${boolean.spirit} → ${booleanProvider.provider} (${booleanProvider.mode})`);
   console.log(`  Roux:     ${roux.spirit} → ${rouxProvider.provider} (${rouxProvider.mode})`);
-  console.log(`  Rounds:   ${ROUNDS}`);
-  console.log(`  Started:  ${timestamp()}`);
+  console.log(`  Rounds:   ${ROUNDS} (parallel within each round)`);
+  const startedAt = timestamp();
+  console.log(`  Started:  ${startedAt}`);
 
   // Override provider in spirit config for actual API calls if in fallback mode
   const booleanForCall = { ...boolean, provider: booleanProvider.provider, model: booleanProvider.provider === boolean.provider ? boolean.model : getDefaultModel(booleanProvider.provider) };
@@ -212,26 +392,40 @@ async function negotiate(topic, keys) {
   let rouxPos    = null;
   let booleanRaw = '';
   let rouxRaw    = '';
+  const roundHistory = [];
 
-  // --- Negotiation Rounds ---
+  // --- Negotiation Rounds (parallel within each round) ---
+  //
+  // Both Spirits receive the other's PREVIOUS-round position summary before
+  // calling their LLM simultaneously. This is architecturally consistent with
+  // context-window isolation (Layer 3 of Anti-Drift): each Spirit responds to
+  // a frozen snapshot of the other's last position, not a mid-round update.
+  // Round 1: both receive null (opening statements) — always parallelizable.
+  // Round 2+: each receives the other's Round N-1 summary.
   for (let round = 1; round <= ROUNDS; round++) {
     divider(`ROUND ${round} of ${ROUNDS}`);
 
-    // Boolean's turn
+    // Build both prompts from prior-round positions (before either responds)
     const bPrompt = buildRoundPrompt(boolean, topic, round, rouxPos);
-    console.log(`  ⟐ Boolean is thinking...`);
-    booleanRaw = await send(booleanForCall, booleanProvider.apiKey, bPrompt);
-    booleanPos = summarizePosition(booleanRaw);
-    console.log(`  ✓ Boolean responded\n`);
-    console.log(indent(booleanRaw));
+    const rPrompt = buildRoundPrompt(roux,    topic, round, booleanPos);
 
-    // Roux's turn
-    const rPrompt = buildRoundPrompt(roux, topic, round, booleanPos);
-    console.log(`\n  ⟐ Roux is thinking...`);
-    rouxRaw = await send(rouxForCall, rouxProvider.apiKey, rPrompt);
-    rouxPos = summarizePosition(rouxRaw);
-    console.log(`  ✓ Roux responded\n`);
+    console.log(`  ⟐ Boolean and Roux are thinking in parallel...`);
+    [booleanRaw, rouxRaw] = await Promise.all([
+      send(booleanForCall, booleanProvider.apiKey, bPrompt),
+      send(rouxForCall,    rouxProvider.apiKey,    rPrompt)
+    ]);
+
+    // Summarize after both respond (positions available for next round)
+    booleanPos = summarizePosition(booleanRaw);
+    rouxPos    = summarizePosition(rouxRaw);
+
+    console.log(`  ✓ Both responded\n`);
+    console.log(`  ── Boolean ──`);
+    console.log(indent(booleanRaw));
+    console.log(`\n  ── Roux ──`);
     console.log(indent(rouxRaw));
+
+    roundHistory.push({ round, boolean: booleanRaw, roux: rouxRaw });
   }
 
   // --- Loom Synthesis ---
@@ -245,13 +439,36 @@ async function negotiate(topic, keys) {
   console.log(`  ✓ Joint Bean produced\n`);
   console.log(indent(jointBean));
 
+  // --- Tension Score ---
+  const tension = computeTensionScore(roundHistory);
+  divider('TENSION SCORE');
+  console.log(`  Score:       ${tension.score}  (${tension.label})`);
+  console.log(`  Friction:    ${tension.frictionCount} markers`);
+  console.log(`  Agreement:   ${tension.agreementCount} markers`);
+  console.log(`  Persistence: ${tension.frictionPersistence} (R3/R1 friction ratio)`);
+  console.log('');
+  tension.perRound.forEach(r =>
+    console.log(`  Round ${r.round}: friction=${r.friction}  agreement=${r.agreement}`)
+  );
+
+  // Annotate round history for file output
+  roundHistory.forEach((r, i) => { r._tension = tension.perRound[i]; });
+
+  // --- Save Output File ---
+  const outputPath = saveOutput(
+    topic, brainMode, boolean, roux,
+    booleanProvider, rouxProvider,
+    roundHistory, jointBean, tension, startedAt
+  );
+
   divider('NEGOTIATION COMPLETE');
   console.log(`  Mode:      ${brainMode}`);
   console.log(`  Completed: ${timestamp()}`);
   console.log(`  Rounds:    ${ROUNDS}`);
-  console.log(`  Output:    Joint Bean (Nucleus / Shell / Corona / Echo)\n`);
+  console.log(`  Tension:   ${tension.score} — ${tension.label}`);
+  console.log(`  Output:    ${outputPath}\n`);
 
-  return { brainMode, jointBean };
+  return { brainMode, jointBean, tension, outputPath };
 }
 
 function getDefaultModel(provider) {
