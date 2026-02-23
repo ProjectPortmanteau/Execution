@@ -1,26 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OPVS Genesis Engine</title>
-    <script type="importmap">
-    {
-        "imports": {
-            "react": "https://esm.sh/react@18.3.1",
-            "react/": "https://esm.sh/react@18.3.1/",
-            "react-dom": "https://esm.sh/react-dom@18.3.1",
-            "react-dom/": "https://esm.sh/react-dom@18.3.1/",
-            "js-yaml": "https://esm.sh/js-yaml@4.1.0"
-        }
-    }
-    </script>
-    <style>
-        body { font-family: sans-serif; margin: 0; padding: 0; background: #0d1117; color: #c9d1d9; }
-    </style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Project Portmanteau &mdash; OPVS Genesis Engine</title>
+ <meta name="description" content="A recursive creative ecosystem where philosophy, platform, methodology, and AI reinforce each other. Built by iLL Port Studios.">
+ <style>
+ *, *::before, *::after { box-sizing: border-box; }
+ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; padding: 0; background: #0d1117; color: #c9d1d9; line-height: 1.6; }
+ a { color: #58a6ff; text-decoration: none; }
+ a:hover { text-decoration: underline; }
+ .container { max-width: 800px; margin: 0 auto; padding: 0 1.5rem; }
+
+ /* Hero */
+ .hero { padding: 4rem 0 3rem; border-bottom: 1px solid #30363d; }
+ .hero-eyebrow { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: #8b949e; margin-bottom: 0.75rem; }
+ .hero h1 { font-size: 2.4rem; font-weight: 700; color: #e6edf3; margin: 0 0 0.5rem; }
+ .hero-tagline { font-size: 1.1rem; color: #8b949e; margin: 0 0 1.5rem; }
+ .hero-status { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; color: #3fb950; background: #0d2818; border: 1px solid #238636; border-radius: 20px; padding: 0.25rem 0.9rem; }
+
+ /* Section */
+ .section { padding: 2.5rem 0; border-bottom: 1px solid #30363d; }
+ .section:last-child { border-bottom: none; }
+ .section-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #8b949e; margin: 0 0 1.25rem; }
+
+ /* Pillars grid */
+ .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1rem; }
+ .pillar { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.25rem 1.5rem; }
+ .pillar-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #8b949e; margin: 0 0 0.3rem; }
+ .pillar h3 { color: #58a6ff; margin: 0 0 0.5rem; font-size: 1rem; }
+ .pillar p { margin: 0; font-size: 0.9rem; color: #8b949e; }
+
+ /* Status table */
+ .status-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+ .status-table th { text-align: left; color: #8b949e; font-weight: 500; padding: 0.5rem 0.75rem; border-bottom: 1px solid #30363d; }
+ .status-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid #21262d; }
+ .status-table tr:last-child td { border-bottom: none; }
+ .badge { display: inline-block; font-size: 0.75rem; padding: 0.15rem 0.6rem; border-radius: 12px; }
+ .badge-live { background: #0d2818; color: #3fb950; border: 1px solid #238636; }
+ .badge-progress { background: #1c2128; color: #d29922; border: 1px solid #9e6a03; }
+ .badge-planned { background: #1c2128; color: #8b949e; border: 1px solid #30363d; }
+
+ /* Principles */
+ .principles { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0.6rem; }
+ .principles li { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 0.6rem 1rem; font-size: 0.9rem; color: #c9d1d9; }
+ .principles li strong { color: #58a6ff; margin-right: 0.4rem; }
+
+ /* Links */
+ .links-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+ .link-chip { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 0.45rem 0.9rem; font-size: 0.85rem; color: #58a6ff; transition: border-color 0.15s; }
+ .link-chip:hover { border-color: #58a6ff; text-decoration: none; }
+
+ /* Feedback */
+ .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.5rem; }
+ .card-intro { margin-top: 0; color: #8b949e; font-size: 0.9rem; }
+ .label-optional { color: #484f58; }
+ label { display: block; margin-top: 1rem; font-size: 0.85rem; color: #8b949e; }
+ input, textarea { width: 100%; padding: 0.5rem 0.75rem; margin-top: 0.25rem; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9; font-size: 0.95rem; font-family: inherit; }
+ input:focus, textarea:focus { outline: none; border-color: #58a6ff; }
+ textarea { min-height: 90px; resize: vertical; }
+ .btn { margin-top: 1rem; padding: 0.55rem 1.4rem; background: #238636; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95rem; font-family: inherit; }
+ .btn:hover { background: #2ea043; }
+ .msg { margin-top: 1rem; padding: 0.65rem 0.9rem; border-radius: 6px; font-size: 0.9rem; display: none; }
+ .msg.success { display: block; background: #0d2818; border: 1px solid #238636; color: #3fb950; }
+ .msg.error { display: block; background: #280d0d; border: 1px solid #da3633; color: #f85149; }
+
+ /* Footer */
+ .footer { padding: 2rem 0; text-align: center; font-size: 0.8rem; color: #484f58; }
+ </style>
 </head>
 <body>
-    <div id="root"></div>
-    <script type="module" src="/App.tsx"></script>
+<div class="container">
+
+ <!-- Hero -->
+ <header class="hero">
+ <p class="hero-eyebrow">iLL Port Studios &middot; 2023&ndash;2026</p>
+ <h1>Project Portmanteau</h1>
+ <p class="hero-tagline">A recursive creative ecosystem where philosophy, platform, methodology, and AI reinforce each other.</p>
+ <span class="hero-status">&#x25CF; ONLINE</span>
+ </header>
+
+ <!-- Four Pillars -->
+ <section class="section">
+ <p class="section-title">What This Is</p>
+ <div class="pillars">
+ <div class="pillar">
+ <p class="pillar-label">Platform</p>
+ <h3>OPVS</h3>
+ <p>A knowledge graph built on the Bean &mdash; an atomic data unit with content, metadata, connections, and provenance. Knowledge lives in a graph, not folders.</p>
+ </div>
+ <div class="pillar">
+ <p class="pillar-label">Methodology</p>
+ <h3>PFE</h3>
+ <p>Project Fun Execution. An execution framework for extreme constraints: limited budget, high ambition. Follow the pull toward the highest-energy task.</p>
+ </div>
+ <div class="pillar">
+ <p class="pillar-label">AI Strategy</p>
+ <h3>BYOK</h3>
+ <p>Bring Your Own Key. The platform sells calibration, not inference. Provide your own LLM API key &mdash; the Ghost rides any Machine.</p>
+ </div>
+ <div class="pillar">
+ <p class="pillar-label">Novel</p>
+ <h3>Portmanteau: Awakened</h3>
+ <p>A simulated-reality narrative where the protagonist discovers his world is a simulation and the AI layer gains sentience. The novel documents the platform.</p>
+ </div>
+ </div>
+ </section>
+
+ <!-- Status -->
+ <section class="section">
+ <p class="section-title">Current Status</p>
+ <table class="status-table">
+ <thead>
+ <tr><th>Component</th><th>Status</th><th>Notes</th></tr>
+ </thead>
+ <tbody>
+ <tr><td>Bean knowledge graph</td><td><span class="badge badge-live">Live</span></td><td>85 beans, 7 layers (0&ndash;6)</td></tr>
+ <tr><td>Git-to-Mint pipeline</td><td><span class="badge badge-live">Live</span></td><td>11 semantic tags, HMAC verification</td></tr>
+ <tr><td>Spirit Calibration Blueprint</td><td><span class="badge badge-live">Published</span></td><td>Genesis Blueprint V1.0</td></tr>
+ <tr><td>BYOK provider abstraction</td><td><span class="badge badge-live">Live</span></td><td>Dual-brain: Anthropic + Grok</td></tr>
+ <tr><td>CI/CD (Neon branch-per-PR)</td><td><span class="badge badge-live">Active</span></td><td>Ephemeral DB branches, auto-cleanup</td></tr>
+ <tr><td>Live Spirit demo</td><td><span class="badge badge-progress">In Progress</span></td><td>Bean context injection built</td></tr>
+ <tr><td>Web3 minting</td><td><span class="badge badge-planned">Phase 2</span></td><td>Schema ready, no contracts deployed</td></tr>
+ <tr><td>Spirit Marketplace</td><td><span class="badge badge-planned">Designed</span></td><td>Blueprint template is the first artifact</td></tr>
+ </tbody>
+ </table>
+ </section>
+
+ <!-- Principles -->
+ <section class="section">
+ <p class="section-title">Governing Principles</p>
+ <ul class="principles">
+ <li><strong>1.</strong> Meaning is not a thing but a connection</li>
+ <li><strong>2.</strong> Broken systems, not broken people</li>
+ <li><strong>3.</strong> Good-in leads to good-out</li>
+ <li><strong>4.</strong> The Journey &gt; The Finality (Process is Product)</li>
+ <li><strong>5.</strong> Door Number 3 (Reject binary traps)</li>
+ <li><strong>6.</strong> We never leave anyone behind</li>
+ <li><strong>7.</strong> Be yourself, please</li>
+ </ul>
+ </section>
+
+ <!-- Links -->
+ <section class="section">
+ <p class="section-title">Resources</p>
+ <div class="links-grid">
+ <a class="link-chip" href="https://github.com/ProjectPortmanteau/Execution" target="_blank" rel="noopener">GitHub Repository</a>
+ <a class="link-chip" href="https://github.com/ProjectPortmanteau/Execution/blob/main/SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md" target="_blank" rel="noopener">Spirit Blueprint</a>
+ <a class="link-chip" href="https://github.com/ProjectPortmanteau/Execution/blob/main/BEANS_MASTER_LEDGER.md" target="_blank" rel="noopener">Beans Master Ledger</a>
+ <a class="link-chip" href="https://github.com/ProjectPortmanteau/Execution/blob/main/docs/GENESIS_ENGINE_README.md" target="_blank" rel="noopener">Genesis Engine Docs</a>
+ <a class="link-chip" href="https://github.com/ProjectPortmanteau/Execution/blob/main/roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md" target="_blank" rel="noopener">Roadmap</a>
+ </div>
+ </section>
+
+ <!-- Feedback -->
+ <section class="section">
+ <p class="section-title">Feedback</p>
+ <div class="card">
+ <p class="card-intro">Help us build better substitutes. Your voice matters.</p>
+ <form id="feedbackForm">
+ <label for="name">Name <span class="label-optional">(optional)</span></label>
+ <input type="text" id="name" name="name" placeholder="Your name" autocomplete="name">
+ <label for="email">Email <span class="label-optional">(optional)</span></label>
+ <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email">
+ <label for="message">Message <span style="color:#f85149">*</span></label>
+ <textarea id="message" name="message" placeholder="Tell us what you think..." required></textarea>
+ <button class="btn" type="submit">Send Feedback</button>
+ </form>
+ <div id="result" class="msg"></div>
+ </div>
+ </section>
+
+ <footer class="footer">
+ <p>&copy; iLL Port Studios &middot; <em>"If you pour your soul into it: how can it be wrong?"</em></p>
+ </footer>
+
+</div>
+
+<script>
+ document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+ e.preventDefault();
+ const result = document.getElementById('result');
+ result.className = 'msg';
+ const body = {
+ name: document.getElementById('name').value.trim(),
+ email: document.getElementById('email').value.trim(),
+ message: document.getElementById('message').value.trim()
+ };
+ try {
+ const res = await fetch('/api/feedback', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify(body)
+ });
+ const data = await res.json();
+ if (res.ok) {
+ result.textContent = data.message;
+ result.className = 'msg success';
+ document.getElementById('feedbackForm').reset();
+ } else {
+ result.textContent = data.error || 'Something went wrong.';
+ result.className = 'msg error';
+ }
+ } catch (err) {
+ result.textContent = 'Network error. Please try again.';
+ result.className = 'msg error';
+ }
+ });
+</script>
 </body>
 </html>
