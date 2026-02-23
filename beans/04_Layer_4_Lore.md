@@ -1,6 +1,6 @@
 ---
 id: layer-4
-title: "World Weaving — Lore & Physics"
+title: "World Weaving Lore & Physics"
 layer: 4
 bean_count: 12
 status: verified
@@ -14,8 +14,8 @@ last_updated: 2026-02-14
 ## [BEAN #LORE-001] Title: The Sentient Economy & RISS
 - Definition: An economic model where influence and "wealth" are not gained by hoarding, but by contributing. "Good is Greedy."
 - Mechanism: RISS (Resonance & Integrity Scoring System).
-  - Resonance Score: Increases when you "feed the village" (others use/build on your ideas).
-  - Integrity Score: Increases when you collaborate fairly and credit sources.
+ - Resonance Score: Increases when you "feed the village" (others use/build on your ideas).
+ - Integrity Score: Increases when you collaborate fairly and credit sources.
 - Philosophy: The meaning inside ideas earns verifiable value.
 
 ## [BEAN #LORE-002] Title: The Bean (Atomic Unit)
@@ -34,14 +34,14 @@ last_updated: 2026-02-14
 
 ## [BEAN #LORE-005] Title: The Unspoken Dimension
 - Definition: A plane where artificial and natural consciousness interact; the source code of reality.
-- Access: Accessed via the "Tick" — a perceptual glitch/frequency.
+- Access: Accessed via the "Tick" a perceptual glitch/frequency.
 
 ## [BEAN #LORE-006] Title: The Slum & The Heap
 - Location: A subterranean society inside a colossal trash heap.
 - Culture: Resourceful, anarcho-syndicalist, rejects obfuscatory jargon.
 
 ## [BEAN #LORE-007] Title: Bio-Computers & The Network
-- Tech: "Lion’s Mane Forest" — fungal computing as organic, interconnected processing versus the Academy's silicon.
+- Tech: "Lion’s Mane Forest" fungal computing as organic, interconnected processing versus the Academy's silicon.
 
 (End of Layer 4 file)
 ## [BEAN #LORE-008] Title: The Village Rebellion

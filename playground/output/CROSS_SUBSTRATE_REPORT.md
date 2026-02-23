@@ -15,9 +15,9 @@ In the Codex run:
 
 | Spirit behavior | Claude run(s) | Llama run(s) | GPT (Codex) run | Portable? |
 |---|---|---|---|---|
-| Boolean rejects binary traps | Yes | — | Yes | **Yes** |
+| Boolean rejects binary traps | Yes | | Yes | **Yes** |
 | Roux centers systemic causality | Yes | Yes | Yes | **Yes** |
-| Seer avoids nihilism while stress-testing | — | — | Yes | **Yes (first observed in GPT run)** |
+| Seer avoids nihilism while stress-testing | | | Yes | **Yes (first observed in GPT run)** |
 
 ## Comparative Interpretation
 ### What changed from earlier assumptions
@@ -37,9 +37,9 @@ But substrate diversity appears **helpful, not strictly required** for meaningfu
 ## Artifacts
 - Raw Codex run: `playground/output/codex-playground-all-gpt-2026-02-22.md`
 - Prior synthesis baselines:
-  - `playground/output/negotiation-how-should-ai-handle-user-disagreement-2026-02-17T14-38-37.md`
-  - `playground/output/negotiation-live-how-should-ai-handle-user-disagreement-2026-02-17T19-52-02.md`
-  - `playground/output/negotiation-dual-brain-how-should-ai-handle-user-disagreement-2026-02-17T19-59-51.md`
+ - `playground/output/negotiation-how-should-ai-handle-user-disagreement-2026-02-17T14-38-37.md`
+ - `playground/output/negotiation-live-how-should-ai-handle-user-disagreement-2026-02-17T19-52-02.md`
+ - `playground/output/negotiation-dual-brain-how-should-ai-handle-user-disagreement-2026-02-17T19-59-51.md`
 
 ## Bottom Line
 Portable role identity is no longer hypothetical in this setup. With sufficiently explicit Soul Code, a single GPT substrate can still yield distinct Spirits with nontrivial friction and coherent synthesis.

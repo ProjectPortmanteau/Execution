@@ -1,4 +1,4 @@
-# Principled Playground v0.4 — Parallel vs Sequential Execution Report
+# Principled Playground v0.4 Parallel vs Sequential Execution Report
 
 **Date:** 2026-02-23
 **Branch:** `claude/principled-playground-report-SmpI5`
@@ -9,14 +9,14 @@
 
 ## Executive Summary
 
-We ran the Principled Playground's full TRI-BRAIN negotiation protocol twice on the same topic — once with **parallel** round execution (`Promise.all`) and once with **sequential** execution (Boolean then Roux, one at a time) — to measure the impact on wall-clock performance, negotiation quality, and output stability.
+We ran the Principled Playground's full TRI-BRAIN negotiation protocol twice on the same topic once with **parallel** round execution (`Promise.all`) and once with **sequential** execution (Boolean then Roux, one at a time) to measure the impact on wall-clock performance, negotiation quality, and output stability.
 
 **Key findings:**
 
-1. **Sequential was 30% faster** (67.7s vs 97.1s) — provider-side rate limiting penalized concurrent requests
-2. **Sequential produced higher tension** (0.85 MAXIMUM vs 0.76 HIGH) — more friction markers, full persistence through Round 3
-3. **Both modes converged on the same synthesis** — "Hybrid/Evolutionary Negotiation Ecosystems" — validating protocol stability
-4. **Both received identical Seer verdicts** — CONDITIONAL PASS with overlapping failure modes
+1. **Sequential was 30% faster** (67.7s vs 97.1s) provider-side rate limiting penalized concurrent requests
+2. **Sequential produced higher tension** (0.85 MAXIMUM vs 0.76 HIGH) more friction markers, full persistence through Round 3
+3. **Both modes converged on the same synthesis** "Hybrid/Evolutionary Negotiation Ecosystems" validating protocol stability
+4. **Both received identical Seer verdicts** CONDITIONAL PASS with overlapping failure modes
 
 ---
 
@@ -58,7 +58,7 @@ We ran the Principled Playground's full TRI-BRAIN negotiation protocol twice on 
 
 - **Round 1 (0.63x):** The most dramatic gap. Anthropic's Claude took ~21s when fired concurrently with Groq, vs ~12s when running alone. Groq responded in <2s either way, meaning the `Promise.all` wall-clock was dominated by an inflated Claude response time.
 - **Rounds 2-3:** The gap narrowed as rate-limit backpressure dissipated, approaching parity by Round 3.
-- **Loom (0.33x):** The Loom runs on Anthropic (single call, no parallelism in either mode). Yet it took **37.3s parallel vs 12.1s sequential** — a 3x penalty. This strongly suggests Anthropic's API was still throttling after heavy parallel usage, with latency carried forward into the Loom phase.
+- **Loom (0.33x):** The Loom runs on Anthropic (single call, no parallelism in either mode). Yet it took **37.3s parallel vs 12.1s sequential** a 3x penalty. This strongly suggests Anthropic's API was still throttling after heavy parallel usage, with latency carried forward into the Loom phase.
 - **Seer (1.62x):** The only phase where parallel was faster. OpenRouter's free tier responded in 9.7s after a rest period (parallel), vs 15.7s when called immediately after sequential rounds. Free-tier flakiness likely explains this variance.
 
 **Conclusion:** In environments with API rate limits (especially Anthropic), sequential execution can outperform parallel by avoiding throttle-induced latency spikes. Parallel remains architecturally cleaner (no ordering dependency between Spirits within a round) and would win in rate-limit-free environments.
@@ -95,7 +95,7 @@ We ran the Principled Playground's full TRI-BRAIN negotiation protocol twice on 
 
 ### Analysis
 
-Sequential produced **31% more friction markers** and maintained full friction persistence through Round 3 (1.00 vs 0.75). In the parallel run, friction *decreased* from Round 1 to 3, suggesting convergence. In the sequential run, friction *escalated* — Roux pushed back harder in each successive round.
+Sequential produced **31% more friction markers** and maintained full friction persistence through Round 3 (1.00 vs 0.75). In the parallel run, friction *decreased* from Round 1 to 3, suggesting convergence. In the sequential run, friction *escalated* Roux pushed back harder in each successive round.
 
 This is likely **sampling variance** (LLMs are non-deterministic) rather than a structural effect of execution order. The protocol guarantees identical information flow: each Spirit receives the same frozen position summary regardless of whether the calls execute concurrently or sequentially. However, different random seeds in the LLM produce different rhetorical choices, and the sequential run happened to produce a more combative Roux.
 
@@ -103,7 +103,7 @@ This is likely **sampling variance** (LLMs are non-deterministic) rather than a 
 
 ## 3. Output Comparison
 
-### Joint Bean — Parallel Mode
+### Joint Bean Parallel Mode
 
 **"Hybrid Negotiation Ecosystems"**
 
@@ -111,11 +111,11 @@ This is likely **sampling variance** (LLMs are non-deterministic) rather than a 
 
 **OPVS layers:** Nucleus (ecosystem redesign over actor optimization), Shell (Process Architecture Synthesis), Corona (6 adjacent connections), Echo (full provenance).
 
-### Joint Bean — Sequential Mode
+### Joint Bean Sequential Mode
 
 **"Evolutionary Negotiation Ecosystems"**
 
-> AI negotiation systems should evolve beyond the allow/prohibit binary into hybrid intelligence platforms that architect new value-creation opportunities. The synthesis: **Collaborative Intelligence Design** — where AI identifies hidden possibilities, humans maintain ethical oversight, and the negotiation process itself becomes a learning system that generates better frameworks for future interactions.
+> AI negotiation systems should evolve beyond the allow/prohibit binary into hybrid intelligence platforms that architect new value-creation opportunities. The synthesis: **Collaborative Intelligence Design** where AI identifies hidden possibilities, humans maintain ethical oversight, and the negotiation process itself becomes a learning system that generates better frameworks for future interactions.
 
 **OPVS layers:** Nucleus (collaborative intelligence design), Shell (Synthesis Bean), Corona (7 adjacent connections with cross-pollination note), Echo (convergence analysis).
 
@@ -139,7 +139,7 @@ This convergence across independent runs validates that the **negotiation protoc
 
 ## 4. Stress Test Comparison
 
-### Parallel — Seer's Verdict: CONDITIONAL PASS
+### Parallel Seer's Verdict: CONDITIONAL PASS
 
 **Load-bearing assumptions:**
 1. AI must reliably identify *unexploited value creation* opportunities
@@ -149,7 +149,7 @@ This convergence across independent runs validates that the **negotiation protoc
 
 **Failure modes:** Scale (miss low-probability opportunities), Adversarial (default to competition), Time (alignment collapse if feedback loops slow), Bias (entrench systemic inequities)
 
-### Sequential — Seer's Verdict: CONDITIONAL PASS
+### Sequential Seer's Verdict: CONDITIONAL PASS
 
 **Load-bearing assumptions:**
 - Human-AI co-creation without reverting to power imbalances
@@ -207,11 +207,11 @@ This benchmark also validated the new OpenRouter provider added in this session:
 
 | Commit | Description |
 |--------|-------------|
-| `33c80d5` | Add OpenRouter provider for Seer — restore TRI-BRAIN with free-tier model |
+| `33c80d5` | Add OpenRouter provider for Seer restore TRI-BRAIN with free-tier model |
 | `9de5ecd` | Add parallel vs sequential comparison runner with first benchmark |
 | *(this commit)* | Full GitHub report with analysis |
 
 ---
 
-*Principled Playground v0.4 — iLL Port Studios*
+*Principled Playground v0.4 iLL Port Studios*
 *TRI-BRAIN: Anthropic (Claude) + Groq (Llama) + OpenRouter (Nemotron)*

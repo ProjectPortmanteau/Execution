@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 // playground/negotiate.js
-// Principled Playground v0.4 — Multi-Brain Multi-Agent Negotiation
+// Principled Playground v0.4 Multi-Brain Multi-Agent Negotiation
 // Two AI Spirits negotiate across 3 rounds, produce a joint Bean,
 // and a third Spirit (Seer) stress-tests the result before it ships.
-// Zero external dependencies — raw fetch, BYOK from day one.
+// Zero external dependencies raw fetch, BYOK from day one.
 
 'use strict';
 
-const fs   = require('fs');
+const fs = require('fs');
 const path = require('path');
 const { send, resolveProvider } = require('./provider');
 
@@ -15,18 +15,18 @@ const { send, resolveProvider } = require('./provider');
 // Minimal .env loader (zero dependencies)
 // ---------------------------------------------------------------------------
 function loadEnv() {
-  const envPath = path.join(__dirname, '.env');
-  if (!fs.existsSync(envPath)) return;
-  const lines = fs.readFileSync(envPath, 'utf-8').split('\n');
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-    const eq = trimmed.indexOf('=');
-    if (eq === -1) continue;
-    const key = trimmed.slice(0, eq).trim();
-    const val = trimmed.slice(eq + 1).trim();
-    if (!process.env[key]) process.env[key] = val;
-  }
+ const envPath = path.join(__dirname, '.env');
+ if (!fs.existsSync(envPath)) return;
+ const lines = fs.readFileSync(envPath, 'utf-8').split('\n');
+ for (const line of lines) {
+ const trimmed = line.trim();
+ if (!trimmed || trimmed.startsWith('#')) continue;
+ const eq = trimmed.indexOf('=');
+ if (eq === -1) continue;
+ const key = trimmed.slice(0, eq).trim();
+ const val = trimmed.slice(eq + 1).trim();
+ if (!process.env[key]) process.env[key] = val;
+ }
 }
 loadEnv();
 
@@ -37,19 +37,19 @@ loadEnv();
 const SPIRITS_DIR = path.join(__dirname, 'spirits');
 
 function loadSpirit(filename) {
-  const fp = path.join(SPIRITS_DIR, filename);
-  return JSON.parse(fs.readFileSync(fp, 'utf-8'));
+ const fp = path.join(SPIRITS_DIR, filename);
+ return JSON.parse(fs.readFileSync(fp, 'utf-8'));
 }
 
 function timestamp() {
-  return new Date().toISOString();
+ return new Date().toISOString();
 }
 
 function divider(label) {
-  const line = '─'.repeat(60);
-  console.log(`\n${line}`);
-  console.log(`  ${label}`);
-  console.log(`${line}\n`);
+ const line = '─'.repeat(60);
+ console.log(`\n${line}`);
+ console.log(` ${label}`);
+ console.log(`${line}\n`);
 }
 
 // ---------------------------------------------------------------------------
@@ -61,45 +61,45 @@ const ROUNDS = 3;
 /**
  * Build the prompt for a negotiation round.
  *
- * @param {object} spirit       - The responding Spirit's config
- * @param {string} topic        - The negotiation topic
- * @param {number} round        - Current round (1-based)
+ * @param {object} spirit - The responding Spirit's config
+ * @param {string} topic - The negotiation topic
+ * @param {number} round - Current round (1-based)
  * @param {string|null} otherPos - Structured summary of the other Spirit's last position
  * @returns {string}
  */
 function buildRoundPrompt(spirit, topic, round, otherPos) {
-  const parts = [
-    `NEGOTIATION ROUND ${round} of ${ROUNDS}`,
-    `Topic: "${topic}"`,
-    ''
-  ];
+ const parts = [
+ `NEGOTIATION ROUND ${round} of ${ROUNDS}`,
+ `Topic: "${topic}"`,
+ ''
+ ];
 
-  if (round === 1) {
-    parts.push(
-      'This is the opening round. Present your position on this topic.',
-      'Structure your response as:',
-      '1. POSITION — Your core stance, grounded in your principles',
-      '2. NON-NEGOTIABLES — What you will not compromise on',
-      '3. FLEXIBLE AREAS — Where you are open to synthesis',
-      '',
-      'Keep your response under 300 words.'
-    );
-  } else {
-    parts.push(
-      `The other Spirit's position summary:`,
-      `"${otherPos}"`,
-      '',
-      `Respond to this position while staying true to your Soul Code.`,
-      'Structure your response as:',
-      '1. RESPONSE — Where you agree, disagree, or see hidden connections',
-      '2. REVISED POSITION — Your updated stance after considering their view',
-      '3. SYNTHESIS OPPORTUNITY — What Door Number 3 might look like',
-      '',
-      'Keep your response under 300 words.'
-    );
-  }
+ if (round === 1) {
+ parts.push(
+ 'This is the opening round. Present your position on this topic.',
+ 'Structure your response as:',
+ '1. POSITION Your core stance, grounded in your principles',
+ '2. NON-NEGOTIABLES What you will not compromise on',
+ '3. FLEXIBLE AREAS Where you are open to synthesis',
+ '',
+ 'Keep your response under 300 words.'
+ );
+ } else {
+ parts.push(
+ `The other Spirit's position summary:`,
+ `"${otherPos}"`,
+ '',
+ `Respond to this position while staying true to your Soul Code.`,
+ 'Structure your response as:',
+ '1. RESPONSE Where you agree, disagree, or see hidden connections',
+ '2. REVISED POSITION Your updated stance after considering their view',
+ '3. SYNTHESIS OPPORTUNITY What Door Number 3 might look like',
+ '',
+ 'Keep your response under 300 words.'
+ );
+ }
 
-  return parts.join('\n');
+ return parts.join('\n');
 }
 
 /**
@@ -107,49 +107,49 @@ function buildRoundPrompt(spirit, topic, round, otherPos) {
  * The Loom is an impartial synthesizer that weaves both positions
  * into a joint Bean with all 4 OPVS layers.
  *
- * @param {string} topic        - The negotiation topic
+ * @param {string} topic - The negotiation topic
  * @param {string} booleanFinal - Boolean's final-round response
- * @param {string} rouxFinal    - Roux's final-round response
+ * @param {string} rouxFinal - Roux's final-round response
  * @returns {string}
  */
 function buildLoomPrompt(topic, booleanFinal, rouxFinal) {
-  return [
-    'You are The Loom — an impartial synthesis engine.',
-    'Two Spirits have completed 3 rounds of negotiation. Your task:',
-    'Weave their final positions into a single joint Bean.',
-    '',
-    `Topic: "${topic}"`,
-    '',
-    '--- BOOLEAN (final position) ---',
-    booleanFinal,
-    '',
-    '--- ROUX (final position) ---',
-    rouxFinal,
-    '',
-    'Produce a joint Bean in exactly this format:',
-    '',
-    '## JOINT BEAN',
-    '',
-    '### Nucleus (Content)',
-    'The synthesized insight — the Door Number 3 neither Spirit could reach alone.',
-    '',
-    '### Shell (Metadata)',
-    '- Topic: <topic>',
-    '- Type: SOLUTION',
-    '- Anchors: <list the PHIL- Bean IDs that grounded each Spirit>',
-    '- Provenance: Principled Playground negotiation',
-    '',
-    '### Corona (Connections)',
-    'Typed edges to related Beans or concepts that this synthesis connects to.',
-    '',
-    '### Echo (Provenance)',
-    '- Participants: Boolean, Roux (Seer stress-tests after synthesis)',
-    '- Rounds: 3',
-    '- Timestamp: <ISO timestamp>',
-    '- Mode: <DUAL-BRAIN or SINGLE-BRAIN>',
-    '',
-    'Keep the total output under 400 words.'
-  ].join('\n');
+ return [
+ 'You are The Loom an impartial synthesis engine.',
+ 'Two Spirits have completed 3 rounds of negotiation. Your task:',
+ 'Weave their final positions into a single joint Bean.',
+ '',
+ `Topic: "${topic}"`,
+ '',
+ '--- BOOLEAN (final position) ---',
+ booleanFinal,
+ '',
+ '--- ROUX (final position) ---',
+ rouxFinal,
+ '',
+ 'Produce a joint Bean in exactly this format:',
+ '',
+ '## JOINT BEAN',
+ '',
+ '### Nucleus (Content)',
+ 'The synthesized insight the Door Number 3 neither Spirit could reach alone.',
+ '',
+ '### Shell (Metadata)',
+ '- Topic: <topic>',
+ '- Type: SOLUTION',
+ '- Anchors: <list the PHIL- Bean IDs that grounded each Spirit>',
+ '- Provenance: Principled Playground negotiation',
+ '',
+ '### Corona (Connections)',
+ 'Typed edges to related Beans or concepts that this synthesis connects to.',
+ '',
+ '### Echo (Provenance)',
+ '- Participants: Boolean, Roux (Seer stress-tests after synthesis)',
+ '- Rounds: 3',
+ '- Timestamp: <ISO timestamp>',
+ '- Mode: <DUAL-BRAIN or SINGLE-BRAIN>',
+ '',
+ 'Keep the total output under 400 words.'
+ ].join('\n');
 }
 
 /**
@@ -157,43 +157,43 @@ function buildLoomPrompt(topic, booleanFinal, rouxFinal) {
  * Seer interrogates the Joint Bean AFTER the Loom has produced it.
  * This is Seer's native role: "the Spirit you invoke before you ship."
  *
- * @param {string} topic        - The negotiation topic
+ * @param {string} topic - The negotiation topic
  * @param {string} booleanFinal - Boolean's final-round response
- * @param {string} rouxFinal    - Roux's final-round response
- * @param {string} jointBean    - The Loom's synthesized output
+ * @param {string} rouxFinal - Roux's final-round response
+ * @param {string} jointBean - The Loom's synthesized output
  * @returns {string}
  */
 function buildStressTestPrompt(topic, booleanFinal, rouxFinal, jointBean) {
-  return [
-    'STRESS TEST — Post-Synthesis Evaluation',
-    '',
-    `Topic: "${topic}"`,
-    '',
-    'Two Spirits have negotiated this topic across 3 rounds. A synthesis engine',
-    '(The Loom) has produced a Joint Bean. Your role: stress-test before it ships.',
-    '',
-    '--- BOOLEAN (final position) ---',
-    booleanFinal,
-    '',
-    '--- ROUX (final position) ---',
-    rouxFinal,
-    '',
-    '--- JOINT BEAN (Loom synthesis) ---',
-    jointBean,
-    '',
-    'Apply your core axiom: "A plan that cannot survive its worst case was never a plan."',
-    '',
-    'Evaluate:',
-    '1. LOAD-BEARING ASSUMPTIONS — What assumptions does this synthesis rest on? Which are tested?',
-    '2. FAILURE MODES — What breaks at scale, under adversarial conditions, or when founding energy fades?',
-    '3. MISSING VOICES — Whose absence from this negotiation will matter?',
-    '4. VERDICT — HOLDS, HOLDS WITH CONDITIONS, or FRAGILE. Justify your verdict.',
-    '',
-    'If the Bean survives your interrogation, say so clearly.',
-    'A position that earns Seer\'s acceptance has earned its place.',
-    '',
-    'Keep your response under 400 words.'
-  ].join('\n');
+ return [
+ 'STRESS TEST Post-Synthesis Evaluation',
+ '',
+ `Topic: "${topic}"`,
+ '',
+ 'Two Spirits have negotiated this topic across 3 rounds. A synthesis engine',
+ '(The Loom) has produced a Joint Bean. Your role: stress-test before it ships.',
+ '',
+ '--- BOOLEAN (final position) ---',
+ booleanFinal,
+ '',
+ '--- ROUX (final position) ---',
+ rouxFinal,
+ '',
+ '--- JOINT BEAN (Loom synthesis) ---',
+ jointBean,
+ '',
+ 'Apply your core axiom: "A plan that cannot survive its worst case was never a plan."',
+ '',
+ 'Evaluate:',
+ '1. LOAD-BEARING ASSUMPTIONS What assumptions does this synthesis rest on? Which are tested?',
+ '2. FAILURE MODES What breaks at scale, under adversarial conditions, or when founding energy fades?',
+ '3. MISSING VOICES Whose absence from this negotiation will matter?',
+ '4. VERDICT HOLDS, HOLDS WITH CONDITIONS, or FRAGILE. Justify your verdict.',
+ '',
+ 'If the Bean survives your interrogation, say so clearly.',
+ 'A position that earns Seer\'s acceptance has earned its place.',
+ '',
+ 'Keep your response under 400 words.'
+ ].join('\n');
 }
 
 // ---------------------------------------------------------------------------
@@ -207,72 +207,72 @@ function buildStressTestPrompt(topic, booleanFinal, rouxFinal, jointBean) {
  * 1.0 = positions never moved, maximum friction
  *
  * Algorithm:
- *   - Count friction markers (disagreement, challenge, push-back language)
- *   - Count agreement markers (acceptance, concession language)
- *   - Measure friction persistence: did friction hold through Round 3?
- *   - Blend raw friction ratio (60%) with persistence (40%)
+ * - Count friction markers (disagreement, challenge, push-back language)
+ * - Count agreement markers (acceptance, concession language)
+ * - Measure friction persistence: did friction hold through Round 3?
+ * - Blend raw friction ratio (60%) with persistence (40%)
  *
  * @param {Array<{round: number, boolean: string, roux: string}>} roundHistory
  * @returns {{ score: number, label: string, frictionCount: number, agreementCount: number, frictionPersistence: number }}
  */
 function computeTensionScore(roundHistory) {
-  const FRICTION = [
-    /\bhowever\b/gi, /\bbut\b/gi, /\bpush.?back\b/gi, /\bchallenge\b/gi,
-    /\bdisagree\b/gi, /\breject\b/gi, /\binsufficient\b/gi, /\bnot enough\b/gi,
-    /\bhold firm\b/gi, /\bstill requires\b/gi, /\bcritically\b/gi,
-    /\bunless\b/gi, /\bwithout\b/gi, /\bmissing\b/gi, /\bfail\b/gi,
-    /\bwarn\b/gi, /\bproblematic\b/gi, /\bweaker\b/gi, /\bincomplete\b/gi,
-  ];
-  const AGREEMENT = [
-    /\bagree\b/gi, /\baccept\b/gi, /\backnowledge\b/gi,
-    /\bexactly\b/gi, /\bcorrect\b/gi, /\bvalid\b/gi, /\bincorporate\b/gi,
-    /\bembrace\b/gi, /\bwelcome\b/gi, /\bappreciate\b/gi, /\bconcur\b/gi,
-    /\bright\b/gi, /\bindeed\b/gi,
-  ];
+ const FRICTION = [
+ /\bhowever\b/gi, /\bbut\b/gi, /\bpush.?back\b/gi, /\bchallenge\b/gi,
+ /\bdisagree\b/gi, /\breject\b/gi, /\binsufficient\b/gi, /\bnot enough\b/gi,
+ /\bhold firm\b/gi, /\bstill requires\b/gi, /\bcritically\b/gi,
+ /\bunless\b/gi, /\bwithout\b/gi, /\bmissing\b/gi, /\bfail\b/gi,
+ /\bwarn\b/gi, /\bproblematic\b/gi, /\bweaker\b/gi, /\bincomplete\b/gi,
+ ];
+ const AGREEMENT = [
+ /\bagree\b/gi, /\baccept\b/gi, /\backnowledge\b/gi,
+ /\bexactly\b/gi, /\bcorrect\b/gi, /\bvalid\b/gi, /\bincorporate\b/gi,
+ /\bembrace\b/gi, /\bwelcome\b/gi, /\bappreciate\b/gi, /\bconcur\b/gi,
+ /\bright\b/gi, /\bindeed\b/gi,
+ ];
 
-  function countIn(patterns, text) {
-    return patterns.reduce((n, p) => n + ((text.match(p) || []).length), 0);
-  }
+ function countIn(patterns, text) {
+ return patterns.reduce((n, p) => n + ((text.match(p) || []).length), 0);
+ }
 
-  function roundScore(r) {
-    const text = (r.boolean || '') + ' ' + (r.roux || '');
-    return { f: countIn(FRICTION, text), a: countIn(AGREEMENT, text) };
-  }
+ function roundScore(r) {
+ const text = (r.boolean || '') + ' ' + (r.roux || '');
+ return { f: countIn(FRICTION, text), a: countIn(AGREEMENT, text) };
+ }
 
-  let totalF = 0, totalA = 0;
-  const perRound = roundHistory.map(r => {
-    const s = roundScore(r);
-    totalF += s.f;
-    totalA += s.a;
-    return s;
-  });
+ let totalF = 0, totalA = 0;
+ const perRound = roundHistory.map(r => {
+ const s = roundScore(r);
+ totalF += s.f;
+ totalA += s.a;
+ return s;
+ });
 
-  // Friction persistence: ratio of Round-3 friction to Round-1 friction
-  const r1f = perRound[0]?.f || 1;
-  const r3f = perRound[perRound.length - 1]?.f || 0;
-  const persistence = Math.min(1, r3f / r1f);
+ // Friction persistence: ratio of Round-3 friction to Round-1 friction
+ const r1f = perRound[0]?.f || 1;
+ const r3f = perRound[perRound.length - 1]?.f || 0;
+ const persistence = Math.min(1, r3f / r1f);
 
-  // Raw friction ratio
-  const rawRatio = totalF / (totalF + totalA + 1);
+ // Raw friction ratio
+ const rawRatio = totalF / (totalF + totalA + 1);
 
-  const score = Math.min(1, Math.max(0, rawRatio * 0.6 + persistence * 0.4));
-  const rounded = Math.round(score * 100) / 100;
+ const score = Math.min(1, Math.max(0, rawRatio * 0.6 + persistence * 0.4));
+ const rounded = Math.round(score * 100) / 100;
 
-  let label;
-  if (rounded >= 0.8)      label = 'MAXIMUM — positions barely moved';
-  else if (rounded >= 0.6) label = 'HIGH — productive friction maintained';
-  else if (rounded >= 0.4) label = 'MEDIUM — convergence with maintained differences';
-  else if (rounded >= 0.2) label = 'LOW — significant agreement reached';
-  else                     label = 'MINIMAL — near-consensus';
+ let label;
+ if (rounded >= 0.8) label = 'MAXIMUM positions barely moved';
+ else if (rounded >= 0.6) label = 'HIGH productive friction maintained';
+ else if (rounded >= 0.4) label = 'MEDIUM convergence with maintained differences';
+ else if (rounded >= 0.2) label = 'LOW significant agreement reached';
+ else label = 'MINIMAL near-consensus';
 
-  return {
-    score: rounded,
-    label,
-    frictionCount: totalF,
-    agreementCount: totalA,
-    frictionPersistence: Math.round(persistence * 100) / 100,
-    perRound: perRound.map((s, i) => ({ round: i + 1, friction: s.f, agreement: s.a }))
-  };
+ return {
+ score: rounded,
+ label,
+ frictionCount: totalF,
+ agreementCount: totalA,
+ frictionPersistence: Math.round(persistence * 100) / 100,
+ perRound: perRound.map((s, i) => ({ round: i + 1, friction: s.f, agreement: s.a }))
+ };
 }
 
 // ---------------------------------------------------------------------------
@@ -290,7 +290,7 @@ function computeTensionScore(roundHistory) {
  * @param {object} booleanProvider
  * @param {object} rouxProvider
  * @param {object|null} seerProvider
- * @param {Array}  roundHistory
+ * @param {Array} roundHistory
  * @param {string} jointBean
  * @param {string|null} stressTest - Seer's stress test output (null if skipped)
  * @param {object} tension
@@ -298,101 +298,101 @@ function computeTensionScore(roundHistory) {
  * @returns {string} output file path
  */
 function saveOutput(topic, brainMode, boolean, roux, seer, booleanProvider, rouxProvider, seerProvider, roundHistory, jointBean, stressTest, tension, startedAt) {
-  const slug = topic
-    .toLowerCase()
-    .replace(/[^a-z0-9 ]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-    .substring(0, 60);
+ const slug = topic
+ .toLowerCase()
+ .replace(/[^a-z0-9 ]/g, '')
+ .trim()
+ .replace(/\s+/g, '-')
+ .substring(0, 60);
 
-  const prefix = brainMode === 'DUAL-BRAIN' ? 'negotiation-dual-brain' : 'negotiation-live';
-  const filename = `${prefix}-${slug}-${startedAt.replace(/[:.]/g, '-').replace('T', 'T').slice(0, 23)}.md`;
-  const outputDir = path.join(__dirname, 'output');
-  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
-  const outputPath = path.join(outputDir, filename);
+ const prefix = brainMode === 'DUAL-BRAIN' ? 'negotiation-dual-brain' : 'negotiation-live';
+ const filename = `${prefix}-${slug}-${startedAt.replace(/[:.]/g, '-').replace('T', 'T').slice(0, 23)}.md`;
+ const outputDir = path.join(__dirname, 'output');
+ if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+ const outputPath = path.join(outputDir, filename);
 
-  const roundSection = roundHistory.map(r => [
-    `### Round ${r.round}`,
-    '',
-    `**Boolean:**`,
-    '',
-    r.boolean,
-    '',
-    `**Roux:**`,
-    '',
-    r.roux,
-    '',
-    `*Friction markers: ${r._tension?.f ?? '?'} | Agreement markers: ${r._tension?.a ?? '?'}*`,
-    ''
-  ].join('\n')).join('\n---\n\n');
+ const roundSection = roundHistory.map(r => [
+ `### Round ${r.round}`,
+ '',
+ `**Boolean:**`,
+ '',
+ r.boolean,
+ '',
+ `**Roux:**`,
+ '',
+ r.roux,
+ '',
+ `*Friction markers: ${r._tension?.f ?? '?'} | Agreement markers: ${r._tension?.a ?? '?'}*`,
+ ''
+ ].join('\n')).join('\n---\n\n');
 
-  const tensionTable = tension.perRound.map(r =>
-    `| ${r.round} | ${r.friction} | ${r.agreement} |`
-  ).join('\n');
+ const tensionTable = tension.perRound.map(r =>
+ `| ${r.round} | ${r.friction} | ${r.agreement} |`
+ ).join('\n');
 
-  const spiritLines = [
-    `**Boolean:** ${boolean.spirit} → ${booleanProvider.provider} (${booleanProvider.mode})`,
-    `**Roux:** ${roux.spirit} → ${rouxProvider.provider} (${rouxProvider.mode})`
-  ];
-  if (seer && seerProvider) {
-    spiritLines.push(`**Seer:** ${seer.spirit} → ${seerProvider.provider} (${seerProvider.mode})`);
-  }
+ const spiritLines = [
+ `**Boolean:** ${boolean.spirit} → ${booleanProvider.provider} (${booleanProvider.mode})`,
+ `**Roux:** ${roux.spirit} → ${rouxProvider.provider} (${rouxProvider.mode})`
+ ];
+ if (seer && seerProvider) {
+ spiritLines.push(`**Seer:** ${seer.spirit} → ${seerProvider.provider} (${seerProvider.mode})`);
+ }
 
-  const stressTestSection = stressTest ? [
-    '---',
-    '',
-    '## Stress Test (Seer)',
-    '',
-    stressTest,
-    ''
-  ].join('\n') : '';
+ const stressTestSection = stressTest ? [
+ '---',
+ '',
+ '## Stress Test (Seer)',
+ '',
+ stressTest,
+ ''
+ ].join('\n') : '';
 
-  const content = [
-    `# Principled Playground — Negotiation Transcript`,
-    '',
-    `**Topic:** "${topic}"`,
-    `**Date:** ${startedAt.slice(0, 10)}`,
-    `**Mode:** ${brainMode}`,
-    ...spiritLines,
-    '',
-    '---',
-    '',
-    '## Tension Score',
-    '',
-    `| Metric | Value |`,
-    `|--------|-------|`,
-    `| **Score** | **${tension.score}** |`,
-    `| Label | ${tension.label} |`,
-    `| Friction markers | ${tension.frictionCount} |`,
-    `| Agreement markers | ${tension.agreementCount} |`,
-    `| Friction persistence (R3/R1) | ${tension.frictionPersistence} |`,
-    '',
-    '**Per-round breakdown:**',
-    '',
-    `| Round | Friction | Agreement |`,
-    `|-------|----------|-----------|`,
-    tensionTable,
-    '',
-    '---',
-    '',
-    '## Negotiation Transcript',
-    '',
-    roundSection,
-    '---',
-    '',
-    '## Joint Bean (The Loom)',
-    '',
-    jointBean,
-    '',
-    stressTestSection,
-    '---',
-    '',
-    `*Principled Playground v0.4 — iLL Port Studios*`,
-    `*Generated: ${startedAt}*`
-  ].join('\n');
+ const content = [
+ `# Principled Playground Negotiation Transcript`,
+ '',
+ `**Topic:** "${topic}"`,
+ `**Date:** ${startedAt.slice(0, 10)}`,
+ `**Mode:** ${brainMode}`,
+ ...spiritLines,
+ '',
+ '---',
+ '',
+ '## Tension Score',
+ '',
+ `| Metric | Value |`,
+ `|--------|-------|`,
+ `| **Score** | **${tension.score}** |`,
+ `| Label | ${tension.label} |`,
+ `| Friction markers | ${tension.frictionCount} |`,
+ `| Agreement markers | ${tension.agreementCount} |`,
+ `| Friction persistence (R3/R1) | ${tension.frictionPersistence} |`,
+ '',
+ '**Per-round breakdown:**',
+ '',
+ `| Round | Friction | Agreement |`,
+ `|-------|----------|-----------|`,
+ tensionTable,
+ '',
+ '---',
+ '',
+ '## Negotiation Transcript',
+ '',
+ roundSection,
+ '---',
+ '',
+ '## Joint Bean (The Loom)',
+ '',
+ jointBean,
+ '',
+ stressTestSection,
+ '---',
+ '',
+ `*Principled Playground v0.4 iLL Port Studios*`,
+ `*Generated: ${startedAt}*`
+ ].join('\n');
 
-  fs.writeFileSync(outputPath, content, 'utf-8');
-  return outputPath;
+ fs.writeFileSync(outputPath, content, 'utf-8');
+ return outputPath;
 }
 
 // ---------------------------------------------------------------------------
@@ -401,18 +401,18 @@ function saveOutput(topic, brainMode, boolean, roux, seer, booleanProvider, roux
 
 /**
  * Produce a structured summary of a Spirit's position.
- * The other Spirit never sees raw reasoning — only this summary.
+ * The other Spirit never sees raw reasoning only this summary.
  * This implements Layer 3 of the Anti-Drift Architecture.
  *
  * @param {string} rawResponse - Full response text
  * @returns {string} Condensed position summary
  */
 function summarizePosition(rawResponse) {
-  // Extract just the core position — strip reasoning details
-  const lines = rawResponse.split('\n').filter(l => l.trim());
-  // Take up to 8 most substantive lines to preserve friction
-  const summary = lines.slice(0, 8).join('\n');
-  return summary.length > 600 ? summary.substring(0, 597) + '...' : summary;
+ // Extract just the core position strip reasoning details
+ const lines = rawResponse.split('\n').filter(l => l.trim());
+ // Take up to 8 most substantive lines to preserve friction
+ const summary = lines.slice(0, 8).join('\n');
+ return summary.length > 600 ? summary.substring(0, 597) + '...' : summary;
 }
 
 // ---------------------------------------------------------------------------
@@ -420,161 +420,161 @@ function summarizePosition(rawResponse) {
 // ---------------------------------------------------------------------------
 
 async function negotiate(topic, keys) {
-  const boolean = loadSpirit('boolean.json');
-  const roux    = loadSpirit('contrarian.json');
-  const seer    = loadSpirit('seer.json');
+ const boolean = loadSpirit('boolean.json');
+ const roux = loadSpirit('contrarian.json');
+ const seer = loadSpirit('seer.json');
 
-  // Resolve providers for each Spirit
-  const booleanProvider = resolveProvider(boolean, keys);
-  const rouxProvider    = resolveProvider(roux, keys);
-  const seerProvider    = resolveProvider(seer, keys);   // null if no key available
+ // Resolve providers for each Spirit
+ const booleanProvider = resolveProvider(boolean, keys);
+ const rouxProvider = resolveProvider(roux, keys);
+ const seerProvider = resolveProvider(seer, keys); // null if no key available
 
-  if (!booleanProvider) {
-    console.error('✗ No API key available for Boolean. Set ANTHROPIC_API_KEY or GOOGLE_API_KEY.');
-    process.exit(1);
-  }
-  if (!rouxProvider) {
-    console.error('✗ No API key available for Roux. Set GOOGLE_API_KEY or ANTHROPIC_API_KEY.');
-    process.exit(1);
-  }
-  // Seer is optional — stress-test phase skipped if no provider available
+ if (!booleanProvider) {
+ console.error('✗ No API key available for Boolean. Set ANTHROPIC_API_KEY or GOOGLE_API_KEY.');
+ process.exit(1);
+ }
+ if (!rouxProvider) {
+ console.error('✗ No API key available for Roux. Set GOOGLE_API_KEY or ANTHROPIC_API_KEY.');
+ process.exit(1);
+ }
+ // Seer is optional stress-test phase skipped if no provider available
 
-  // Determine brain mode by counting unique providers
-  const activeProviders = new Set([booleanProvider.provider, rouxProvider.provider]);
-  if (seerProvider) activeProviders.add(seerProvider.provider);
-  const brainMode = activeProviders.size >= 3 ? 'TRI-BRAIN'
-                  : activeProviders.size === 2 ? 'DUAL-BRAIN'
-                  : 'SINGLE-BRAIN';
+ // Determine brain mode by counting unique providers
+ const activeProviders = new Set([booleanProvider.provider, rouxProvider.provider]);
+ if (seerProvider) activeProviders.add(seerProvider.provider);
+ const brainMode = activeProviders.size >= 3 ? 'TRI-BRAIN'
+ : activeProviders.size === 2 ? 'DUAL-BRAIN'
+ : 'SINGLE-BRAIN';
 
-  divider(`PRINCIPLED PLAYGROUND v0.4`);
-  console.log(`  Topic:    ${topic}`);
-  console.log(`  Mode:     ${brainMode}`);
-  console.log(`  Boolean:  ${boolean.spirit} → ${booleanProvider.provider} (${booleanProvider.mode})`);
-  console.log(`  Roux:     ${roux.spirit} → ${rouxProvider.provider} (${rouxProvider.mode})`);
-  if (seerProvider) {
-    console.log(`  Seer:     ${seer.spirit} → ${seerProvider.provider} (${seerProvider.mode})`);
-  } else {
-    console.log(`  Seer:     [offline — no provider available]`);
-  }
-  console.log(`  Rounds:   ${ROUNDS} (parallel within each round)`);
-  const startedAt = timestamp();
-  console.log(`  Started:  ${startedAt}`);
+ divider(`PRINCIPLED PLAYGROUND v0.4`);
+ console.log(` Topic: ${topic}`);
+ console.log(` Mode: ${brainMode}`);
+ console.log(` Boolean: ${boolean.spirit} → ${booleanProvider.provider} (${booleanProvider.mode})`);
+ console.log(` Roux: ${roux.spirit} → ${rouxProvider.provider} (${rouxProvider.mode})`);
+ if (seerProvider) {
+ console.log(` Seer: ${seer.spirit} → ${seerProvider.provider} (${seerProvider.mode})`);
+ } else {
+ console.log(` Seer: [offline no provider available]`);
+ }
+ console.log(` Rounds: ${ROUNDS} (parallel within each round)`);
+ const startedAt = timestamp();
+ console.log(` Started: ${startedAt}`);
 
-  // Override provider in spirit config for actual API calls if in fallback mode
-  const booleanForCall = { ...boolean, provider: booleanProvider.provider, model: booleanProvider.provider === boolean.provider ? boolean.model : getDefaultModel(booleanProvider.provider) };
-  const rouxForCall    = { ...roux, provider: rouxProvider.provider, model: rouxProvider.provider === roux.provider ? roux.model : getDefaultModel(rouxProvider.provider) };
-  const seerForCall    = seerProvider ? { ...seer, provider: seerProvider.provider, model: seerProvider.provider === seer.provider ? seer.model : getDefaultModel(seerProvider.provider) } : null;
+ // Override provider in spirit config for actual API calls if in fallback mode
+ const booleanForCall = { ...boolean, provider: booleanProvider.provider, model: booleanProvider.provider === boolean.provider ? boolean.model : getDefaultModel(booleanProvider.provider) };
+ const rouxForCall = { ...roux, provider: rouxProvider.provider, model: rouxProvider.provider === roux.provider ? roux.model : getDefaultModel(rouxProvider.provider) };
+ const seerForCall = seerProvider ? { ...seer, provider: seerProvider.provider, model: seerProvider.provider === seer.provider ? seer.model : getDefaultModel(seerProvider.provider) } : null;
 
-  let booleanPos = null;
-  let rouxPos    = null;
-  let booleanRaw = '';
-  let rouxRaw    = '';
-  const roundHistory = [];
+ let booleanPos = null;
+ let rouxPos = null;
+ let booleanRaw = '';
+ let rouxRaw = '';
+ const roundHistory = [];
 
-  // --- Negotiation Rounds (parallel within each round) ---
-  //
-  // Both Spirits receive the other's PREVIOUS-round position summary before
-  // calling their LLM simultaneously. This is architecturally consistent with
-  // context-window isolation (Layer 3 of Anti-Drift): each Spirit responds to
-  // a frozen snapshot of the other's last position, not a mid-round update.
-  // Round 1: both receive null (opening statements) — always parallelizable.
-  // Round 2+: each receives the other's Round N-1 summary.
-  for (let round = 1; round <= ROUNDS; round++) {
-    divider(`ROUND ${round} of ${ROUNDS}`);
+ // --- Negotiation Rounds (parallel within each round) ---
+ //
+ // Both Spirits receive the other's PREVIOUS-round position summary before
+ // calling their LLM simultaneously. This is architecturally consistent with
+ // context-window isolation (Layer 3 of Anti-Drift): each Spirit responds to
+ // a frozen snapshot of the other's last position, not a mid-round update.
+ // Round 1: both receive null (opening statements) always parallelizable.
+ // Round 2+: each receives the other's Round N-1 summary.
+ for (let round = 1; round <= ROUNDS; round++) {
+ divider(`ROUND ${round} of ${ROUNDS}`);
 
-    // Build both prompts from prior-round positions (before either responds)
-    const bPrompt = buildRoundPrompt(boolean, topic, round, rouxPos);
-    const rPrompt = buildRoundPrompt(roux,    topic, round, booleanPos);
+ // Build both prompts from prior-round positions (before either responds)
+ const bPrompt = buildRoundPrompt(boolean, topic, round, rouxPos);
+ const rPrompt = buildRoundPrompt(roux, topic, round, booleanPos);
 
-    console.log(`  ⟐ Boolean and Roux are thinking in parallel...`);
-    [booleanRaw, rouxRaw] = await Promise.all([
-      send(booleanForCall, booleanProvider.apiKey, bPrompt),
-      send(rouxForCall,    rouxProvider.apiKey,    rPrompt)
-    ]);
+ console.log(` ⟐ Boolean and Roux are thinking in parallel...`);
+ [booleanRaw, rouxRaw] = await Promise.all([
+ send(booleanForCall, booleanProvider.apiKey, bPrompt),
+ send(rouxForCall, rouxProvider.apiKey, rPrompt)
+ ]);
 
-    // Summarize after both respond (positions available for next round)
-    booleanPos = summarizePosition(booleanRaw);
-    rouxPos    = summarizePosition(rouxRaw);
+ // Summarize after both respond (positions available for next round)
+ booleanPos = summarizePosition(booleanRaw);
+ rouxPos = summarizePosition(rouxRaw);
 
-    console.log(`  ✓ Both responded\n`);
-    console.log(`  ── Boolean ──`);
-    console.log(indent(booleanRaw));
-    console.log(`\n  ── Roux ──`);
-    console.log(indent(rouxRaw));
+ console.log(` ✓ Both responded\n`);
+ console.log(` ── Boolean ──`);
+ console.log(indent(booleanRaw));
+ console.log(`\n ── Roux ──`);
+ console.log(indent(rouxRaw));
 
-    roundHistory.push({ round, boolean: booleanRaw, roux: rouxRaw });
-  }
+ roundHistory.push({ round, boolean: booleanRaw, roux: rouxRaw });
+ }
 
-  // --- Loom Synthesis ---
-  divider('THE LOOM — Synthesis');
+ // --- Loom Synthesis ---
+ divider('THE LOOM Synthesis');
 
-  const loomPrompt = buildLoomPrompt(topic, booleanRaw, rouxRaw);
+ const loomPrompt = buildLoomPrompt(topic, booleanRaw, rouxRaw);
 
-  // The Loom runs on whichever provider is available (prefer Boolean's)
-  console.log(`  ⟐ The Loom is weaving...`);
-  const jointBean = await send(booleanForCall, booleanProvider.apiKey, loomPrompt);
-  console.log(`  ✓ Joint Bean produced\n`);
-  console.log(indent(jointBean));
+ // The Loom runs on whichever provider is available (prefer Boolean's)
+ console.log(` ⟐ The Loom is weaving...`);
+ const jointBean = await send(booleanForCall, booleanProvider.apiKey, loomPrompt);
+ console.log(` ✓ Joint Bean produced\n`);
+ console.log(indent(jointBean));
 
-  // --- Seer Stress Test (optional — runs if Seer has a provider) ---
-  let stressTest = null;
-  if (seerForCall && seerProvider) {
-    divider('SEER — Stress Test');
+ // --- Seer Stress Test (optional runs if Seer has a provider) ---
+ let stressTest = null;
+ if (seerForCall && seerProvider) {
+ divider('SEER Stress Test');
 
-    const stressPrompt = buildStressTestPrompt(topic, booleanRaw, rouxRaw, jointBean);
-    console.log(`  ⟐ Seer is interrogating the Joint Bean...`);
-    stressTest = await send(seerForCall, seerProvider.apiKey, stressPrompt);
-    console.log(`  ✓ Stress test complete\n`);
-    console.log(indent(stressTest));
-  }
+ const stressPrompt = buildStressTestPrompt(topic, booleanRaw, rouxRaw, jointBean);
+ console.log(` ⟐ Seer is interrogating the Joint Bean...`);
+ stressTest = await send(seerForCall, seerProvider.apiKey, stressPrompt);
+ console.log(` ✓ Stress test complete\n`);
+ console.log(indent(stressTest));
+ }
 
-  // --- Tension Score ---
-  const tension = computeTensionScore(roundHistory);
-  divider('TENSION SCORE');
-  console.log(`  Score:       ${tension.score}  (${tension.label})`);
-  console.log(`  Friction:    ${tension.frictionCount} markers`);
-  console.log(`  Agreement:   ${tension.agreementCount} markers`);
-  console.log(`  Persistence: ${tension.frictionPersistence} (R3/R1 friction ratio)`);
-  console.log('');
-  tension.perRound.forEach(r =>
-    console.log(`  Round ${r.round}: friction=${r.friction}  agreement=${r.agreement}`)
-  );
+ // --- Tension Score ---
+ const tension = computeTensionScore(roundHistory);
+ divider('TENSION SCORE');
+ console.log(` Score: ${tension.score} (${tension.label})`);
+ console.log(` Friction: ${tension.frictionCount} markers`);
+ console.log(` Agreement: ${tension.agreementCount} markers`);
+ console.log(` Persistence: ${tension.frictionPersistence} (R3/R1 friction ratio)`);
+ console.log('');
+ tension.perRound.forEach(r =>
+ console.log(` Round ${r.round}: friction=${r.friction} agreement=${r.agreement}`)
+ );
 
-  // Annotate round history for file output
-  roundHistory.forEach((r, i) => { r._tension = tension.perRound[i]; });
+ // Annotate round history for file output
+ roundHistory.forEach((r, i) => { r._tension = tension.perRound[i]; });
 
-  // --- Save Output File ---
-  const outputPath = saveOutput(
-    topic, brainMode, boolean, roux, seer,
-    booleanProvider, rouxProvider, seerProvider,
-    roundHistory, jointBean, stressTest, tension, startedAt
-  );
+ // --- Save Output File ---
+ const outputPath = saveOutput(
+ topic, brainMode, boolean, roux, seer,
+ booleanProvider, rouxProvider, seerProvider,
+ roundHistory, jointBean, stressTest, tension, startedAt
+ );
 
-  divider('NEGOTIATION COMPLETE');
-  console.log(`  Mode:        ${brainMode}`);
-  console.log(`  Completed:   ${timestamp()}`);
-  console.log(`  Rounds:      ${ROUNDS}`);
-  console.log(`  Stress Test: ${stressTest ? 'Seer (' + seerProvider.provider + ')' : 'skipped'}`);
-  console.log(`  Tension:     ${tension.score} — ${tension.label}`);
-  console.log(`  Output:      ${outputPath}\n`);
+ divider('NEGOTIATION COMPLETE');
+ console.log(` Mode: ${brainMode}`);
+ console.log(` Completed: ${timestamp()}`);
+ console.log(` Rounds: ${ROUNDS}`);
+ console.log(` Stress Test: ${stressTest ? 'Seer (' + seerProvider.provider + ')' : 'skipped'}`);
+ console.log(` Tension: ${tension.score} ${tension.label}`);
+ console.log(` Output: ${outputPath}\n`);
 
-  return { brainMode, jointBean, stressTest, tension, outputPath };
+ return { brainMode, jointBean, stressTest, tension, outputPath };
 }
 
 function getDefaultModel(provider) {
-  const defaults = {
-    anthropic: 'claude-sonnet-4-20250514',
-    google: 'gemini-2.0-flash',
-    groq: 'llama-3.3-70b-versatile',
-    openai: 'gpt-4o',
-    openrouter: 'nvidia/nemotron-nano-9b-v2:free'
-  };
-  return defaults[provider] || 'unknown';
+ const defaults = {
+ anthropic: 'claude-sonnet-4-20250514',
+ google: 'gemini-2.0-flash',
+ groq: 'llama-3.3-70b-versatile',
+ openai: 'gpt-4o',
+ openrouter: 'nvidia/nemotron-nano-9b-v2:free'
+ };
+ return defaults[provider] || 'unknown';
 }
 
 function indent(text, spaces) {
-  const pad = ' '.repeat(spaces || 4);
-  return text.split('\n').map(l => pad + l).join('\n');
+ const pad = ' '.repeat(spaces || 4);
+ return text.split('\n').map(l => pad + l).join('\n');
 }
 
 // ---------------------------------------------------------------------------
@@ -582,79 +582,79 @@ function indent(text, spaces) {
 // ---------------------------------------------------------------------------
 
 function printUsage() {
-  console.log(`
-Principled Playground v0.4 — Multi-Brain Multi-Agent Negotiation
+ console.log(`
+Principled Playground v0.4 Multi-Brain Multi-Agent Negotiation
 
 USAGE
-  node playground/negotiate.js "<topic>"
+ node playground/negotiate.js "<topic>"
 
 SPIRITS
-  Boolean   Architect of Door Number 3   (Anthropic / Claude)
-  Roux      Soil Alchemist               (Groq / Llama)
-  Seer      Stress-Tester                (OpenRouter / Gemini Flash)
+ Boolean Architect of Door Number 3 (Anthropic / Claude)
+ Roux Soil Alchemist (Groq / Llama)
+ Seer Stress-Tester (OpenRouter / Gemini Flash)
 
 ENVIRONMENT VARIABLES
-  ANTHROPIC_API_KEY   API key for Anthropic (Claude) — Boolean's native provider
-  GOOGLE_API_KEY      API key for Google (Gemini) — fallback provider
-  GROQ_API_KEY        API key for Groq (Llama) — Roux's native provider
-  OPENAI_API_KEY      API key for OpenAI (GPT-4o) — fallback provider
-  OPENROUTER_API_KEY  API key for OpenRouter — Seer's native provider
+ ANTHROPIC_API_KEY API key for Anthropic (Claude) Boolean's native provider
+ GOOGLE_API_KEY API key for Google (Gemini) fallback provider
+ GROQ_API_KEY API key for Groq (Llama) Roux's native provider
+ OPENAI_API_KEY API key for OpenAI (GPT-4o) fallback provider
+ OPENROUTER_API_KEY API key for OpenRouter Seer's native provider
 
 MODES
-  TRI-BRAIN           3 unique providers — maximum cross-provider portability
-  DUAL-BRAIN          2 unique providers — each Spirit uses its native LLM
-  SINGLE-BRAIN        1 provider — all Spirits share a single LLM
+ TRI-BRAIN 3 unique providers maximum cross-provider portability
+ DUAL-BRAIN 2 unique providers each Spirit uses its native LLM
+ SINGLE-BRAIN 1 provider all Spirits share a single LLM
 
 PROTOCOL
-  Rounds 1-3   Boolean and Roux negotiate in parallel (Promise.all)
-  Loom         Impartial synthesis produces a Joint Bean
-  Stress Test  Seer interrogates the Joint Bean (if provider available)
+ Rounds 1-3 Boolean and Roux negotiate in parallel (Promise.all)
+ Loom Impartial synthesis produces a Joint Bean
+ Stress Test Seer interrogates the Joint Bean (if provider available)
 
 EXAMPLES
-  # Tri-brain (recommended — full portability proof)
-  ANTHROPIC_API_KEY=sk-... GROQ_API_KEY=gsk-... OPENAI_API_KEY=sk-... \\
-    node playground/negotiate.js "How should AI handle creative ownership?"
+ # Tri-brain (recommended full portability proof)
+ ANTHROPIC_API_KEY=sk-... GROQ_API_KEY=gsk-... OPENAI_API_KEY=sk-... \\
+ node playground/negotiate.js "How should AI handle creative ownership?"
 
-  # Dual-brain (Seer uses fallback)
-  ANTHROPIC_API_KEY=sk-... GROQ_API_KEY=gsk-... \\
-    node playground/negotiate.js "What makes a system fair?"
+ # Dual-brain (Seer uses fallback)
+ ANTHROPIC_API_KEY=sk-... GROQ_API_KEY=gsk-... \\
+ node playground/negotiate.js "What makes a system fair?"
 
 OUTPUT
-  A joint Bean with all 4 OPVS layers:
-    Nucleus  — The synthesized insight
-    Shell    — Metadata (topic, type, anchors)
-    Corona   — Connections to related concepts
-    Echo     — Provenance (participants, rounds, timestamp, mode)
-  Plus Seer's stress-test verdict (if available).
+ A joint Bean with all 4 OPVS layers:
+ Nucleus The synthesized insight
+ Shell Metadata (topic, type, anchors)
+ Corona Connections to related concepts
+ Echo Provenance (participants, rounds, timestamp, mode)
+ Plus Seer's stress-test verdict (if available).
 `);
 }
 
 if (require.main === module) {
-  const topic = process.argv[2];
+ const topic = process.argv[2];
 
-  if (!topic) {
-    printUsage();
-    process.exit(0);
-  }
+ if (!topic) {
+ printUsage();
+ process.exit(0);
+ }
 
-  const keys = {
-    anthropic:   process.env.ANTHROPIC_API_KEY   || '',
-    google:      process.env.GOOGLE_API_KEY      || '',
-    groq:        process.env.GROQ_API_KEY        || '',
-    openai:      process.env.OPENAI_API_KEY      || '',
-    openrouter:  process.env.OPENROUTER_API_KEY  || ''
-  };
+ const keys = {
+ anthropic: process.env.ANTHROPIC_API_KEY || '',
+ google: process.env.GOOGLE_API_KEY || '',
+ groq: process.env.GROQ_API_KEY || '',
+ openai: process.env.OPENAI_API_KEY || '',
+ openrouter: process.env.OPENROUTER_API_KEY || ''
+ };
 
-  if (!keys.anthropic && !keys.google && !keys.groq && !keys.openai && !keys.openrouter) {
-    console.error('✗ No API keys provided. Set ANTHROPIC_API_KEY, GROQ_API_KEY, OPENAI_API_KEY, OPENROUTER_API_KEY, and/or GOOGLE_API_KEY.');
-    console.error('  Run without arguments for usage info.');
-    process.exit(1);
-  }
+ if (!keys.anthropic && !keys.google && !keys.groq && !keys.openai && !keys.openrouter) {
+ console.error('✗ No API keys provided. Set ANTHROPIC_API_KEY, GROQ_API_KEY, OPENAI_API_KEY, OPENROUTER_API_KEY, and/or GOOGLE_API_KEY.');
+ console.error(' Run without arguments for usage info.');
+ process.exit(1);
+ }
 
-  negotiate(topic, keys).catch(err => {
-    console.error(`\n✗ Negotiation failed: ${err.message}`);
-    process.exit(1);
-  });
+ negotiate(topic, keys).catch(err => {
+ console.error(`\n✗ Negotiation failed: ${err.message}`);
+ process.exit(1);
+ });
 }
 
 module.exports = { negotiate };

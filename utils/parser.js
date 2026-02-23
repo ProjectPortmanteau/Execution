@@ -6,19 +6,19 @@
  * Output: { type: "SPARK", content: "The first note of the symphony." }
  */
 const parseCommitMessage = (message) => {
-    // Regex to find [TAG] at the start
-    const tagPattern = /^\[(SPARK|BLOCKER|SOLUTION|LORE|PODIUM)\]\s*(.*)/i;
-    const match = message.match(tagPattern);
+ // Regex to find [TAG] at the start
+ const tagPattern = /^\[(SPARK|BLOCKER|SOLUTION|LORE|PODIUM)\]\s*(.*)/i;
+ const match = message.match(tagPattern);
 
-    if (match) {
-        return {
-            type: match[1].toUpperCase(),
-            content: match[2].trim(),
-            isValid: true
-        };
-    }
-    
-    return { isValid: false };
+ if (match) {
+ return {
+ type: match[1].toUpperCase(),
+ content: match[2].trim(),
+ isValid: true
+ };
+ }
+
+ return { isValid: false };
 };
 
 /**
@@ -26,12 +26,12 @@ const parseCommitMessage = (message) => {
  * Uses 'gray-matter' library
  */
 const parseMarkdownFile = (fileContent) => {
-    const matter = require('gray-matter');
-    const { data, content } = matter(fileContent);
-    return {
-        metadata: data, // { title: "...", layer: 1 }
-        body: content
-    };
+ const matter = require('gray-matter');
+ const { data, content } = matter(fileContent);
+ return {
+ metadata: data, // { title: "...", layer: 1 }
+ body: content
+ };
 };
 
 /**
@@ -40,13 +40,13 @@ const parseMarkdownFile = (fileContent) => {
  * Ensures backward compatibility when syncing Beans from the Ark.
  */
 const LAYER_MAP = {
-    'philosophy':        0, 'soul code':         0, 'layer 0': 0, 'layer0': 0,
-    'visionary':         1, 'blueprint':         1, 'layer 1': 1, 'layer1': 1,
-    'narrative':         2, 'roadmap':           2, 'layer 2': 2, 'layer2': 2,
-    'execution':         3, 'scene construction': 3, 'layer 3': 3, 'layer3': 3,
-    'lore':              4, 'world weaving':     4, 'layer 4': 4, 'layer4': 4,
-    'process':           5, 'chronicle':         5, 'layer 5': 5, 'layer5': 5,
-    'ark':               6, 'consolidated':      6, 'layer 6': 6, 'layer6': 6,
+ 'philosophy': 0, 'soul code': 0, 'layer 0': 0, 'layer0': 0,
+ 'visionary': 1, 'blueprint': 1, 'layer 1': 1, 'layer1': 1,
+ 'narrative': 2, 'roadmap': 2, 'layer 2': 2, 'layer2': 2,
+ 'execution': 3, 'scene construction': 3, 'layer 3': 3, 'layer3': 3,
+ 'lore': 4, 'world weaving': 4, 'layer 4': 4, 'layer4': 4,
+ 'process': 5, 'chronicle': 5, 'layer 5': 5, 'layer5': 5,
+ 'ark': 6, 'consolidated': 6, 'layer 6': 6, 'layer6': 6,
 };
 
 /**
@@ -55,22 +55,22 @@ const LAYER_MAP = {
  * Returns null if the value cannot be resolved.
  */
 const normalizeLayer = (raw) => {
-    if (raw === null || raw === undefined) return null;
+ if (raw === null || raw === undefined) return null;
 
-    // Already a valid number
-    if (typeof raw === 'number' && raw >= 0 && raw <= 6) return raw;
+ // Already a valid number
+ if (typeof raw === 'number' && raw >= 0 && raw <= 6) return raw;
 
-    // Numeric string
-    const num = Number(raw);
-    if (!isNaN(num) && num >= 0 && num <= 6) return num;
+ // Numeric string
+ const num = Number(raw);
+ if (!isNaN(num) && num >= 0 && num <= 6) return num;
 
-    // Legacy name lookup
-    if (typeof raw === 'string') {
-        const key = raw.trim().toLowerCase();
-        if (key in LAYER_MAP) return LAYER_MAP[key];
-    }
+ // Legacy name lookup
+ if (typeof raw === 'string') {
+ const key = raw.trim().toLowerCase();
+ if (key in LAYER_MAP) return LAYER_MAP[key];
+ }
 
-    return null;
+ return null;
 };
 
 /**
@@ -78,13 +78,13 @@ const normalizeLayer = (raw) => {
  * Returns an array of { id, title } objects found in the text.
  */
 const extractBeanIds = (text) => {
-    const beans = [];
-    const pattern = /\[BEAN\s+#([A-Z]+-\d+)\]\s*(?:Title:\s*)?(.+)/gi;
-    let match;
-    while ((match = pattern.exec(text)) !== null) {
-        beans.push({ id: match[1].toUpperCase(), title: match[2].trim() });
-    }
-    return beans;
+ const beans = [];
+ const pattern = /\[BEAN\s+#([A-Z]+-\d+)\]\s*(?:Title:\s*)?(.+)/gi;
+ let match;
+ while ((match = pattern.exec(text)) !== null) {
+ beans.push({ id: match[1].toUpperCase(), title: match[2].trim() });
+ }
+ return beans;
 };
 
 /**
@@ -92,81 +92,81 @@ const extractBeanIds = (text) => {
  *
  * Each section starts at a [BEAN #ID] header and runs until the next
  * [BEAN #ID] header or end-of-file. Returns an array of objects:
- *   { id, title, content }
+ * { id, title, content }
  *
  * @param {string} text - The markdown body (after frontmatter removal)
  * @returns {{ id: string, title: string, content: string }[]}
  */
 const splitBeansFromFile = (text) => {
-    const beanPattern = /\[BEAN\s+#([A-Z]+-\d+)\]\s*(?:Title:\s*)?(.+)/gi;
-    const matches = [];
-    let match;
+ const beanPattern = /\[BEAN\s+#([A-Z]+-\d+)\]\s*(?:Title:\s*)?(.+)/gi;
+ const matches = [];
+ let match;
 
-    while ((match = beanPattern.exec(text)) !== null) {
-        matches.push({
-            id: match[1].toUpperCase(),
-            title: match[2].trim(),
-            startIndex: match.index,
-        });
-    }
+ while ((match = beanPattern.exec(text)) !== null) {
+ matches.push({
+ id: match[1].toUpperCase(),
+ title: match[2].trim(),
+ startIndex: match.index,
+ });
+ }
 
-    if (matches.length === 0) return [];
+ if (matches.length === 0) return [];
 
-    return matches.map((m, i) => {
-        const endIndex = i + 1 < matches.length ? matches[i + 1].startIndex : text.length;
-        const content = text.slice(m.startIndex, endIndex).trim();
-        return { id: m.id, title: m.title, content };
-    });
+ return matches.map((m, i) => {
+ const endIndex = i + 1 < matches.length ? matches[i + 1].startIndex : text.length;
+ const content = text.slice(m.startIndex, endIndex).trim();
+ return { id: m.id, title: m.title, content };
+ });
 };
 
 /**
- * Safe Bean Parser — parses a single bean file (JSON or Markdown).
+ * Safe Bean Parser parses a single bean file (JSON or Markdown).
  * Returns { ok: true, data } on success, { ok: false, error } on failure.
  * Ensures one broken bean never crashes the entire sync.
  */
 const safeParseBeanFile = (filePath, rawText) => {
-    try {
-        let beanData;
+ try {
+ let beanData;
 
-        if (filePath.endsWith('.json')) {
-            beanData = JSON.parse(rawText);
-        } else {
-            const { metadata, body } = parseMarkdownFile(rawText);
+ if (filePath.endsWith('.json')) {
+ beanData = JSON.parse(rawText);
+ } else {
+ const { metadata, body } = parseMarkdownFile(rawText);
 
-            // Normalize layer from frontmatter or filename
-            let layer = normalizeLayer(metadata.layer);
-            if (layer === null) {
-                // Attempt to infer layer from filename (e.g. 00_Philosophy.md → 0)
-                const fileMatch = filePath.match(/(\d{2})_/);
-                if (fileMatch) {
-                    const parsed = parseInt(fileMatch[1], 10);
-                    if (parsed >= 0 && parsed <= 6) layer = parsed;
-                }
-            }
+ // Normalize layer from frontmatter or filename
+ let layer = normalizeLayer(metadata.layer);
+ if (layer === null) {
+ // Attempt to infer layer from filename (e.g. 00_Philosophy.md → 0)
+ const fileMatch = filePath.match(/(\d{2})_/);
+ if (fileMatch) {
+ const parsed = parseInt(fileMatch[1], 10);
+ if (parsed >= 0 && parsed <= 6) layer = parsed;
+ }
+ }
 
-            // Extract embedded Bean IDs from body
-            const embeddedBeans = extractBeanIds(body);
+ // Extract embedded Bean IDs from body
+ const embeddedBeans = extractBeanIds(body);
 
-            beanData = {
-                ...metadata,
-                layer,
-                content: body,
-                embeddedBeans,
-            };
-        }
+ beanData = {
+ ...metadata,
+ layer,
+ content: body,
+ embeddedBeans,
+ };
+ }
 
-        return { ok: true, data: beanData };
-    } catch (err) {
-        return { ok: false, error: err.message, filePath };
-    }
+ return { ok: true, data: beanData };
+ } catch (err) {
+ return { ok: false, error: err.message, filePath };
+ }
 };
 
 module.exports = {
-    parseCommitMessage,
-    parseMarkdownFile,
-    normalizeLayer,
-    extractBeanIds,
-    splitBeansFromFile,
-    safeParseBeanFile,
-    LAYER_MAP,
+ parseCommitMessage,
+ parseMarkdownFile,
+ normalizeLayer,
+ extractBeanIds,
+ splitBeansFromFile,
+ safeParseBeanFile,
+ LAYER_MAP,
 };
