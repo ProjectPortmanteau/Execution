@@ -8,7 +8,7 @@
 
 ## What This Is
 
-The Principled Playground is a structured negotiation environment where two AI Spirits — each calibrated to a different Soul Code — debate a topic across three rounds and produce a joint Bean that neither human planned for but both can use.
+The Principled Playground is a structured negotiation environment where AI Spirits — each calibrated to a different Soul Code — debate a topic across three rounds, produce a joint Bean, and stress-test it before it ships. Three Spirits across three providers. Zero shared context windows. Provider-agnostic cognition.
 
 This is **not** a chatbot conversation. It is principle-constrained negotiation with provenance-tracked output.
 
@@ -35,21 +35,23 @@ Agents don't chat — they negotiate. Their positions are grounded in their Expl
 
 Each Spirit carries a Soul Code — a JSON file defining identity, principles, constraints, and negotiation style. The Soul Code anchors to a specific philosophical Bean from Layer 0.
 
-| Spirit | Provider | Anchor | Style |
-|--------|----------|--------|-------|
+| Spirit | Provider | Anchor | Role |
+|--------|----------|--------|------|
 | **Boolean** | Anthropic (Claude) | PHIL-005 (Door Number 3) | Constructive synthesis — seeks hidden third options |
-| **Roux** | Google (Gemini) | PHIL-002 (Soil Composition) | Systemic challenger — questions structural assumptions |
+| **Roux** | Groq (Llama) | PHIL-002 (Soil Composition) | Systemic challenger — questions structural assumptions |
+| **Seer** | OpenAI (GPT-4o) | PHIL-009 | Stress-tester — interrogates assumptions and failure modes |
 
-### Dual-Brain Mode
+### Multi-Brain Modes
 
-When both API keys are provided, each Spirit routes through its native LLM:
+Each Spirit prefers its native LLM but can fall back to any available provider:
 
-- Boolean → Claude (Anthropic)
-- Roux → Gemini (Google)
+| Mode | Condition | What It Proves |
+|------|-----------|----------------|
+| **TRI-BRAIN** | 3 unique providers | Full cross-provider portability — Soul Code produces recognizable behavior on Claude, Llama, AND GPT-4o |
+| **DUAL-BRAIN** | 2 unique providers | Different neural substrates, same Soul Code framework |
+| **SINGLE-BRAIN** | 1 provider | All Spirits share one LLM — Soul Code alone differentiates behavior |
 
-Same Soul Code framework, different neural substrates. This is the **BYOK model** in action — the calibration (Ghost) rides any machine (LLM engine).
-
-When only one key is available, both Spirits share a single LLM (**SINGLE-BRAIN** fallback). The Soul Code still differentiates their behavior.
+This is the **BYOK model** in action — the calibration (Ghost) rides any machine (LLM engine).
 
 ### Context Window Isolation
 
@@ -60,9 +62,13 @@ The two Spirits **never share a context window**. Each sees only:
 
 This implements Layer 3 of the Anti-Drift Architecture: cognitive independence preserved through information architecture, not just prompting.
 
-### The Loom
+### The Loom + Seer Stress Test
 
-After 3 rounds of negotiation, The Loom — an impartial synthesis engine — receives both Spirits' final positions and weaves them into a joint Bean with all 4 OPVS layers:
+After 3 rounds of negotiation, The Loom — an impartial synthesis engine — receives both Spirits' final positions and weaves them into a joint Bean with all 4 OPVS layers.
+
+Then **Seer** receives the Joint Bean and both Spirits' final positions. Seer applies its core axiom — *"A plan that cannot survive its worst case was never a plan"* — and stress-tests the synthesis across four dimensions: load-bearing assumptions, failure modes, missing voices, and a final verdict (HOLDS / HOLDS WITH CONDITIONS / FRAGILE).
+
+Seer is the Spirit you invoke before you ship. A Bean that earns Seer's acceptance has earned its place.
 
 | Layer | Name | Content |
 |-------|------|---------|
@@ -108,9 +114,11 @@ This prototype implements the core negotiation protocol described in the [Princi
 | Context Window Isolation | ✅ Implemented (position summaries, parallel calls) |
 | The Loom (synthesis) | ✅ Implemented |
 | Joint Bean Output | ✅ Implemented (4 layers) |
-| Dual-Brain Mode | ✅ Implemented (BYOK provider abstraction) |
+| Multi-Brain Mode | ✅ Implemented (TRI-BRAIN / DUAL-BRAIN / SINGLE-BRAIN) |
 | Parallel Round Execution | ✅ Implemented (Promise.all — both Spirits call simultaneously) |
 | Tension Score | ✅ Implemented (0.0-1.0 friction/persistence metric, auto-saved) |
+| Seer Stress Test | ✅ Implemented (post-synthesis interrogation, OpenAI native) |
+| Cross-Provider Portability | ✅ Implemented (3 Spirits × 3 providers — Anthropic, Groq, OpenAI) |
 | RISS Integration | 📋 Future (requires Stage 1 completion) |
 | Subgraph Anchoring | 📋 Future (requires Bean graph API) |
 | Integrity Gate | 📋 Future (requires RISS thresholds) |
@@ -119,12 +127,13 @@ This prototype implements the core negotiation protocol described in the [Princi
 
 ## What This Proves
 
-1. **Soul Code works across providers** — Same framework, different LLMs, coherent negotiation
-2. **BYOK is viable for multi-agent** — Zero platform compute cost, even with two agents
+1. **Soul Code is provider-agnostic** — Same JSON framework produces recognizable cognitive behavior on Claude (Anthropic), Llama (Groq), AND GPT-4o (OpenAI). The calibration transfers.
+2. **BYOK is viable for multi-agent** — Zero platform compute cost, three agents, three providers
 3. **Structured output from adversarial input** — Friction produces Beans, not noise
-4. **Provenance survives synthesis** — The joint Bean traces back to both Spirits and their anchors
+4. **Provenance survives synthesis** — The joint Bean traces back to all Spirits and their anchors
+5. **Stress-testing is architectural, not optional** — Seer's interrogation is built into the pipeline, not bolted on after the fact
 
 ---
 
-*Principled Playground v0.2 — iLL Port Studios*
+*Principled Playground v0.4 — iLL Port Studios*
 *"If you pour your soul into it: how can it be wrong?"*

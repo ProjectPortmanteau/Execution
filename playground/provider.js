@@ -1,9 +1,12 @@
 // playground/provider.js
-// BYOK Dual-Brain Provider Abstraction
-// Routes requests to Anthropic (Claude) or Google (Gemini) based on Spirit config.
-// Zero external dependencies — raw fetch only.
+// BYOK Multi-Brain Provider Abstraction
+// Routes requests to Anthropic, Google, Groq, or OpenAI based on Spirit config.
+// Zero external dependencies — raw fetch + curl for DNS-challenged environments.
 
 'use strict';
+
+const fs = require('fs');
+const { execSync } = require('child_process');
 
 // ---------------------------------------------------------------------------
 // Provider: Anthropic (Claude)
@@ -66,8 +69,6 @@ async function callGoogle(apiKey, model, systemPrompt, userMessage) {
 // Uses curl for environments where Node.js DNS cannot resolve api.groq.com
 // ---------------------------------------------------------------------------
 
-const { execSync } = require('child_process');
-
 async function callGroq(apiKey, model, systemPrompt, userMessage) {
   const payload = JSON.stringify({
     model,
@@ -79,7 +80,6 @@ async function callGroq(apiKey, model, systemPrompt, userMessage) {
   });
 
   // Write payload to temp file to avoid shell escaping issues
-  const fs = require('fs');
   const tmpFile = '/tmp/groq_payload_' + Date.now() + '.json';
   fs.writeFileSync(tmpFile, payload);
 
@@ -103,13 +103,91 @@ async function callGroq(apiKey, model, systemPrompt, userMessage) {
 }
 
 // ---------------------------------------------------------------------------
+// Provider: OpenAI (GPT-4o)
+// Uses curl for DNS reliability (same rationale as Groq above).
+// ---------------------------------------------------------------------------
+
+async function callOpenAI(apiKey, model, systemPrompt, userMessage) {
+  const payload = JSON.stringify({
+    model,
+    max_tokens: 1024,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userMessage }
+    ]
+  });
+
+  const tmpFile = '/tmp/openai_payload_' + Date.now() + '.json';
+  fs.writeFileSync(tmpFile, payload);
+
+  try {
+    const result = execSync(
+      `curl -s -X POST "https://api.openai.com/v1/chat/completions" ` +
+      `-H "Content-Type: application/json" ` +
+      `-H "Authorization: Bearer ${apiKey}" ` +
+      `-d @${tmpFile}`,
+      { timeout: 90000, encoding: 'utf-8' }
+    );
+
+    const data = JSON.parse(result);
+    if (data.error) {
+      throw new Error(`OpenAI API: ${data.error.message || JSON.stringify(data.error)}`);
+    }
+    return data.choices[0].message.content;
+  } finally {
+    try { fs.unlinkSync(tmpFile); } catch (_) {}
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Provider: OpenRouter (OpenAI-compatible, free-tier models available)
+// Uses curl for DNS reliability.
+// ---------------------------------------------------------------------------
+
+async function callOpenRouter(apiKey, model, systemPrompt, userMessage) {
+  const payload = JSON.stringify({
+    model,
+    max_tokens: 1024,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userMessage }
+    ]
+  });
+
+  const tmpFile = '/tmp/openrouter_payload_' + Date.now() + '.json';
+  fs.writeFileSync(tmpFile, payload);
+
+  try {
+    const result = execSync(
+      `curl -s -X POST "https://openrouter.ai/api/v1/chat/completions" ` +
+      `-H "Content-Type: application/json" ` +
+      `-H "Authorization: Bearer ${apiKey}" ` +
+      `-d @${tmpFile}`,
+      { timeout: 90000, encoding: 'utf-8' }
+    );
+
+    const data = JSON.parse(result);
+    if (data.error) {
+      throw new Error(`OpenRouter API: ${data.error.message || JSON.stringify(data.error)}`);
+    }
+    const msg = data.choices[0].message;
+    // Some OpenRouter models (reasoning models) put output in reasoning instead of content
+    return msg.content || msg.reasoning || '';
+  } finally {
+    try { fs.unlinkSync(tmpFile); } catch (_) {}
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Unified dispatch
 // ---------------------------------------------------------------------------
 
 const PROVIDERS = {
   anthropic: callAnthropic,
   google: callGoogle,
-  groq: callGroq
+  groq: callGroq,
+  openai: callOpenAI,
+  openrouter: callOpenRouter
 };
 
 /**
@@ -154,7 +232,7 @@ function resolveProvider(spirit, keys) {
   const preferred = spirit.provider;               // e.g. "anthropic", "google", "groq"
 
   // Fallback chain: try preferred → then all others
-  const allProviders = ['anthropic', 'google', 'groq'];
+  const allProviders = ['anthropic', 'google', 'groq', 'openai', 'openrouter'];
   const fallbacks = allProviders.filter(p => p !== preferred);
 
   if (keys[preferred]) {
