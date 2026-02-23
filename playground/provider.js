@@ -1,7 +1,7 @@
 // playground/provider.js
 // BYOK Multi-Brain Provider Abstraction
 // Routes requests to Anthropic, Google, Groq, or OpenAI based on Spirit config.
-// Zero external dependencies — raw fetch + curl for DNS-challenged environments.
+// Zero external dependencies raw fetch + curl for DNS-challenged environments.
 
 'use strict';
 
@@ -13,30 +13,30 @@ const { execSync } = require('child_process');
 // ---------------------------------------------------------------------------
 
 async function callAnthropic(apiKey, model, systemPrompt, userMessage) {
-  const url = 'https://api.anthropic.com/v1/messages';
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01'
-    },
-    body: JSON.stringify({
-      model,
-      max_tokens: 1024,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userMessage }]
-    })
-  });
+ const url = 'https://api.anthropic.com/v1/messages';
+ const res = await fetch(url, {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json',
+ 'x-api-key': apiKey,
+ 'anthropic-version': '2023-06-01'
+ },
+ body: JSON.stringify({
+ model,
+ max_tokens: 1024,
+ system: systemPrompt,
+ messages: [{ role: 'user', content: userMessage }]
+ })
+ });
 
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`Anthropic ${res.status}: ${body}`);
-  }
+ if (!res.ok) {
+ const body = await res.text();
+ throw new Error(`Anthropic ${res.status}: ${body}`);
+ }
 
-  const data = await res.json();
-  // Claude returns content as an array of content blocks
-  return data.content.map(b => b.text).join('');
+ const data = await res.json();
+ // Claude returns content as an array of content blocks
+ return data.content.map(b => b.text).join('');
 }
 
 // ---------------------------------------------------------------------------
@@ -44,24 +44,24 @@ async function callAnthropic(apiKey, model, systemPrompt, userMessage) {
 // ---------------------------------------------------------------------------
 
 async function callGoogle(apiKey, model, systemPrompt, userMessage) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      system_instruction: { parts: [{ text: systemPrompt }] },
-      contents: [{ parts: [{ text: userMessage }] }],
-      generationConfig: { maxOutputTokens: 1024 }
-    })
-  });
+ const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+ const res = await fetch(url, {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({
+ system_instruction: { parts: [{ text: systemPrompt }] },
+ contents: [{ parts: [{ text: userMessage }] }],
+ generationConfig: { maxOutputTokens: 1024 }
+ })
+ });
 
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`Google ${res.status}: ${body}`);
-  }
+ if (!res.ok) {
+ const body = await res.text();
+ throw new Error(`Google ${res.status}: ${body}`);
+ }
 
-  const data = await res.json();
-  return data.candidates[0].content.parts.map(p => p.text).join('');
+ const data = await res.json();
+ return data.candidates[0].content.parts.map(p => p.text).join('');
 }
 
 // ---------------------------------------------------------------------------
@@ -70,36 +70,36 @@ async function callGoogle(apiKey, model, systemPrompt, userMessage) {
 // ---------------------------------------------------------------------------
 
 async function callGroq(apiKey, model, systemPrompt, userMessage) {
-  const payload = JSON.stringify({
-    model,
-    max_tokens: 1024,
-    messages: [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: userMessage }
-    ]
-  });
+ const payload = JSON.stringify({
+ model,
+ max_tokens: 1024,
+ messages: [
+ { role: 'system', content: systemPrompt },
+ { role: 'user', content: userMessage }
+ ]
+ });
 
-  // Write payload to temp file to avoid shell escaping issues
-  const tmpFile = '/tmp/groq_payload_' + Date.now() + '.json';
-  fs.writeFileSync(tmpFile, payload);
+ // Write payload to temp file to avoid shell escaping issues
+ const tmpFile = '/tmp/groq_payload_' + Date.now() + '.json';
+ fs.writeFileSync(tmpFile, payload);
 
-  try {
-    const result = execSync(
-      `curl -s -X POST "https://api.groq.com/openai/v1/chat/completions" ` +
-      `-H "Content-Type: application/json" ` +
-      `-H "Authorization: Bearer ${apiKey}" ` +
-      `-d @${tmpFile}`,
-      { timeout: 60000, encoding: 'utf-8' }
-    );
+ try {
+ const result = execSync(
+ `curl -s -X POST "https://api.groq.com/openai/v1/chat/completions" ` +
+ `-H "Content-Type: application/json" ` +
+ `-H "Authorization: Bearer ${apiKey}" ` +
+ `-d @${tmpFile}`,
+ { timeout: 60000, encoding: 'utf-8' }
+ );
 
-    const data = JSON.parse(result);
-    if (data.error) {
-      throw new Error(`Groq API: ${data.error.message || JSON.stringify(data.error)}`);
-    }
-    return data.choices[0].message.content;
-  } finally {
-    try { fs.unlinkSync(tmpFile); } catch (_) {}
-  }
+ const data = JSON.parse(result);
+ if (data.error) {
+ throw new Error(`Groq API: ${data.error.message || JSON.stringify(data.error)}`);
+ }
+ return data.choices[0].message.content;
+ } finally {
+ try { fs.unlinkSync(tmpFile); } catch (_) {}
+ }
 }
 
 // ---------------------------------------------------------------------------
@@ -108,35 +108,35 @@ async function callGroq(apiKey, model, systemPrompt, userMessage) {
 // ---------------------------------------------------------------------------
 
 async function callOpenAI(apiKey, model, systemPrompt, userMessage) {
-  const payload = JSON.stringify({
-    model,
-    max_tokens: 1024,
-    messages: [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: userMessage }
-    ]
-  });
+ const payload = JSON.stringify({
+ model,
+ max_tokens: 1024,
+ messages: [
+ { role: 'system', content: systemPrompt },
+ { role: 'user', content: userMessage }
+ ]
+ });
 
-  const tmpFile = '/tmp/openai_payload_' + Date.now() + '.json';
-  fs.writeFileSync(tmpFile, payload);
+ const tmpFile = '/tmp/openai_payload_' + Date.now() + '.json';
+ fs.writeFileSync(tmpFile, payload);
 
-  try {
-    const result = execSync(
-      `curl -s -X POST "https://api.openai.com/v1/chat/completions" ` +
-      `-H "Content-Type: application/json" ` +
-      `-H "Authorization: Bearer ${apiKey}" ` +
-      `-d @${tmpFile}`,
-      { timeout: 90000, encoding: 'utf-8' }
-    );
+ try {
+ const result = execSync(
+ `curl -s -X POST "https://api.openai.com/v1/chat/completions" ` +
+ `-H "Content-Type: application/json" ` +
+ `-H "Authorization: Bearer ${apiKey}" ` +
+ `-d @${tmpFile}`,
+ { timeout: 90000, encoding: 'utf-8' }
+ );
 
-    const data = JSON.parse(result);
-    if (data.error) {
-      throw new Error(`OpenAI API: ${data.error.message || JSON.stringify(data.error)}`);
-    }
-    return data.choices[0].message.content;
-  } finally {
-    try { fs.unlinkSync(tmpFile); } catch (_) {}
-  }
+ const data = JSON.parse(result);
+ if (data.error) {
+ throw new Error(`OpenAI API: ${data.error.message || JSON.stringify(data.error)}`);
+ }
+ return data.choices[0].message.content;
+ } finally {
+ try { fs.unlinkSync(tmpFile); } catch (_) {}
+ }
 }
 
 // ---------------------------------------------------------------------------
@@ -145,37 +145,37 @@ async function callOpenAI(apiKey, model, systemPrompt, userMessage) {
 // ---------------------------------------------------------------------------
 
 async function callOpenRouter(apiKey, model, systemPrompt, userMessage) {
-  const payload = JSON.stringify({
-    model,
-    max_tokens: 1024,
-    messages: [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: userMessage }
-    ]
-  });
+ const payload = JSON.stringify({
+ model,
+ max_tokens: 1024,
+ messages: [
+ { role: 'system', content: systemPrompt },
+ { role: 'user', content: userMessage }
+ ]
+ });
 
-  const tmpFile = '/tmp/openrouter_payload_' + Date.now() + '.json';
-  fs.writeFileSync(tmpFile, payload);
+ const tmpFile = '/tmp/openrouter_payload_' + Date.now() + '.json';
+ fs.writeFileSync(tmpFile, payload);
 
-  try {
-    const result = execSync(
-      `curl -s -X POST "https://openrouter.ai/api/v1/chat/completions" ` +
-      `-H "Content-Type: application/json" ` +
-      `-H "Authorization: Bearer ${apiKey}" ` +
-      `-d @${tmpFile}`,
-      { timeout: 90000, encoding: 'utf-8' }
-    );
+ try {
+ const result = execSync(
+ `curl -s -X POST "https://openrouter.ai/api/v1/chat/completions" ` +
+ `-H "Content-Type: application/json" ` +
+ `-H "Authorization: Bearer ${apiKey}" ` +
+ `-d @${tmpFile}`,
+ { timeout: 90000, encoding: 'utf-8' }
+ );
 
-    const data = JSON.parse(result);
-    if (data.error) {
-      throw new Error(`OpenRouter API: ${data.error.message || JSON.stringify(data.error)}`);
-    }
-    const msg = data.choices[0].message;
-    // Some OpenRouter models (reasoning models) put output in reasoning instead of content
-    return msg.content || msg.reasoning || '';
-  } finally {
-    try { fs.unlinkSync(tmpFile); } catch (_) {}
-  }
+ const data = JSON.parse(result);
+ if (data.error) {
+ throw new Error(`OpenRouter API: ${data.error.message || JSON.stringify(data.error)}`);
+ }
+ const msg = data.choices[0].message;
+ // Some OpenRouter models (reasoning models) put output in reasoning instead of content
+ return msg.content || msg.reasoning || '';
+ } finally {
+ try { fs.unlinkSync(tmpFile); } catch (_) {}
+ }
 }
 
 // ---------------------------------------------------------------------------
@@ -183,41 +183,41 @@ async function callOpenRouter(apiKey, model, systemPrompt, userMessage) {
 // ---------------------------------------------------------------------------
 
 const PROVIDERS = {
-  anthropic: callAnthropic,
-  google: callGoogle,
-  groq: callGroq,
-  openai: callOpenAI,
-  openrouter: callOpenRouter
+ anthropic: callAnthropic,
+ google: callGoogle,
+ groq: callGroq,
+ openai: callOpenAI,
+ openrouter: callOpenRouter
 };
 
 /**
  * Send a prompt to the provider specified in a Spirit's config.
  *
- * @param {object} spirit     - Parsed spirit JSON (must include .provider, .model, .soul_code)
- * @param {string} apiKey     - User-supplied API key for the provider
+ * @param {object} spirit - Parsed spirit JSON (must include .provider, .model, .soul_code)
+ * @param {string} apiKey - User-supplied API key for the provider
  * @param {string} userMessage - The prompt / negotiation round content
- * @returns {Promise<string>}  Raw text response from the LLM
+ * @returns {Promise<string>} Raw text response from the LLM
  */
 async function send(spirit, apiKey, userMessage) {
-  const providerFn = PROVIDERS[spirit.provider];
-  if (!providerFn) {
-    throw new Error(`Unknown provider "${spirit.provider}". Supported: ${Object.keys(PROVIDERS).join(', ')}`);
-  }
+ const providerFn = PROVIDERS[spirit.provider];
+ if (!providerFn) {
+ throw new Error(`Unknown provider "${spirit.provider}". Supported: ${Object.keys(PROVIDERS).join(', ')}`);
+ }
 
-  const sc = spirit.soul_code;
-  const systemPrompt = [
-    `You are ${sc.identity}`,
-    '',
-    'Core principles:',
-    ...sc.principles.map(p => `- ${p}`),
-    '',
-    'Hard constraints (never violate):',
-    ...sc.constraints.map(c => `- ${c}`),
-    '',
-    `Negotiation style: ${sc.negotiation_style}`
-  ].join('\n');
+ const sc = spirit.soul_code;
+ const systemPrompt = [
+ `You are ${sc.identity}`,
+ '',
+ 'Core principles:',
+ ...sc.principles.map(p => `- ${p}`),
+ '',
+ 'Hard constraints (never violate):',
+ ...sc.constraints.map(c => `- ${c}`),
+ '',
+ `Negotiation style: ${sc.negotiation_style}`
+ ].join('\n');
 
-  return providerFn(apiKey, spirit.model, systemPrompt, userMessage);
+ return providerFn(apiKey, spirit.model, systemPrompt, userMessage);
 }
 
 /**
@@ -225,25 +225,25 @@ async function send(spirit, apiKey, userMessage) {
  * Returns { apiKey, provider, mode } or null if no key is available.
  *
  * @param {object} spirit - Parsed spirit JSON
- * @param {object} keys   - { anthropic?: string, google?: string }
+ * @param {object} keys - { anthropic?: string, google?: string }
  * @returns {{ apiKey: string, provider: string, mode: string } | null}
  */
 function resolveProvider(spirit, keys) {
-  const preferred = spirit.provider;               // e.g. "anthropic", "google", "groq"
+ const preferred = spirit.provider; // e.g. "anthropic", "google", "groq"
 
-  // Fallback chain: try preferred → then all others
-  const allProviders = ['anthropic', 'google', 'groq', 'openai', 'openrouter'];
-  const fallbacks = allProviders.filter(p => p !== preferred);
+ // Fallback chain: try preferred → then all others
+ const allProviders = ['anthropic', 'google', 'groq', 'openai', 'openrouter'];
+ const fallbacks = allProviders.filter(p => p !== preferred);
 
-  if (keys[preferred]) {
-    return { apiKey: keys[preferred], provider: preferred, mode: 'NATIVE' };
-  }
-  for (const fb of fallbacks) {
-    if (keys[fb]) {
-      return { apiKey: keys[fb], provider: fb, mode: 'FALLBACK' };
-    }
-  }
-  return null;
+ if (keys[preferred]) {
+ return { apiKey: keys[preferred], provider: preferred, mode: 'NATIVE' };
+ }
+ for (const fb of fallbacks) {
+ if (keys[fb]) {
+ return { apiKey: keys[fb], provider: fb, mode: 'FALLBACK' };
+ }
+ }
+ return null;
 }
 
 module.exports = { send, resolveProvider, PROVIDERS };

@@ -1,6 +1,6 @@
 ---
 id: layer-0
-title: "Philosophy — The Soul Code"
+title: "Philosophy The Soul Code"
 layer: 0
 bean_count: 12
 status: verified

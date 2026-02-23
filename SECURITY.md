@@ -12,7 +12,7 @@ This project handles sensitive data through several mechanisms:
 
 ### API Keys (BYOK Model)
 - User-provided LLM API keys are stored in session memory only (never persisted to database or disk)
-- Keys are isolated per session — no cross-session access
+- Keys are isolated per session no cross-session access
 - Keys are transmitted over HTTPS only
 
 ### GitHub Webhooks

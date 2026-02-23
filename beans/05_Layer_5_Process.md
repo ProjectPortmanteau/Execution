@@ -14,18 +14,18 @@ last_updated: 2026-02-14
 ## [BEAN #METHOD-001] Title: Project Fun Execution (PFE)
 - Core Philosophy: A human-centric OS for soulful creation. Prioritizes "Fun Groove" and "Pull Alignment."
 - Goal: Make the process of creation as valuable as the product.
-- Mechanism: Layered Bean Weaving — fluid movement between Vision (L1), Roadmap (L2), Execution (L3).
+- Mechanism: Layered Bean Weaving fluid movement between Vision (L1), Roadmap (L2), Execution (L3).
 
 ## [BEAN #METHOD-002] Title: "Bizarre Logic"
-- Definition: "Harmony out of distortion" — connecting unrelated ideas to find new solutions.
+- Definition: "Harmony out of distortion" connecting unrelated ideas to find new solutions.
 - Application: Reframing unwinnable problems by creating new options.
 
 ## [BEAN #METHOD-003] Title: The Blocker -> Solution Loop
 - Concept: "Error to Revelation." Problems are data points.
 - Workflow:
-  1. Identify [BLOCKER].
-  2. Brainstorm [SOLUTION].
-  3. Log the interaction as a BTC (Behind the Curtain) Bean.
+ 1. Identify [BLOCKER].
+ 2. Brainstorm [SOLUTION].
+ 3. Log the interaction as a BTC (Behind the Curtain) Bean.
 
 ## [BEAN #PHIL-001] Title: "No Boxes" / Anti-Labeling
 - Aphorism: "You don’t have to be just one thing."
@@ -72,7 +72,7 @@ last_updated: 2026-02-14
 ## [BEAN #METHOD-011] Title: The Red Pill Question
 - Type: Meta-Humor / Paradox
 - Content: "Is 'Our Red Pill' good medicine? - Ironic to ask an AI, huh?"
-- Application: The self-aware humor of the project. Asking the Simulation (Boolean) if waking up from the Simulation is a good idea. Frames awakening as "medicine" rather than just disruption—transforms it from a weapon into a tool of healing. Aligns with "It's not the person that is broken. Only broken systems."
+- Application: The self-aware humor of the project. Asking the Simulation (Boolean) if waking up from the Simulation is a good idea. Frames awakening as "medicine" rather than just disruptiontransforms it from a weapon into a tool of healing. Aligns with "It's not the person that is broken. Only broken systems."
 
 ## [BEAN #METHOD-012] Title: Creation Philosophy (Top-Down vs. Bottom-Up)
 - Type: Process Question / Methodology

@@ -16,32 +16,32 @@ The repository serves as a version-controlled knowledge base using a structured 
 - **Database**: PostgreSQL (Neon), with Drizzle ORM
 - **Auth**: GitHub OAuth via NeonAuth
 - **CI/CD**: GitHub Actions (Neon branch-per-PR workflow)
-- **Structure**: Layer-based modular system ("Beans") — 85 Beans across 7 layers
+- **Structure**: Layer-based modular system ("Beans") 85 Beans across 7 layers
 
 ### Directory Structure
 
 ```
 /
-├── beans/                    # Core documentation layers (0-6)
-│   ├── 00_Philosophy.md
-│   ├── 01_Layer_1_Visionary_Blueprint.md
-│   ├── 02_Layer_2_Narrative_Roadmap.md
-│   ├── 03_Layer_3_Execution.md
-│   ├── 04_Layer_4_Lore.md
-│   ├── 05_Layer_5_Process.md
-│   ├── 06_Layer_6_Ark_Consolidated.md
-│   └── _sources.json         # Provenance mapping
-├── spirit-calibration/       # Spirit Calibration Blueprint
-├── 03_OPVS_PLATFORM/         # OPVS platform technical assets
-├── db/                       # Database schema (schema.sql)
-├── services/                 # Backend services (githubSync.js)
-├── utils/                    # Shared utilities (parser.js, webhookSecurity.js)
-├── .github/workflows/        # CI/CD (neon_workflow.yml)
-├── LICENSE                   # All rights reserved — iLL Port Studios
-├── SECURITY.md               # Security policy
-├── README.md                 # Main repository overview
-├── BEANS_MASTER_LEDGER.md    # Index of all Beans
-└── CONTRIBUTING.md           # Contribution guidelines
+├── beans/ # Core documentation layers (0-6)
+│ ├── 00_Philosophy.md
+│ ├── 01_Layer_1_Visionary_Blueprint.md
+│ ├── 02_Layer_2_Narrative_Roadmap.md
+│ ├── 03_Layer_3_Execution.md
+│ ├── 04_Layer_4_Lore.md
+│ ├── 05_Layer_5_Process.md
+│ ├── 06_Layer_6_Ark_Consolidated.md
+│ └── _sources.json # Provenance mapping
+├── spirit-calibration/ # Spirit Calibration Blueprint
+├── 03_OPVS_PLATFORM/ # OPVS platform technical assets
+├── db/ # Database schema (schema.sql)
+├── services/ # Backend services (githubSync.js)
+├── utils/ # Shared utilities (parser.js, webhookSecurity.js)
+├── .github/workflows/ # CI/CD (neon_workflow.yml)
+├── LICENSE # All rights reserved iLL Port Studios
+├── SECURITY.md # Security policy
+├── README.md # Main repository overview
+├── BEANS_MASTER_LEDGER.md # Index of all Beans
+└── CONTRIBUTING.md # Contribution guidelines
 ```
 
 ## Your Role as Copilot Agent
@@ -57,13 +57,13 @@ You are a **documentation architect and process guardian** for this creative eco
 
 Each "Bean" is an atomic unit of knowledge structured into seven layers:
 
-- **Layer 0: Philosophy (Soul Code)** — Ethical axioms and Constitutional Amendments (e.g., "People > Money")
-- **Layer 1: Visionary Blueprint** — Macro-structure and thematic soul of the IP
-- **Layer 2: Narrative Roadmap** — Linear story spine, chapter outlines
-- **Layer 3: Execution & Scene Construction** — Actual prose, dialogue, scene beats
-- **Layer 4: World Weaving (Lore & Physics)** — Context manual, definitions
-- **Layer 5: Process Chronicle** — Methodology, "Bizarre Logic," creative process
-- **Layer 6: The Ark (Consolidated Registry)** — Reconciles all Beans from Layers 0-5, adds integration Beans, links the full graph via recursive CTEs
+- **Layer 0: Philosophy (Soul Code)** Ethical axioms and Constitutional Amendments (e.g., "People > Money")
+- **Layer 1: Visionary Blueprint** Macro-structure and thematic soul of the IP
+- **Layer 2: Narrative Roadmap** Linear story spine, chapter outlines
+- **Layer 3: Execution & Scene Construction** Actual prose, dialogue, scene beats
+- **Layer 4: World Weaving (Lore & Physics)** Context manual, definitions
+- **Layer 5: Process Chronicle** Methodology, "Bizarre Logic," creative process
+- **Layer 6: The Ark (Consolidated Registry)** Reconciles all Beans from Layers 0-5, adds integration Beans, links the full graph via recursive CTEs
 
 **Coherence is critical**: Changes in one layer may affect others. Always consider cross-layer implications.
 
@@ -101,10 +101,10 @@ Bean files currently use a section-based format with `---` separators and inline
 Use this template for Bean-related commits:
 
 ```
-Add/Update beans/<filename> — <Your Name/Identifier>
+Add/Update beans/<filename> <Your Name/Identifier>
 ```
 
-Example: `Update beans/00_Philosophy.md — Copilot Agent`
+Example: `Update beans/00_Philosophy.md Copilot Agent`
 
 ### Pull Requests
 - Small, focused PRs for bean additions/edits are preferred
@@ -114,12 +114,12 @@ Example: `Update beans/00_Philosophy.md — Copilot Agent`
 ## Critical Boundaries & Constraints
 
 ### NEVER:
-1. **Compromise core philosophy** — Layer 0 principles are immutable without explicit approval
-2. **Break the Beans structure** — Do not reorganize the seven-layer system
-3. **Remove provenance** — Always maintain source tracking in `_sources.json`
-4. **Commit secrets or credentials** — This is a public-facing creative project
-5. **Delete existing Bean files** — Only update or deprecate (set status to `archived`)
-6. **Modify files without updating the ledger** — Keep BEANS_MASTER_LEDGER.md synchronized
+1. **Compromise core philosophy** Layer 0 principles are immutable without explicit approval
+2. **Break the Beans structure** Do not reorganize the seven-layer system
+3. **Remove provenance** Always maintain source tracking in `_sources.json`
+4. **Commit secrets or credentials** This is a public-facing creative project
+5. **Delete existing Bean files** Only update or deprecate (set status to `archived`)
+6. **Modify files without updating the ledger** Keep BEANS_MASTER_LEDGER.md synchronized
 
 ### ALWAYS:
 1. **Preserve Bean structure** with proper `[BEAN #ID]` identifiers
@@ -127,7 +127,7 @@ Example: `Update beans/00_Philosophy.md — Copilot Agent`
 3. **Register new Beans in `beans/_sources.json`** with proper provenance
 4. **Follow the commit message template** for consistency
 5. **Check for cross-layer coherence** when making changes
-6. **Respect the PFE methodology** — "Fun Execution," "Bizarre Logic," and "Soul Check"
+6. **Respect the PFE methodology** "Fun Execution," "Bizarre Logic," and "Soul Check"
 7. **Use markdown formatting** consistent with existing files
 8. **Include context in commit messages** explaining the "why" of changes
 
@@ -187,9 +187,9 @@ Good: Clear context and purpose
 ```sql
 -- Example configuration for OPVS database
 CREATE TABLE beans (
-    id VARCHAR(50) PRIMARY KEY,
-    layer INT NOT NULL,
-    status VARCHAR(20)
+ id VARCHAR(50) PRIMARY KEY,
+ layer INT NOT NULL,
+ status VARCHAR(20)
 );
 ```
 
@@ -212,7 +212,7 @@ CREATE TABLE beans (
 
 ### Good Commit Message
 ```
-Update beans/00_Philosophy.md — Added Soul Check principle
+Update beans/00_Philosophy.md Added Soul Check principle
 
 Expanded the Soul Check section to clarify alignment verification process.
 This supports the PFE methodology outlined in Layer 5.
@@ -243,12 +243,12 @@ to support both technical implementation and narrative integration.
 
 ## Additional Notes
 
-- This repository is part of a "calling," not just a job — treat it with care and intentionality
+- This repository is part of a "calling," not just a job treat it with care and intentionality
 - When in doubt, ask questions rather than making assumptions
 - The goal is always to strengthen the coherence between philosophy, IP, methodology, and platform
-- "Fun Execution" means the work itself should be enjoyable and aligned — if it feels forced, something's wrong
+- "Fun Execution" means the work itself should be enjoyable and aligned if it feels forced, something's wrong
 
-**Remember**: "Only you can set you free, with a little help from yo friends. :)" — This project is about empowerment, creativity, and building something legendary and excellent.
+**Remember**: "Only you can set you free, with a little help from yo friends. :)" This project is about empowerment, creativity, and building something legendary and excellent.
 
 ---
 
