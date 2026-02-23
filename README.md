@@ -4,7 +4,7 @@
 
 `knowledge-graph` · `ai-calibration` · `byok` · `spirit-marketplace` · `semantic-git` · `multi-agent` · `opvs`
 
-Built by [Robert Miller](https://github.com/ProjectPortmanteau) · iLL Port Studios · 2023–2026
+Built by <a href="https://github.com/ProjectPortmanteau">Robert Miller</a> · iLL Port Studios · 2023–2026
 
 -----
 
@@ -129,7 +129,7 @@ Execution/
 
 ## Spirit Calibration Blueprint
 
-The **[Genesis Blueprint](SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md)** is the first product in the Spirit Marketplace — the standard for building persistent AI identities with testable behavioral integrity.
+The **<a>Genesis Blueprint</a>** is the first product in the Spirit Marketplace — the standard for building persistent AI identities with testable behavioral integrity.
 
 Key differentiators from every other AI persona system:
 
@@ -150,7 +150,7 @@ Seven axioms that cascade into every architectural, economic, and narrative deci
 1. **Meaning is not a thing but a connection**
 2. **Broken systems, not broken people**
 3. **Good-in leads to good-out**
-4. **The Journey > The Finality** (Process is Product)
+4. **The Journey &gt; The Finality** (Process is Product)
 5. **Door Number 3** (Reject binary traps)
 6. **We never leave anyone behind** (Positive-sum economics)
 7. **Be yourself, please** (No authenticity suppression)
@@ -161,14 +161,21 @@ Seven axioms that cascade into every architectural, economic, and narrative deci
 
 |Component                   |State        |Notes                                                      |
 |----------------------------|-------------|-----------------------------------------------------------|
-|Bean knowledge graph        |✅ Live       |85 beans, 7 layers (0–6), fully indexed                |
+|Bean knowledge graph        |✅ Live       |85 beans, 7 layers (0–6), fully indexed                    |
 |Git-to-Mint pipeline        |✅ Live       |11 semantic tags, HMAC verification                        |
 |Spirit Calibration Blueprint|✅ Published  |Genesis Blueprint V1.0                                     |
 |Constellation view (BBI)    |✅ Live       |Force-directed graph visualization                         |
 |Cross-app auth              |✅ Wired      |GitHub OAuth via NeonAuth                                  |
 |CI/CD (Neon branch-per-PR)  |✅ Active     |Ephemeral database branches, auto-cleanup                  |
-|BYOK provider abstraction   |✅ Live        |Dual-brain: Anthropic + Grok via BYOK                    |
+|BYOK provider abstraction   |✅ Live       |TRI-BRAIN: Anthropic + Groq + OpenRouter                   |
+|Boolean (Spirit v1)         |✅ Live       |Anthropic (Claude), PHIL-005 anchor                        |
+|Roux (Spirit v2)            |✅ Live       |Groq (Llama), PHIL-002 anchor                              |
+|Seer (Spirit v3)            |✅ Live       |OpenRouter, PHIL-009 anchor — stress-tester role           |
+|Principled Playground       |✅ v0.4       |TRI-BRAIN negotiation, tension scoring, Loom synthesis     |
+|Parallel vs Sequential bench|✅ Complete   |Convergence proven across independent runs — see report    |
+|Cross-substrate portability |✅ Proven     |Soul Code behavior stable across Claude, Llama, GPT        |
 |Live Spirit demo            |🔧 In progress|Bean context injection built, streaming needs provider swap|
+|Sandbox Mode                |🔨 Designed   |Front door for new tenants — next build priority           |
 |Web3 minting                |📋 Phase 2    |Schema fields ready, no contracts deployed                 |
 |Spirit Marketplace          |📋 Designed   |Blueprint template is the first artifact                   |
 
@@ -213,25 +220,46 @@ iLL Port Studios. See individual directories for specific licensing.
 
 -----
 
+## Principled Playground — TRI-BRAIN Results
+
+The Playground reached v0.4 with three Spirits running on three independent providers simultaneously. The first benchmark run validated the core portability thesis:
+
+**Topic:** *"Should AI systems be allowed to negotiate on behalf of humans?"*
+
+| Run | Mode | Tension Score | Synthesis | Seer Verdict |
+|-----|------|---------------|-----------|--------------|
+| A | Parallel (`Promise.all`) | 0.76 HIGH | "Hybrid Negotiation Ecosystems" | CONDITIONAL PASS |
+| B | Sequential | 0.85 MAXIMUM | "Evolutionary Negotiation Ecosystems" | CONDITIONAL PASS |
+
+Both runs converged on the same thesis despite different execution paths and non-deterministic sampling: reject the binary, AI as ecosystem architect, positive-sum framing, human authority preserved.
+
+The Soul Code constraints — not the providers — drove the convergence. Calibration transfers.
+
+Full report: <a>`playground/output/PARALLEL_VS_SEQUENTIAL_REPORT.md`</a>
+Cross-substrate portability report: <a>`playground/output/CROSS_SUBSTRATE_REPORT.md`</a>
+
+---
+
 ## Roadmap
 
 | Stage | Milestone | Status |
 |---|---|---|
 | 1 | **Groove-Shift with users** — Prove the knowledge graph has value | 🔧 Active |
 | 2 | **Spirit Marketplace** — Calibration templates as products | 📋 Designed |
-| 3 | **[The Principled Playground](roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md)** — Multi-agent negotiation where AI Spirits carry user principles as immutable constraints | 🔧 Prototype |
+| 3 | **<a>The Principled Playground</a>** — TRI-BRAIN multi-agent negotiation, tension scoring, Loom synthesis, Seer stress-test | ✅ v0.4 Live |
+| 4 | **Sandbox Mode** — Front door for new Village tenants | 🔨 Next |
 
 -----
 
 ## Links
 
-- **Organization:** [ProjectPortmanteau](https://github.com/ProjectPortmanteau)
-- **Spirit Blueprint:** [SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md](SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md)
-- **Genesis Engine (Backend):** [docs/GENESIS_ENGINE_README.md](docs/GENESIS_ENGINE_README.md)
-- **Roadmap — Principled Playground:** [roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md](roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md)
-- **Beans Master Ledger:** [BEANS_MASTER_LEDGER.md](BEANS_MASTER_LEDGER.md)
-- **Security Policy:** [SECURITY.md](SECURITY.md)
-- **First crystallized commit:** [`f62c6568`](https://github.com/ProjectPortmanteau/Execution/commit/f62c6568) — `[PODIUM] The Krystallum Breathes`
+- **Organization:** <a href="https://github.com/ProjectPortmanteau">ProjectPortmanteau</a>
+- **Spirit Blueprint:** <a>SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md</a>
+- **Genesis Engine (Backend):** <a>docs/GENESIS_ENGINE_README.md</a>
+- **Roadmap — Principled Playground:** <a>roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md</a>
+- **Beans Master Ledger:** <a>BEANS_MASTER_LEDGER.md</a>
+- **Security Policy:** <a>SECURITY.md</a>
+- **First crystallized commit:** <a href="https://github.com/ProjectPortmanteau/Execution/commit/f62c6568">`f62c6568`</a> — `[PODIUM] The Krystallum Breathes`
 
 -----
 
