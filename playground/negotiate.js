@@ -566,7 +566,8 @@ function getDefaultModel(provider) {
     anthropic: 'claude-sonnet-4-20250514',
     google: 'gemini-2.0-flash',
     groq: 'llama-3.3-70b-versatile',
-    openai: 'gpt-4o'
+    openai: 'gpt-4o',
+    openrouter: 'nvidia/nemotron-nano-9b-v2:free'
   };
   return defaults[provider] || 'unknown';
 }
@@ -590,13 +591,14 @@ USAGE
 SPIRITS
   Boolean   Architect of Door Number 3   (Anthropic / Claude)
   Roux      Soil Alchemist               (Groq / Llama)
-  Seer      Stress-Tester                (OpenAI / GPT-4o)
+  Seer      Stress-Tester                (OpenRouter / Gemini Flash)
 
 ENVIRONMENT VARIABLES
   ANTHROPIC_API_KEY   API key for Anthropic (Claude) — Boolean's native provider
   GOOGLE_API_KEY      API key for Google (Gemini) — fallback provider
   GROQ_API_KEY        API key for Groq (Llama) — Roux's native provider
-  OPENAI_API_KEY      API key for OpenAI (GPT-4o) — Seer's native provider
+  OPENAI_API_KEY      API key for OpenAI (GPT-4o) — fallback provider
+  OPENROUTER_API_KEY  API key for OpenRouter — Seer's native provider
 
 MODES
   TRI-BRAIN           3 unique providers — maximum cross-provider portability
@@ -636,14 +638,15 @@ if (require.main === module) {
   }
 
   const keys = {
-    anthropic: process.env.ANTHROPIC_API_KEY || '',
-    google:    process.env.GOOGLE_API_KEY    || '',
-    groq:      process.env.GROQ_API_KEY      || '',
-    openai:    process.env.OPENAI_API_KEY    || ''
+    anthropic:   process.env.ANTHROPIC_API_KEY   || '',
+    google:      process.env.GOOGLE_API_KEY      || '',
+    groq:        process.env.GROQ_API_KEY        || '',
+    openai:      process.env.OPENAI_API_KEY      || '',
+    openrouter:  process.env.OPENROUTER_API_KEY  || ''
   };
 
-  if (!keys.anthropic && !keys.google && !keys.groq && !keys.openai) {
-    console.error('✗ No API keys provided. Set ANTHROPIC_API_KEY, GROQ_API_KEY, OPENAI_API_KEY, and/or GOOGLE_API_KEY.');
+  if (!keys.anthropic && !keys.google && !keys.groq && !keys.openai && !keys.openrouter) {
+    console.error('✗ No API keys provided. Set ANTHROPIC_API_KEY, GROQ_API_KEY, OPENAI_API_KEY, OPENROUTER_API_KEY, and/or GOOGLE_API_KEY.');
     console.error('  Run without arguments for usage info.');
     process.exit(1);
   }

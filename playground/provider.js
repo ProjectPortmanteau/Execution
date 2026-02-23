@@ -140,6 +140,45 @@ async function callOpenAI(apiKey, model, systemPrompt, userMessage) {
 }
 
 // ---------------------------------------------------------------------------
+// Provider: OpenRouter (OpenAI-compatible, free-tier models available)
+// Uses curl for DNS reliability.
+// ---------------------------------------------------------------------------
+
+async function callOpenRouter(apiKey, model, systemPrompt, userMessage) {
+  const payload = JSON.stringify({
+    model,
+    max_tokens: 1024,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userMessage }
+    ]
+  });
+
+  const tmpFile = '/tmp/openrouter_payload_' + Date.now() + '.json';
+  fs.writeFileSync(tmpFile, payload);
+
+  try {
+    const result = execSync(
+      `curl -s -X POST "https://openrouter.ai/api/v1/chat/completions" ` +
+      `-H "Content-Type: application/json" ` +
+      `-H "Authorization: Bearer ${apiKey}" ` +
+      `-d @${tmpFile}`,
+      { timeout: 90000, encoding: 'utf-8' }
+    );
+
+    const data = JSON.parse(result);
+    if (data.error) {
+      throw new Error(`OpenRouter API: ${data.error.message || JSON.stringify(data.error)}`);
+    }
+    const msg = data.choices[0].message;
+    // Some OpenRouter models (reasoning models) put output in reasoning instead of content
+    return msg.content || msg.reasoning || '';
+  } finally {
+    try { fs.unlinkSync(tmpFile); } catch (_) {}
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Unified dispatch
 // ---------------------------------------------------------------------------
 
@@ -147,7 +186,8 @@ const PROVIDERS = {
   anthropic: callAnthropic,
   google: callGoogle,
   groq: callGroq,
-  openai: callOpenAI
+  openai: callOpenAI,
+  openrouter: callOpenRouter
 };
 
 /**
@@ -192,7 +232,7 @@ function resolveProvider(spirit, keys) {
   const preferred = spirit.provider;               // e.g. "anthropic", "google", "groq"
 
   // Fallback chain: try preferred → then all others
-  const allProviders = ['anthropic', 'google', 'groq', 'openai'];
+  const allProviders = ['anthropic', 'google', 'groq', 'openai', 'openrouter'];
   const fallbacks = allProviders.filter(p => p !== preferred);
 
   if (keys[preferred]) {

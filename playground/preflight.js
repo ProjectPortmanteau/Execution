@@ -45,31 +45,41 @@ function loadSpirit(filename) {
 const PING_SYSTEM = 'You are a health-check responder. Reply with exactly: OK';
 const PING_USER   = 'Respond with the single word OK.';
 
-async function checkProvider(name, apiKey, model) {
+async function checkProvider(name, apiKey, model, retries) {
+  retries = retries || (name === 'openrouter' ? 2 : 0);
   const callFn = PROVIDERS[name];
   if (!callFn) return { provider: name, status: 'UNKNOWN', detail: 'No provider function' };
   if (!apiKey) return { provider: name, status: 'SKIP', detail: 'No API key configured' };
 
-  const start = Date.now();
-  try {
-    const reply = await callFn(apiKey, model, PING_SYSTEM, PING_USER);
-    const ms = Date.now() - start;
-    const ok = typeof reply === 'string' && reply.length > 0;
-    return {
-      provider: name,
-      status: ok ? 'OK' : 'WARN',
-      detail: ok ? `Response in ${ms}ms` : `Empty response (${ms}ms)`,
-      latency: ms,
-      snippet: (reply || '').slice(0, 60)
-    };
-  } catch (err) {
-    const ms = Date.now() - start;
-    return {
-      provider: name,
-      status: 'FAIL',
-      detail: err.message.slice(0, 120),
-      latency: ms
-    };
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    if (attempt > 0) {
+      const wait = attempt * 2000;
+      process.stdout.write(`retry ${attempt}/${retries} (${wait/1000}s) ... `);
+      await new Promise(r => setTimeout(r, wait));
+    }
+    const start = Date.now();
+    try {
+      const reply = await callFn(apiKey, model, PING_SYSTEM, PING_USER);
+      const ms = Date.now() - start;
+      const ok = typeof reply === 'string' && reply.length > 0;
+      return {
+        provider: name,
+        status: ok ? 'OK' : 'WARN',
+        detail: ok ? `Response in ${ms}ms` : `Empty response (${ms}ms)`,
+        latency: ms,
+        snippet: (reply || '').slice(0, 60)
+      };
+    } catch (err) {
+      const ms = Date.now() - start;
+      if (attempt === retries) {
+        return {
+          provider: name,
+          status: 'FAIL',
+          detail: err.message.slice(0, 120),
+          latency: ms
+        };
+      }
+    }
   }
 }
 
@@ -83,18 +93,20 @@ async function main() {
   console.log('╚══════════════════════════════════════════════════════════╝\n');
 
   const keys = {
-    anthropic: process.env.ANTHROPIC_API_KEY || '',
-    google:    process.env.GOOGLE_API_KEY    || '',
-    groq:      process.env.GROQ_API_KEY      || '',
-    openai:    process.env.OPENAI_API_KEY    || ''
+    anthropic:   process.env.ANTHROPIC_API_KEY   || '',
+    google:      process.env.GOOGLE_API_KEY      || '',
+    groq:        process.env.GROQ_API_KEY        || '',
+    openai:      process.env.OPENAI_API_KEY      || '',
+    openrouter:  process.env.OPENROUTER_API_KEY  || ''
   };
 
   // Default lightweight models for preflight (minimize token cost)
   const models = {
-    anthropic: 'claude-sonnet-4-20250514',
-    google:    'gemini-2.0-flash',
-    groq:      'llama-3.3-70b-versatile',
-    openai:    'gpt-4o-mini'
+    anthropic:   'claude-sonnet-4-20250514',
+    google:      'gemini-2.0-flash',
+    groq:        'llama-3.3-70b-versatile',
+    openai:      'gpt-4o-mini',
+    openrouter:  'nvidia/nemotron-nano-9b-v2:free'
   };
 
   // Load spirits to show intended provider mapping
@@ -171,18 +183,32 @@ async function main() {
 
   console.log(`\n  Brain mode: ${brainMode} (${activeProviders.size} distinct provider${activeProviders.size !== 1 ? 's' : ''})`);
 
-  // Summary
+  // Determine which providers are actually needed for negotiation
+  const neededProviders = new Set(
+    [resolvedBoolean, resolvedRoux, resolvedSeer]
+      .filter(Boolean)
+      .map(r => r.provider)
+  );
+
+  // Summary: only block on failures for providers that spirits actually need
   const okCount   = results.filter(r => r.status === 'OK').length;
   const failCount = results.filter(r => r.status === 'FAIL').length;
   const skipCount = results.filter(r => r.status === 'SKIP').length;
+  const neededFails = results.filter(r => r.status === 'FAIL' && neededProviders.has(r.provider));
 
   console.log('\n────────────────────────────────────────────────────────────');
-  if (failCount > 0) {
-    console.log(`PREFLIGHT: ${failCount} provider(s) FAILED. Fix keys before running negotiate.js.`);
+  if (neededFails.length > 0) {
+    const names = neededFails.map(r => r.provider).join(', ');
+    console.log(`PREFLIGHT: BLOCKED — ${names} failed and is needed by a Spirit. Fix before running negotiate.js.`);
     process.exit(1);
   } else if (!bOk || !rOk) {
     console.log('PREFLIGHT: Boolean or Roux has no provider. Cannot negotiate.');
     process.exit(1);
+  } else if (failCount > 0) {
+    const failNames = results.filter(r => r.status === 'FAIL').map(r => r.provider).join(', ');
+    console.log(`PREFLIGHT: PASS with warnings — ${failNames} failed but no Spirit depends on them.`);
+    if (!sOk) console.log('  Seer unavailable — stress test will be skipped.');
+    console.log(`  Ready for ${brainMode} negotiation.`);
   } else if (!sOk) {
     console.log(`PREFLIGHT: PASS (${okCount} OK, ${skipCount} skipped). Seer unavailable — stress test will be skipped.`);
   } else {
