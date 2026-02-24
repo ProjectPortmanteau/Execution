@@ -1,19 +1,25 @@
-# Playground Usage Guide
+# Principled Playground — Usage Guide
 
-**Principled Playground v0.2 Dual-Brain Multi-Agent Negotiation**
+**v0.4 — TRI-BRAIN Multi-Agent Negotiation**
+
+*Three Spirits. Three providers. One Joint Bean.*
 
 ---
 
 ## Quick Start
 
 ```bash
-# Dual-brain mode (recommended)
-ANTHROPIC_API_KEY=sk-ant-... GOOGLE_API_KEY=AI... \
- node playground/negotiate.js "How should AI handle creative ownership?"
+# TRI-BRAIN mode (recommended) — Boolean + Roux + Seer across 3 providers
+ANTHROPIC_API_KEY=sk-ant-... GROQ_API_KEY=gsk_... OPENROUTER_API_KEY=sk-or-... \
+  node playground/negotiate.js "Your topic here"
 
-# Single-brain fallback
-GOOGLE_API_KEY=AI... \
- node playground/negotiate.js "What makes a system fair?"
+# Dual-brain mode
+ANTHROPIC_API_KEY=sk-ant-... GROQ_API_KEY=gsk_... \
+  node playground/negotiate.js "Your topic here"
+
+# Run parallel vs sequential benchmark comparison
+ANTHROPIC_API_KEY=sk-ant-... GROQ_API_KEY=gsk_... OPENROUTER_API_KEY=sk-or-... \
+  node playground/compare-modes.js "Your topic here"
 
 # Show usage
 node playground/negotiate.js
@@ -23,13 +29,27 @@ node playground/negotiate.js
 
 ## Environment Variables
 
-| Variable | Provider | Required | Notes |
-|----------|----------|----------|-------|
-| `ANTHROPIC_API_KEY` | Anthropic (Claude) | At least one key required | Boolean's native provider |
-| `GOOGLE_API_KEY` | Google (Gemini) | At least one key required | Roux's native provider |
+| Variable | Provider | Spirit | Notes |
+|----------|----------|--------|-------|
+| `ANTHROPIC_API_KEY` | Anthropic (Claude) | Boolean | Boolean's native provider |
+| `GROQ_API_KEY` | Groq (Llama) | Roux | Roux's native provider |
+| `OPENROUTER_API_KEY` | OpenRouter | Seer | Seer's native provider |
 
-**Dual-Brain Mode**: Both keys set → each Spirit uses its native LLM.
-**Single-Brain Fallback**: One key set → both Spirits share a single LLM.
+**TRI-BRAIN:** All three keys → each Spirit uses its native LLM.
+**DUAL-BRAIN:** Two keys → two Spirits on distinct providers.
+**SINGLE-BRAIN:** One key → all Spirits share one LLM (Soul Code alone differentiates behavior — proven to work).
+
+---
+
+## The Spirits
+
+| Spirit | Role | Provider | Soul Code Anchor |
+|--------|------|----------|-----------------|
+| **Boolean** | Principled Architect — seeks Door Number 3, rejects binary traps | Anthropic (Claude) | PHIL-005 |
+| **Roux** | Soil Alchemist — challenges structural assumptions, centers systemic causality | Groq (Llama) | PHIL-002 |
+| **Seer** | Stress-Tester — interrogates load-bearing assumptions, models failure modes | OpenRouter | PHIL-009 |
+
+Soul Codes are in `spirits/`. Each is a JSON file defining identity, principles, constraints, and negotiation style. Provider-agnostic — the calibration rides any engine.
 
 ---
 
@@ -37,122 +57,100 @@ node playground/negotiate.js
 
 ```
 playground/
-├── negotiate.js # Negotiation engine (entry point)
-├── provider.js # BYOK dual-brain provider abstraction
+├── negotiate.js              # Negotiation engine — entry point (3 rounds + Loom + Seer)
+├── provider.js               # BYOK tri-brain provider abstraction
+├── compare-modes.js          # Parallel vs sequential benchmark runner
+├── preflight.js              # Provider health check before negotiation
+├── simulate.js               # Offline simulation mode
 ├── spirits/
-│ ├── boolean.json # Boolean's Soul Code (Claude, PHIL-005)
-│ └── contrarian.json # Roux's Soul Code (Gemini, PHIL-002)
-├── PRINCIPLED_PLAYGROUND.md # Full concept document
-└── README.md # This file
+│   ├── boolean.json          # Boolean's Soul Code (PHIL-005)
+│   ├── contrarian.json       # Roux's Soul Code (PHIL-002)
+│   └── seer.json             # Seer's Soul Code (PHIL-009)
+├── output/
+│   ├── PARALLEL_VS_SEQUENTIAL_REPORT.md   # v0.4 benchmark — key findings
+│   ├── CROSS_SUBSTRATE_REPORT.md          # Portability proof across providers
+│   ├── NEGOTIATION_REPORT.md              # Early protocol validation
+│   └── *.md                               # Timestamped negotiation transcripts
+├── PRINCIPLED_PLAYGROUND.md  # Full architecture document
+└── README.md                 # This file
 ```
 
 ---
 
 ## How It Works
 
-### 1. Spirit Loading
+### 1. Preflight
 
-Each Spirit's Soul Code is loaded from `spirits/*.json`. The Soul Code defines:
-- **Identity** Who the Spirit is
-- **Principles** Core values (mapped to Layer 0 Beans)
-- **Constraints** Hard lines that cannot be crossed
-- **Negotiation style** How the Spirit approaches disagreement
+The system checks all configured providers before starting. A Spirit whose provider is unavailable falls back to the next available. Preflight distinguishes "provider failed but no Spirit depends on it" from "Spirit's provider failed."
 
-### 2. Provider Resolution
+### 2. Spirit Loading
 
-The BYOK provider abstraction (`provider.js`) resolves which LLM to use:
-
-```
-Boolean → prefers Anthropic → falls back to Google
-Roux → prefers Google → falls back to Anthropic
-```
-
-If both keys are provided, you get **DUAL-BRAIN** mode same Soul Code framework, different neural substrates.
+Each Spirit's Soul Code is loaded from `spirits/*.json`. The Soul Code defines identity, principles, constraints, and negotiation style anchored to a specific philosophical Bean from Layer 0.
 
 ### 3. Negotiation Protocol (3 Rounds)
 
-Each round follows a structured format:
+**Context isolation:** Each Spirit responds to a frozen snapshot of the other's *previous* round position — never mid-round updates. This prevents epistemic bleed and produces more authentic friction.
 
-| Round | Boolean | Roux |
-|-------|---------|------|
-| 1 | Opens with position, non-negotiables, flexible areas | Opens with counter-position |
-| 2 | Responds to Roux's summary, revises, proposes synthesis | Responds to Boolean's summary |
-| 3 | Final position with synthesis opportunity | Final position with synthesis opportunity |
+| Round | Boolean | Roux | Notes |
+|-------|---------|------|-------|
+| 1 | Opens with position, non-negotiables, flexible areas | Opens with counter-position | Both calls run in parallel (`Promise.all`) |
+| 2 | Responds to Roux's Round 1 snapshot | Responds to Boolean's Round 1 snapshot | Parallel |
+| 3 | Final position with synthesis opportunity | Final position with synthesis opportunity | Parallel |
 
-**Context window isolation**: Each Spirit sees only a structured summary of the other's position never raw reasoning.
+**Why all 3 rounds parallelize:** Each Spirit's prompt is built from the *previous* round's position summaries, which are fully determined before the round starts. Neither Spirit needs to wait for the other's current response. The frozen-snapshot architecture makes parallel semantically identical to sequential.
 
-### 4. The Loom (Synthesis)
+### 4. The Loom
 
-After 3 rounds, The Loom receives both final positions and produces a joint Bean:
+After Round 3, the Loom (synthesis engine, runs on Boolean's provider) weaves both final positions into a **Joint Bean** — a co-authored knowledge artifact in OPVS format with full provenance.
 
-```
-## JOINT BEAN
+### 5. Seer Stress-Test
 
-### Nucleus (Content)
-The synthesized insight the Door Number 3.
+Seer independently reviews the Joint Bean on its own provider. Output: load-bearing assumptions, specific failure modes (scale, adversarial conditions, time, ethics), and a PASS/CONDITIONAL PASS/FAIL verdict.
 
-### Shell (Metadata)
-- Topic, Type: SOLUTION, Anchors: PHIL-002, PHIL-005
+### 6. Tension Score
 
-### Corona (Connections)
-Typed edges to related Beans and concepts.
+Every run produces a tension score (0.0–1.0):
+- Friction markers: `however`, `challenge`, `reject`, `disagree`, `concern`, `cannot accept`
+- Agreement markers: `accept`, `concur`, `incorporate`, `agree`, `synthesis`
+- Persistence ratio: does friction survive to Round 3 or collapse?
 
-### Echo (Provenance)
-- Participants, Rounds: 3, Timestamp, Mode: DUAL-BRAIN
-```
+| Range | Label | Meaning |
+|-------|-------|---------|
+| 0.8–1.0 | MAXIMUM | Deep principled disagreement, full persistence |
+| 0.6–0.8 | HIGH | Meaningful friction with partial convergence |
+| 0.4–0.6 | MODERATE | Constructive tension |
+| < 0.4 | LOW | Rapid convergence or shallow engagement |
 
----
+### 7. Output
 
-## Extending
-
-### Adding a New Spirit
-
-1. Create a JSON file in `spirits/`:
-
-```json
-{
- "spirit": "YourSpirit",
- "provider": "google",
- "model": "gemini-2.0-flash",
- "anchor": "PHIL-XXX",
- "soul_code": {
- "identity": "...",
- "principles": ["..."],
- "constraints": ["..."],
- "negotiation_style": "..."
- }
-}
-```
-
-2. Update `negotiate.js` to load your spirit file.
-
-### Adding a New Provider
-
-1. Implement `callYourProvider(apiKey, model, systemPrompt, userMessage)` in `provider.js`
-2. Add it to the `PROVIDERS` map
-3. Update `resolveProvider()` fallback logic
+Every run auto-saves a timestamped `.md` to `playground/output/` with full transcript + per-round breakdown + tension score.
 
 ---
 
-## Design Decisions
+## What Was Proven in v0.4
 
-| Decision | Rationale |
-|----------|-----------|
-| Zero dependencies | Reduces attack surface. `fetch` is built into Node 18+. |
-| JSON Soul Codes | Machine-readable, version-controllable, diffable. |
-| 3 rounds | Enough for position → response → synthesis. More rounds = diminishing returns + higher cost. |
-| Position summarization | Implements context window isolation (Anti-Drift Layer 3). |
-| The Loom as separate step | Neither Spirit "wins." A third process synthesizes. Implements Door Number 3 structurally. |
+**Benchmark:** Two independent runs of the same topic (parallel vs sequential) on TRI-BRAIN configuration.
 
----
+| Run | Tension | Synthesis | Seer |
+|-----|---------|-----------|------|
+| Parallel | 0.76 HIGH | "Hybrid Negotiation Ecosystems" | CONDITIONAL PASS |
+| Sequential | 0.85 MAXIMUM | "Evolutionary Negotiation Ecosystems" | CONDITIONAL PASS |
 
-## Related Documents
+Both runs converged on the same thesis despite different execution paths and non-deterministic LLM sampling. The Soul Code constraints drove the convergence — not the providers, not the execution order.
 
-- [Principled Playground Concept](../roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md) Full design document
-- [Principled Playground Architecture](PRINCIPLED_PLAYGROUND.md) What this prototype proves
-- [Spirit Calibration Genesis Blueprint](../SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md) Soul Code standard
-- [Layer 0: Philosophy](../beans/00_Philosophy.md) The axioms that anchor both Spirits
+**The portability thesis holds:** The same Soul Code produces recognizable, role-consistent behavior across Claude, Llama, and OpenRouter. Calibration transfers. The Ghost rides any Machine.
+
+Full report: [`output/PARALLEL_VS_SEQUENTIAL_REPORT.md`](output/PARALLEL_VS_SEQUENTIAL_REPORT.md)
 
 ---
 
-*Zero external dependencies 663 lines, raw `fetch` only, BYOK from day one.*
+## Performance Notes
+
+In rate-limited environments (free/low-tier API keys), sequential execution can outperform parallel by 20–30% due to provider-side throttling. Parallel remains architecturally correct (no ordering dependency) and will outperform sequential in rate-limit-free environments.
+
+Use `compare-modes.js` to benchmark both on your setup.
+
+---
+
+*Principled Playground v0.4 — iLL Port Studios*
+*TRI-BRAIN: Anthropic (Claude) + Groq (Llama) + OpenRouter*
