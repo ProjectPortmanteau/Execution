@@ -4,7 +4,7 @@
 
 If you discover a security vulnerability in this repository, please report it responsibly. Do NOT create a public GitHub issue.
 
-Contact: [add your preferred secure contact method]
+Contact: robertmiller@illportstudios.com
 
 ## Security Architecture
 
