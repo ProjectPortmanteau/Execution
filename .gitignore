@@ -28,3 +28,6 @@ build/
 # Temporary files
 tmp/
 temp/
+
+# Regenerable Loom rerun artifacts (Phase 0.5 acceptance harness output)
+playground/output/*.rerun.bean.json
