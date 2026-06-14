@@ -17,7 +17,10 @@ const { computeGroundedness: loomGroundedness } = require('./loom');
 
 const FIXTURE_MODE = process.env.SCORING_FIXTURE === '1';
 
-const EMBED_DIM = 768;
+// EMBED_DIM is the vector dimension returned by the configured embed model.
+// gemini-embedding-001 returns 3072 dims; text-embedding-004 returns 768 dims.
+// The fixture embed uses this dimension to stay compatible with cosineSim tests.
+const EMBED_DIM = parseInt(process.env.GEMINI_EMBED_DIM || '3072', 10);
 
 // Produces a deterministic unit vector seeded from the text's character codes.
 // NOT a semantic embedding — for pipeline/math verification only.
@@ -104,7 +107,7 @@ const VALID_STANCES = new Set(['SUPPORTS', 'CONTRADICTS', 'UNRELATED']);
  * @param {string} [model='gemini-2.0-flash']
  * @returns {Promise<'SUPPORTS'|'CONTRADICTS'|'UNRELATED'>}
  */
-async function classifyStance(claimA, claimB, apiKey, model = 'gemini-2.0-flash') {
+async function classifyStance(claimA, claimB, apiKey, model = process.env.GEMINI_GEN_MODEL || 'gemini-2.0-flash') {
  if (FIXTURE_MODE) return 'UNRELATED';
 
  const callFn = PROVIDERS.gemini || PROVIDERS.google;
@@ -142,7 +145,7 @@ async function computeSemanticTension(textA, textB, apiKey, opts = {}) {
  const {
  engagementThreshold = 0.3,
  maxPairs = 20,
- model = 'gemini-2.0-flash'
+ model = process.env.GEMINI_GEN_MODEL || 'gemini-2.0-flash'
  } = opts;
 
  const claimsA = splitClaims(textA);

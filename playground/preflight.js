@@ -101,11 +101,13 @@ async function main() {
  openrouter: process.env.OPENROUTER_API_KEY || ''
  };
 
- // Default lightweight models for preflight (minimize token cost)
+ // Default lightweight models for preflight (minimize token cost).
+ // Use GEMINI_GEN_MODEL to override if the default model hits quota on your key.
+ const geminiModel = process.env.GEMINI_GEN_MODEL || 'gemini-2.0-flash';
  const models = {
  anthropic: 'claude-sonnet-4-20250514',
- google: 'gemini-2.0-flash',
- gemini: 'gemini-2.0-flash',
+ google: geminiModel,
+ gemini: geminiModel,
  groq: 'llama-3.3-70b-versatile',
  openai: 'gpt-4o-mini',
  openrouter: 'nvidia/nemotron-nano-9b-v2:free'

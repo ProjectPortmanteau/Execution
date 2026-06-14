@@ -186,7 +186,11 @@ async function callOpenRouter(apiKey, model, systemPrompt, userMessage) {
 // ---------------------------------------------------------------------------
 
 async function embed(text, apiKey) {
- const url = `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${apiKey}`;
+ // Read model name lazily (after loadEnv() in the caller has run).
+ // GEMINI_EMBED_MODEL defaults: gemini-embedding-001 (3072-dim) is widely
+ // available; text-embedding-004 (768-dim) requires specific AI Studio projects.
+ const embedModel = process.env.GEMINI_EMBED_MODEL || 'gemini-embedding-001';
+ const url = `https://generativelanguage.googleapis.com/v1beta/models/${embedModel}:embedContent?key=${apiKey}`;
  const res = await fetch(url, {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
@@ -199,7 +203,7 @@ async function embed(text, apiKey) {
  }
 
  const data = await res.json();
- return data.embedding.values; // numeric array, length 768
+ return data.embedding.values; // numeric array
 }
 
 // ---------------------------------------------------------------------------

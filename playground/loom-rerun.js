@@ -36,34 +36,9 @@ function loadEnv() {
 }
 loadEnv();
 
-// ---------------------------------------------------------------------------
-// Transcript parser: pull the LAST "Round 3" Boolean & Roux positions.
-// Handles "### Boolean" / "### Roux" headers as written by saveOutput and the
-// older transcript format ("## Round 3 of 3").
-// ---------------------------------------------------------------------------
-function extractRound3(md) {
-  // Find the start of the final round (Round 3) section.
-  const roundMatches = [...md.matchAll(/^#{1,3}\s*Round\s*3\b.*$/gim)];
-  const startIdx = roundMatches.length ? roundMatches[roundMatches.length - 1].index : 0;
-  const region = md.slice(startIdx);
-
-  // Cut the region at the Loom synthesis / next top-level section if present.
-  const stop = region.search(/^#{1,3}\s*(The Loom|JOINT BEAN|Stress Test|Tension)/im);
-  const body = stop > 0 ? region.slice(0, stop) : region;
-
-  // Grab text after a "Boolean" header up to the next "Roux" header.
-  const grab = (who, text) => {
-    const re = new RegExp(`^#{1,4}\\s*${who}\\b.*$|^\\*\\*${who}:?\\*\\*.*$`, 'im');
-    const m = text.match(re);
-    if (!m) return '';
-    const after = text.slice(text.indexOf(m[0]) + m[0].length);
-    // stop at the next spirit header or horizontal rule
-    const nextHdr = after.search(/^#{1,4}\s*(Boolean|Roux)\b|^\*\*(Boolean|Roux):?\*\*|^---\s*$/im);
-    return (nextHdr > 0 ? after.slice(0, nextHdr) : after).trim();
-  };
-
-  return { boolean_r3: grab('Boolean', body), roux_r3: grab('Roux', body) };
-}
+// Transcript parsing moved to transcript-parser.js (Phase 3) so that
+// novelty-report.js and future scripts can import it without side effects.
+const { extractRound3 } = require('./transcript-parser');
 
 // ---------------------------------------------------------------------------
 // FIXTURE (used ONLY when no API key is available).
@@ -249,4 +224,6 @@ async function main() {
   console.log(`\nJoint Bean JSON written: ${path.relative(process.cwd(), outPath)}`);
 }
 
-main().catch(err => { console.error('✗ rerun failed:', err); process.exit(1); });
+if (require.main === module) {
+  main().catch(err => { console.error('✗ rerun failed:', err); process.exit(1); });
+}
