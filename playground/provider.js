@@ -179,12 +179,37 @@ async function callOpenRouter(apiKey, model, systemPrompt, userMessage) {
 }
 
 // ---------------------------------------------------------------------------
+// Embedder: Gemini text-embedding-004
+// Uses the same generativelanguage.googleapis.com endpoint as callGoogle.
+// Key can be GEMINI_API_KEY (AI Studio) or GOOGLE_API_KEY — both work.
+// Returns a 768-dim numeric array.
+// ---------------------------------------------------------------------------
+
+async function embed(text, apiKey) {
+ const url = `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${apiKey}`;
+ const res = await fetch(url, {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({ content: { parts: [{ text }] } })
+ });
+
+ if (!res.ok) {
+ const body = await res.text();
+ throw new Error(`Embed ${res.status}: ${body}`);
+ }
+
+ const data = await res.json();
+ return data.embedding.values; // numeric array, length 768
+}
+
+// ---------------------------------------------------------------------------
 // Unified dispatch
 // ---------------------------------------------------------------------------
 
 const PROVIDERS = {
  anthropic: callAnthropic,
  google: callGoogle,
+ gemini: callGoogle, // alias: same API, GEMINI_API_KEY key name
  groq: callGroq,
  openai: callOpenAI,
  openrouter: callOpenRouter
@@ -232,7 +257,7 @@ function resolveProvider(spirit, keys) {
  const preferred = spirit.provider; // e.g. "anthropic", "google", "groq"
 
  // Fallback chain: try preferred → then all others
- const allProviders = ['anthropic', 'google', 'groq', 'openai', 'openrouter'];
+ const allProviders = ['anthropic', 'google', 'gemini', 'groq', 'openai', 'openrouter'];
  const fallbacks = allProviders.filter(p => p !== preferred);
 
  if (keys[preferred]) {
@@ -246,4 +271,4 @@ function resolveProvider(spirit, keys) {
  return null;
 }
 
-module.exports = { send, resolveProvider, PROVIDERS };
+module.exports = { send, resolveProvider, PROVIDERS, embed };

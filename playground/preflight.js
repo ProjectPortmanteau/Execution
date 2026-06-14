@@ -8,7 +8,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { send, resolveProvider, PROVIDERS } = require('./provider');
+const { send, resolveProvider, PROVIDERS, embed } = require('./provider');
 
 // ---------------------------------------------------------------------------
 // Minimal .env loader (same as negotiate.js)
@@ -95,6 +95,7 @@ async function main() {
  const keys = {
  anthropic: process.env.ANTHROPIC_API_KEY || '',
  google: process.env.GOOGLE_API_KEY || '',
+ gemini: process.env.GEMINI_API_KEY || '',
  groq: process.env.GROQ_API_KEY || '',
  openai: process.env.OPENAI_API_KEY || '',
  openrouter: process.env.OPENROUTER_API_KEY || ''
@@ -104,6 +105,7 @@ async function main() {
  const models = {
  anthropic: 'claude-sonnet-4-20250514',
  google: 'gemini-2.0-flash',
+ gemini: 'gemini-2.0-flash',
  groq: 'llama-3.3-70b-versatile',
  openai: 'gpt-4o-mini',
  openrouter: 'nvidia/nemotron-nano-9b-v2:free'
@@ -195,6 +197,21 @@ async function main() {
  const failCount = results.filter(r => r.status === 'FAIL').length;
  const skipCount = results.filter(r => r.status === 'SKIP').length;
  const neededFails = results.filter(r => r.status === 'FAIL' && neededProviders.has(r.provider));
+
+ // Embed preflight: verify text-embedding-004 is reachable
+ console.log('\nEmbed check (text-embedding-004):');
+ const embedKey = keys.gemini || keys.google;
+ if (embedKey) {
+ process.stdout.write(' embed       ... ');
+ try {
+ const vec = await embed('preflight ok', embedKey);
+ console.log(`✓ OK  vector length=${vec.length}`);
+ } catch (err) {
+ console.log(`✗ FAIL  ${err.message.slice(0, 100)}`);
+ }
+ } else {
+ console.log(' embed       –  SKIP  No GEMINI_API_KEY or GOOGLE_API_KEY');
+ }
 
  console.log('\n────────────────────────────────────────────────────────────');
  if (neededFails.length > 0) {

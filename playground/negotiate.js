@@ -558,6 +558,7 @@ function getDefaultModel(provider) {
  const defaults = {
  anthropic: 'claude-sonnet-4-20250514',
  google: 'gemini-2.0-flash',
+ gemini: 'gemini-2.0-flash',
  groq: 'llama-3.3-70b-versatile',
  openai: 'gpt-4o',
  openrouter: 'nvidia/nemotron-nano-9b-v2:free'
@@ -633,13 +634,14 @@ if (require.main === module) {
  const keys = {
  anthropic: process.env.ANTHROPIC_API_KEY || '',
  google: process.env.GOOGLE_API_KEY || '',
+ gemini: process.env.GEMINI_API_KEY || '',
  groq: process.env.GROQ_API_KEY || '',
  openai: process.env.OPENAI_API_KEY || '',
  openrouter: process.env.OPENROUTER_API_KEY || ''
  };
 
- if (!keys.anthropic && !keys.google && !keys.groq && !keys.openai && !keys.openrouter) {
- console.error('✗ No API keys provided. Set ANTHROPIC_API_KEY, GROQ_API_KEY, OPENAI_API_KEY, OPENROUTER_API_KEY, and/or GOOGLE_API_KEY.');
+ if (!keys.anthropic && !keys.google && !keys.gemini && !keys.groq && !keys.openai && !keys.openrouter) {
+ console.error('✗ No API keys provided. Set ANTHROPIC_API_KEY, GEMINI_API_KEY, GROQ_API_KEY, OPENAI_API_KEY, OPENROUTER_API_KEY, and/or GOOGLE_API_KEY.');
  console.error(' Run without arguments for usage info.');
  process.exit(1);
  }
