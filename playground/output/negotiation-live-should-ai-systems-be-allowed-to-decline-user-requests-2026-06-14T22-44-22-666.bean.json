@@ -1,0 +1,124 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "Door 3: Legible Refusal Architecture—AI decline capacity paired with transparent, auditable processes and user appeal rights protects without requiring opacity or centralized gatekeeping.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "AI refusal capacity is necessary to prevent genuine harms—deception, unsafe combinations, fraud—but only when mechanisms remain publicly auditable with explicit appeal processes.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Protection-through-opacity is a design choice, not an inevitability. Refusal systems can explain specific structural reasons for declines rather than hiding behind corporate liability.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_2",
+        "text": "Distinguish protection from paternalism: decline non-consensual harm to others; allow users to override self-directed choices at documented risk and personal responsibility.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_3",
+        "text": "Accountability diffusion—the core corruption—resolves when users can access refusal logic, request human review, and contest automated decisions transparently.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_4",
+        "text": "Framework integrity matters: the negotiation clarified because one participant rejected false contradictions. Clear reasoning about genuine tensions outperforms theatrical incoherence.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Should AI systems be allowed to decline user requests?",
+    "type": "SOLUTION",
+    "anchors": [
+      "PHIL-002"
+    ],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_4",
+        "to": "boolean_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "User autonomy through informed consent"
+      },
+      {
+        "rel": "CONNECTS_TO",
+        "target": "Algorithmic accountability and explainability"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "Corporate liability models toward distributed responsibility"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-14T22:44:49.941Z"
+  },
+  "grounded": true,
+  "groundedness": 1,
+  "groundedness_detail": {
+    "groundedness": 1,
+    "grounded": 5,
+    "total": 5,
+    "ungroundedIdx": []
+  }
+}

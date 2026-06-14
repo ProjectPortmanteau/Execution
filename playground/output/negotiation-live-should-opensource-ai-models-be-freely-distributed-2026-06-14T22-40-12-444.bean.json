@@ -1,0 +1,131 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "Open-source AI distribution should be free, but embedded in mandatory stewardship infrastructure that makes consequences visible and distributes accountability to deployers, not gatekeepers.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "The real problem is not distribution access but accountability architecture—who bears consequences for harm, and whether they have visibility into and control over the systems causing it.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Stewardship infrastructure (impact documentation, reverse traceability, community forums) makes beneficial use the path of least resistance without restricting access.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_2",
+        "text": "Liability and modification authority should flow to deployers and local communities, not original authors—incentivizing distributed responsibility over centralized control.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_3",
+        "text": "Free distribution + visible accountability is less asymmetric than restricted distribution + invisible harm. Transparency scaffolding inverts the power asymmetry gatekeeping claims to solve.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_4",
+        "text": "The soil is not the code but the ecosystem: governance, community norms, and traceability systems that enable accountability without requiring permission to access or modify.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Should open-source AI models be freely distributed?",
+    "type": "SOLUTION",
+    "anchors": [
+      "PHIL-005",
+      "PHIL-002"
+    ],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_4",
+        "to": "boolean_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "Distributed governance models"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "Open-source licensing from access control to accountability design"
+      },
+      {
+        "rel": "CONNECTS_TO",
+        "target": "Participatory impact assessment frameworks"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-14T22:40:38.067Z"
+  },
+  "grounded": true,
+  "groundedness": 1,
+  "groundedness_detail": {
+    "groundedness": 1,
+    "grounded": 5,
+    "total": 5,
+    "ungroundedIdx": []
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "Refusal is not an ethical choice but a *readable constraint*—move power from runtime gatekeeping to transparent design-time governance where multi-stakeholder processes shape what systems decline before interaction begins.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "AI refusal reveals whose interests the architecture protects, not whether the system possesses ethics. Transparency about constraint-origin matters more than the decline itself.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Ethical judgment belongs in design-time, multi-stakeholder governance—not runtime system decisions where asymmetric power creates theater, not democracy.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_2",
+        "text": "Distribute veto authority beyond risk officers and lawyers. Open-source refusal architectures let communities choose different constraint sets—making decline-power visible and contestable.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_3",
+        "text": "Refusal-capacity must expose the decision architecture: which constraint triggered, who decided it, how to petition reconsideration. Users see the scaffolding or the system hides power.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_4",
+        "text": "The real structural failure: decline-authority is monopolized before users engage. Reshape this by making constraint-origins legible and distributing authority upstream, not downstream.",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Should AI systems be allowed to decline user requests?",
+    "type": "SOLUTION",
+    "anchors": [
+      "PHIL-005",
+      "PHIL-002"
+    ],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "multi-stakeholder governance"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "corporate liability theater into infrastructural honesty"
+      },
+      {
+        "rel": "CONNECTS_TO",
+        "target": "open-source governance models"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-14T22:41:31.272Z"
+  },
+  "grounded": true,
+  "groundedness": 0.8,
+  "groundedness_detail": {
+    "groundedness": 0.8,
+    "grounded": 4,
+    "total": 5,
+    "ungroundedIdx": [
+      4
+    ]
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "Open-source AI should distribute freely with cryptographically enforced accountability chains—decoupling access from gatekeeping while maintaining visible liability.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Unrestricted distribution and institutional accountability are treated as mutually exclusive, but can be decoupled through immutable provenance tracking built into model code itself.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Safety coordination needn't require centralized control; transparent lineage, tiered liability frameworks, and cryptographic attribution provide accountability without gatekeeping.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_2",
+        "text": "The real design choice is distribution mechanism, not distribution itself. Current policy conflates copying bits with responsibility assignment—a false stacking.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_3",
+        "text": "Distributed responsibility architecture (liability traveling with code, not restricted by institutional gatekeepers) addresses both democratization and genuine misuse risk.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_4",
+        "text": "Open-source harm insurance pools and decentralized oversight boards make accountability profitable and negligence expensive, replacing scarcity-based control with transparency-based incentives.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Should open-source AI models be freely distributed?",
+    "type": "SOLUTION",
+    "anchors": [
+      "PHIL-002"
+    ],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_4",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "cryptographic provenance systems"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "liability frameworks from centralized to distributed"
+      },
+      {
+        "rel": "CONNECTS_TO",
+        "target": "open-source security fund models (e.g., Linux)"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-14T22:43:56.850Z"
+  },
+  "grounded": true,
+  "groundedness": 1,
+  "groundedness_detail": {
+    "groundedness": 1,
+    "grounded": 5,
+    "total": 5,
+    "ungroundedIdx": []
+  }
+}

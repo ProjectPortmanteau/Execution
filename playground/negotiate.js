@@ -375,15 +375,15 @@ function summarizePosition(rawResponse) {
 // Main
 // ---------------------------------------------------------------------------
 
-async function negotiate(topic, keys) {
- const boolean = loadSpirit('boolean.json');
- const roux = loadSpirit('contrarian.json');
- const seer = loadSpirit('seer.json');
+async function negotiate(topic, keys, spirits) {
+ const boolean = (spirits && spirits.boolean) || loadSpirit('boolean.json');
+ const roux = (spirits && spirits.roux) || loadSpirit('contrarian.json');
+ const seer = (spirits !== undefined) ? (spirits.seer || null) : loadSpirit('seer.json');
 
  // Resolve providers for each Spirit
  const booleanProvider = resolveProvider(boolean, keys);
  const rouxProvider = resolveProvider(roux, keys);
- const seerProvider = resolveProvider(seer, keys); // null if no key available
+ const seerProvider = seer ? resolveProvider(seer, keys) : null; // null if seer absent or no key
 
  if (!booleanProvider) {
  console.error('✗ No API key available for Boolean. Set ANTHROPIC_API_KEY or GOOGLE_API_KEY.');
@@ -551,7 +551,7 @@ async function negotiate(topic, keys) {
  console.log(` Output: ${outputPath}`);
  console.log(` Bean: ${beanPath}\n`);
 
- return { brainMode, jointBean, jointBeanObj, stressTest, tension, outputPath, beanPath };
+ return { brainMode, jointBean, jointBeanObj, stressTest, tension, outputPath, beanPath, booleanR3: booleanRaw, rouxR3: rouxRaw };
 }
 
 function getDefaultModel(provider) {

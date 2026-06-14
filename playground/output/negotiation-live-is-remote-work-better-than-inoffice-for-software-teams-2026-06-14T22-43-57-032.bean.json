@@ -1,0 +1,126 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "Work topology determines optimal location; the false binary dissolves when teams diagnose actual dependencies rather than impose ideology.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Synchronous and asynchronous work modes have genuine, measurable requirements. Co-location and distribution serve different topologies—neither is universally superior.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "The real failure is using location as a proxy for accountability instead of building transparent feedback systems that expose actual work dependencies.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_2",
+        "text": "Adaptive infrastructure must match location to work type dynamically—some sprints co-locate, others distribute—without conflating attendance with loyalty or capability.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_3",
+        "text": "Systems thinking beats location dogmatism, but only when it includes honest diagnosis of dependency graphs rather than hiding behind both/and paralysis.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_4",
+        "text": "The question 'remote vs. office' is malformed. The diagnostic question is: 'What does this team's actual work topology demand, and why?'",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Is remote work better than in-office for software teams?",
+    "type": "SOLUTION",
+    "anchors": [
+      "PHIL-002"
+    ],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_4",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "organizational_transparency"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "accountability_systems"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-14T22:44:22.337Z"
+  },
+  "grounded": true,
+  "groundedness": 1,
+  "groundedness_detail": {
+    "groundedness": 1,
+    "grounded": 5,
+    "total": 5,
+    "ungroundedIdx": []
+  }
+}

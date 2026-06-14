@@ -1,0 +1,130 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "Decouple open-source model distribution from deployment capability: release weights transparently to prevent monopoly, gate large-scale compute access to distribute stewardship responsibility.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Safety externalities are real and distributed; closed systems prevent neither misuse nor reverse-engineering, only accountability. Governance architecture—not access control—is the actual crux.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Staged release by capability level—research community first, broader access after validation—prevents both monopoly lock-in and reckless proliferation without assuming access equals consequence-free deployment.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_2",
+        "text": "Open weights + compute verification gates: transparency prevents gatekeeping power concentration; deployment friction requires distributed stewardship without suppressing safety-infrastructure innovation.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_3",
+        "text": "License restrictions should target specific dual-use harms (biosynthesis, surveillance scale) rather than blanket models. Dual-use risk varies by capability; graduated friction matches actual vectors.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_4",
+        "text": "Federated independent review bodies distribute power across multiple institutions. Neither single gatekeeper nor ungoverned proliferation—governance distributes as innovatively as capability.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "REFINES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Should open-source AI models be freely distributed?",
+    "type": "SOLUTION",
+    "anchors": [],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_4",
+        "to": "boolean_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "Distributed governance infrastructure"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "Access-vs-safety binary into access-with-friction spectrum"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-14T22:42:20.591Z"
+  },
+  "grounded": true,
+  "groundedness": 1,
+  "groundedness_detail": {
+    "groundedness": 1,
+    "grounded": 5,
+    "total": 5,
+    "ungroundedIdx": []
+  }
+}

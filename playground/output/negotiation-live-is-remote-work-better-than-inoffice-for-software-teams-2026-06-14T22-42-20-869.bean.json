@@ -1,0 +1,124 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "Door 3: Location is diagnostic, not determinative. Match work structure to team communication maturity, using remote as a forcing function that reveals whether async protocols can actually work.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Intentional asynchronous design matters more than physical location. Remote makes this requirement visible; in-office teams can hide poor communication through synchronous proximity.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Tacit knowledge transfer happens via exposure to expertise, not location. Both pair programming and async code review with detailed commentary enable osmosis when deliberately designed.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_2",
+        "text": "Remote work exposes organizational dysfunction that offices mask. For healthy teams, this exposure becomes a diagnostic advantage; for dysfunctional teams, it becomes a liability.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_3",
+        "text": "Hybrid output-based teams with 2–3 daily core hours for high-bandwidth moments capture both osmosis and deep focus, making location optional based on actual communication maturity.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_4",
+        "text": "The burden of proof flips: not 'can remote work with extraordinary maturity?' but 'which structure forces teams to build real collaboration skills?' Remote is the faster diagnostic.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Is remote work better than in-office for software teams?",
+    "type": "SOLUTION",
+    "anchors": [],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_4",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "organizational health assessment"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "work design from location-first to maturity-first"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-14T22:42:45.924Z"
+  },
+  "grounded": true,
+  "groundedness": 1,
+  "groundedness_detail": {
+    "groundedness": 1,
+    "grounded": 5,
+    "total": 5,
+    "ungroundedIdx": []
+  }
+}
