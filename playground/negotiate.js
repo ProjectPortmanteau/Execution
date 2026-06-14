@@ -10,6 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 const { send, resolveProvider } = require('./provider');
+const loom = require('./loom');
 
 // ---------------------------------------------------------------------------
 // Minimal .env loader (zero dependencies)
@@ -102,55 +103,10 @@ function buildRoundPrompt(spirit, topic, round, otherPos) {
  return parts.join('\n');
 }
 
-/**
- * Build the prompt for the Loom synthesis step.
- * The Loom is an impartial synthesizer that weaves both positions
- * into a joint Bean with all 4 OPVS layers.
- *
- * @param {string} topic - The negotiation topic
- * @param {string} booleanFinal - Boolean's final-round response
- * @param {string} rouxFinal - Roux's final-round response
- * @returns {string}
- */
-function buildLoomPrompt(topic, booleanFinal, rouxFinal) {
- return [
- 'You are The Loom an impartial synthesis engine.',
- 'Two Spirits have completed 3 rounds of negotiation. Your task:',
- 'Weave their final positions into a single joint Bean.',
- '',
- `Topic: "${topic}"`,
- '',
- '--- BOOLEAN (final position) ---',
- booleanFinal,
- '',
- '--- ROUX (final position) ---',
- rouxFinal,
- '',
- 'Produce a joint Bean in exactly this format:',
- '',
- '## JOINT BEAN',
- '',
- '### Nucleus (Content)',
- 'The synthesized insight the Door Number 3 neither Spirit could reach alone.',
- '',
- '### Shell (Metadata)',
- '- Topic: <topic>',
- '- Type: SOLUTION',
- '- Anchors: <list the PHIL- Bean IDs that grounded each Spirit>',
- '- Provenance: Principled Playground negotiation',
- '',
- '### Corona (Connections)',
- 'Typed edges to related Beans or concepts that this synthesis connects to.',
- '',
- '### Echo (Provenance)',
- '- Participants: Boolean, Roux (Seer stress-tests after synthesis)',
- '- Rounds: 3',
- '- Timestamp: <ISO timestamp>',
- '- Mode: <DUAL-BRAIN or SINGLE-BRAIN>',
- '',
- 'Keep the total output under 400 words.'
- ].join('\n');
-}
+// The Loom prompt + structured Joint Bean assembly now live in ./loom.js
+// (Phase 0.5). The Loom receives the FULL Round-3 positions tagged with stable
+// ids (boolean_r3 / roux_r3) and returns JSON whose claims carry DERIVES_FROM
+// edges, so groundedness and displacement are computable on the result.
 
 /**
  * Build the prompt for Seer's post-synthesis stress test.
@@ -505,15 +461,45 @@ async function negotiate(topic, keys) {
  roundHistory.push({ round, boolean: booleanRaw, roux: rouxRaw });
  }
 
- // --- Loom Synthesis ---
+ // --- Loom Synthesis (structured, traceable Joint Bean) ---
  divider('THE LOOM Synthesis');
 
- const loomPrompt = buildLoomPrompt(topic, booleanRaw, rouxRaw);
+ // Loom sees the FULL Round-3 positions (booleanRaw/rouxRaw), tagged with
+ // stable ids boolean_r3 / roux_r3. It returns JSON; we parse, then build a
+ // Bean whose claims carry DERIVES_FROM edges and whose Echo records substrate.
+ const loomPrompt = loom.buildLoomPrompt(topic, booleanRaw, rouxRaw);
 
- // The Loom runs on whichever provider is available (prefer Boolean's)
  console.log(` ⟐ The Loom is weaving...`);
- const jointBean = await send(booleanForCall, booleanProvider.apiKey, loomPrompt);
- console.log(` ✓ Joint Bean produced\n`);
+ let loomRaw = await send(booleanForCall, booleanProvider.apiKey, loomPrompt);
+ let parsed = loom.parseLoomJSON(loomRaw);
+ if (!parsed) {
+ console.log(` ⚠ Loom JSON parse failed retrying once...`);
+ loomRaw = await send(booleanForCall, booleanProvider.apiKey, loomPrompt);
+ parsed = loom.parseLoomJSON(loomRaw);
+ }
+
+ const loomCommon = {
+ topic,
+ substrate: booleanForCall.model,
+ brainMode,
+ timestamp: timestamp(),
+ anchors: [boolean.anchor, roux.anchor].filter(Boolean)
+ };
+
+ let jointBeanObj;
+ if (parsed) {
+ const norm = loom.normalizeLoom(parsed);
+ if (norm.droppedIds.length) {
+ console.log(` ⚠ Loom cited unknown source ids (ignored): ${norm.droppedIds.join(', ')}`);
+ }
+ jointBeanObj = loom.buildJointBean({ norm, grounded: true, ...loomCommon });
+ } else {
+ console.log(` ⚠ Loom JSON parse failed twice falling back to free text (grounded:false)`);
+ jointBeanObj = loom.buildFallbackBean({ rawText: loomRaw, ...loomCommon });
+ }
+
+ const jointBean = loom.renderJointBeanProse(jointBeanObj);
+ console.log(` ✓ Joint Bean produced (groundedness ${jointBeanObj.groundedness}, substrate ${jointBeanObj.echo.substrate})\n`);
  console.log(indent(jointBean));
 
  // --- Seer Stress Test (optional runs if Seer has a provider) ---
@@ -550,15 +536,22 @@ async function negotiate(topic, keys) {
  roundHistory, jointBean, stressTest, tension, startedAt
  );
 
+ // Persist the machine-readable Joint Bean alongside the transcript so
+ // downstream tooling (groundedness / displacement) can consume it directly.
+ const beanPath = outputPath.replace(/\.md$/, '.bean.json');
+ fs.writeFileSync(beanPath, JSON.stringify(jointBeanObj, null, 2), 'utf-8');
+
  divider('NEGOTIATION COMPLETE');
  console.log(` Mode: ${brainMode}`);
  console.log(` Completed: ${timestamp()}`);
  console.log(` Rounds: ${ROUNDS}`);
  console.log(` Stress Test: ${stressTest ? 'Seer (' + seerProvider.provider + ')' : 'skipped'}`);
  console.log(` Tension: ${tension.score} ${tension.label}`);
- console.log(` Output: ${outputPath}\n`);
+ console.log(` Groundedness: ${jointBeanObj.groundedness} (substrate ${jointBeanObj.echo.substrate})`);
+ console.log(` Output: ${outputPath}`);
+ console.log(` Bean: ${beanPath}\n`);
 
- return { brainMode, jointBean, stressTest, tension, outputPath };
+ return { brainMode, jointBean, jointBeanObj, stressTest, tension, outputPath, beanPath };
 }
 
 function getDefaultModel(provider) {
