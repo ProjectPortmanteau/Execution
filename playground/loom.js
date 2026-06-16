@@ -28,14 +28,23 @@ const VALID_RELS = ['SYNTHESIZES', 'REFINES', 'REJECTS'];
  */
 function buildLoomPrompt(topic, booleanFinal, rouxFinal) {
   return [
-    'You are The Loom an impartial synthesis engine.',
-    'Two Spirits have completed 3 rounds of negotiation. Weave their FINAL',
-    'positions into a single joint Bean, and trace every claim back to the',
-    'position(s) it actually draws from.',
+    'You are The Loom. Two Spirits have completed 3 rounds of negotiation.',
+    'Your task is NOT to average, summarize, or blend their final positions.',
+    'Your task is to find Door Number 3: the structural move that makes the',
+    'original disagreement unnecessary — a reframe that lets both Spirits\'',
+    'non-negotiables coexist without either side capitulating.',
     '',
     `Topic: "${topic}"`,
     '',
-    'The two source positions, each with a stable id you must cite from:',
+    'Procedure:',
+    '1. Identify what each Spirit named as NON-NEGOTIABLE.',
+    '2. Find the hidden assumption that makes those two sets appear incompatible.',
+    '3. Dissolve that assumption. The dissolution is Door Number 3.',
+    '4. State it as a claim that neither Spirit explicitly made, which makes',
+    '   both their non-negotiables LESS NECESSARY once it is accepted.',
+    'If no such move exists, say so plainly in the thesis — do not fabricate.',
+    '',
+    'The two source positions (cite by these stable ids):',
     '',
     '--- id: boolean_r3 (Boolean, final position) ---',
     booleanFinal,
@@ -46,7 +55,8 @@ function buildLoomPrompt(topic, booleanFinal, rouxFinal) {
     'Return ONLY a JSON object, no prose outside it, in exactly this shape:',
     '',
     '{',
-    '  "thesis": "<one-line synthesis claim that names Door Number 3>",',
+    '  "thesis": "<one-line Door Number 3 claim — the move neither Spirit explicitly stated>",',
+    '  "why_not_blend": "<one sentence: what assumption was dissolved and why that makes both sets of non-negotiables compatible>",',
     '  "claims": [',
     '    {',
     '      "text": "<a single synthesized claim, one idea>",',
@@ -59,14 +69,17 @@ function buildLoomPrompt(topic, booleanFinal, rouxFinal) {
     '  ]',
     '}',
     '',
+    'ANTI-BLEND CHECK: Before finalizing, re-read your thesis. Could it be',
+    'described as "A said X, B said Y, therefore X + Y"? If so, rewrite it.',
+    'The thesis must name a structural move or reframe that changes what the',
+    'disagreement is ABOUT, not who was more right.',
+    '',
     'Rules for derives_from (READ CAREFULLY):',
     '- Cite a source id ONLY when the claim genuinely builds on THAT position.',
     '  Valid ids: "boolean_r3", "roux_r3". Cite one, both, or neither.',
     '- A novel bridging claim that neither Spirit stated may legitimately have',
     '  "derives_from": []. An HONEST EMPTY list is better than a reflexive one.',
-    '- Do NOT attach both ids to every claim out of habit. If a claim is just a',
-    '  restatement of one position, cite only that one. We independently check',
-    '  novelty, so a claim that cites a parent but merely copies it will be caught.',
+    '- Do NOT attach both ids to every claim out of habit.',
     '',
     'rel must be one of: SYNTHESIZES (new combined idea), REFINES (sharpens one',
     'position), REJECTS (overturns a position). connections is for adjacency',
@@ -139,6 +152,7 @@ function normalizeLoom(parsed) {
 
   return {
     thesis: (typeof parsed.thesis === 'string' && parsed.thesis.trim()) ? parsed.thesis.trim() : '(no thesis emitted)',
+    why_not_blend: (typeof parsed.why_not_blend === 'string' && parsed.why_not_blend.trim()) ? parsed.why_not_blend.trim() : '',
     claims,
     connections,
     droppedIds
@@ -204,6 +218,7 @@ function buildJointBean(args) {
     schema: 'joint-bean/0.5',
     nucleus: {
       thesis: norm.thesis,
+      why_not_blend: norm.why_not_blend || '',
       claims: norm.claims.map((c, i) => ({ id: `claim_${i}`, ...c }))
     },
     shell: {
@@ -291,6 +306,9 @@ function renderJointBeanProse(bean) {
     '',
     `**Thesis:** ${bean.nucleus.thesis}`,
     '',
+    ...(bean.nucleus.why_not_blend
+      ? [`**Why this is not a blend:** ${bean.nucleus.why_not_blend}`, '']
+      : []),
     '**Claims (with provenance edges):**',
     '',
     claimLines,

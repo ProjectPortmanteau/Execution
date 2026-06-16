@@ -98,7 +98,7 @@ async function runLoomLive(boolean_r3, roux_r3, topic) {
   if (!resolved) return null;
 
   const defaults = {
-    anthropic: 'claude-sonnet-4-20250514', google: 'gemini-2.0-flash',
+    anthropic: 'claude-haiku-4-5-20251001', google: process.env.GEMINI_GEN_MODEL || 'gemini-flash-latest',
     groq: 'llama-3.3-70b-versatile', openai: 'gpt-4o', openrouter: 'nvidia/nemotron-nano-9b-v2:free'
   };
   const model = resolved.provider === boolean.provider ? boolean.model : defaults[resolved.provider];
@@ -188,6 +188,9 @@ async function main() {
   console.log(`RESULT  (mode: ${mode})`);
   console.log('='.repeat(70));
   console.log(`\nThesis:\n  ${bean.nucleus.thesis}\n`);
+  if (bean.nucleus.why_not_blend) {
+    console.log(`Why this is not a blend:\n  ${bean.nucleus.why_not_blend}\n`);
+  }
   console.log('Claims with DERIVES_FROM edges (spot-check each cited id against the');
   console.log('source text printed above):\n');
   bean.nucleus.claims.forEach((c) => {

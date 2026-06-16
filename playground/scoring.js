@@ -100,27 +100,49 @@ const VALID_STANCES = new Set(['SUPPORTS', 'CONTRADICTS', 'UNRELATED']);
 
 /**
  * Classify whether claimA supports, contradicts, or is unrelated to claimB.
+ * Tries Gemini first; falls back to Anthropic claude-haiku when Gemini is quota-limited.
  *
  * @param {string} claimA
  * @param {string} claimB
- * @param {string} apiKey
- * @param {string} [model='gemini-2.0-flash']
+ * @param {string} geminiKey  - Gemini/Google API key (may be empty)
+ * @param {string} [model]    - Gemini generation model
+ * @param {string} [anthropicKey] - Anthropic key for fallback stance classification
  * @returns {Promise<'SUPPORTS'|'CONTRADICTS'|'UNRELATED'>}
  */
-async function classifyStance(claimA, claimB, apiKey, model = process.env.GEMINI_GEN_MODEL || 'gemini-2.0-flash') {
+async function classifyStance(
+ claimA, claimB,
+ geminiKey,
+ model = process.env.GEMINI_GEN_MODEL || 'gemini-2.0-flash',
+ anthropicKey = ''
+) {
  if (FIXTURE_MODE) return 'UNRELATED';
 
- const callFn = PROVIDERS.gemini || PROVIDERS.google;
- if (!callFn) throw new Error('classifyStance: no google/gemini provider available');
-
  const userMsg = `Claim A: "${claimA}"\nClaim B: "${claimB}"\nRelationship:`;
- try {
- const raw = await callFn(apiKey, model, STANCE_PROMPT_SYSTEM, userMsg);
- const word = raw.trim().toUpperCase().replace(/[^A-Z]/, '');
- return VALID_STANCES.has(word) ? word : 'UNRELATED';
- } catch (_) {
- return 'UNRELATED'; // fail safe — never crash the scoring pipeline
+
+ // Try Gemini first (preferred — cheap, fast)
+ const gemCallFn = PROVIDERS.gemini || PROVIDERS.google;
+ if (geminiKey && gemCallFn) {
+  try {
+   const raw = await gemCallFn(geminiKey, model, STANCE_PROMPT_SYSTEM, userMsg);
+   const word = raw.trim().toUpperCase().replace(/[^A-Z]/g, '');
+   if (VALID_STANCES.has(word)) return word;
+  } catch (_) {
+   // fall through to Anthropic
+  }
  }
+
+ // Anthropic fallback (used when Gemini is quota-limited)
+ if (anthropicKey && PROVIDERS.anthropic) {
+  try {
+   const raw = await PROVIDERS.anthropic(anthropicKey, 'claude-haiku-4-5-20251001', STANCE_PROMPT_SYSTEM, userMsg);
+   const word = raw.trim().toUpperCase().replace(/[^A-Z]/g, '');
+   return VALID_STANCES.has(word) ? word : 'UNRELATED';
+  } catch (_) {
+   return 'UNRELATED';
+  }
+ }
+
+ return 'UNRELATED'; // no provider available
 }
 
 // ---------------------------------------------------------------------------
@@ -145,7 +167,8 @@ async function computeSemanticTension(textA, textB, apiKey, opts = {}) {
  const {
  engagementThreshold = 0.3,
  maxPairs = 20,
- model = process.env.GEMINI_GEN_MODEL || 'gemini-2.0-flash'
+ model = process.env.GEMINI_GEN_MODEL || 'gemini-2.0-flash',
+ anthropicKey = ''
  } = opts;
 
  const claimsA = splitClaims(textA);
@@ -178,7 +201,7 @@ async function computeSemanticTension(textA, textB, apiKey, opts = {}) {
 
  // Classify each engaged pair
  const stances = await Promise.all(
- capped.map(p => classifyStance(claimsA[p.i], claimsB[p.j], apiKey, model))
+ capped.map(p => classifyStance(claimsA[p.i], claimsB[p.j], apiKey, model, anthropicKey))
  );
  const contradictCount = stances.filter(s => s === 'CONTRADICTS').length;
  const opposition = contradictCount / stances.length;

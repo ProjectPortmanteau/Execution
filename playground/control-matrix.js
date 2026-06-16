@@ -3,12 +3,10 @@
 // Phase 4: Falsifiable control experiment.
 //
 // Fixed substrate: Anthropic claude-haiku-4-5-20251001 for ALL agents.
-// (Gemini free tier = 5 generation RPM; haiku has much higher limits.)
-// Gemini is still used for embeddings-only: computeDisplacement, computeGroundedness.
-//
-// Note on tension metric: computeSemanticTension calls classifyStance which hits
-// Gemini generation quota; it is skipped here. Lexical tension (regex-based friction/
-// agreement marker ratio) from negotiate() is reported instead, noted explicitly.
+// Tension metric: semantic (embedding engagement × stance opposition).
+//   Stance classifier uses Anthropic claude-haiku-4-5-20251001 as fallback
+//   when Gemini generation quota is exhausted (which is common on free tier).
+// Displacement and groundedness use Gemini embeddings (higher separate quota).
 //
 // Three conditions:
 //   ON_DIFFERENTIATED  — real PHIL-005 (Boolean) vs PHIL-002 (Roux) soul codes
@@ -61,21 +59,27 @@ const TOPICS = [
 
 const CONDITIONS = ['ON_DIFFERENTIATED', 'OFF', 'SCRAMBLED'];
 
-// Pre-registered predictions (documented before any run).
-// tension = lexical friction score (0-1) from negotiate(); noted as lexical.
+// Pre-registered predictions (printed before any run).
+// Tension = semantic: engagement × opposition.
+// engagement ≈ mean cosine similarity of topically-aligned claim pairs (expected ~0.8)
+// opposition = fraction of engaged pairs where Anthropic/Gemini classifier returns CONTRADICTS
+// tension = engagement × opposition (expected range 0.0–0.4)
+//
+// Phase B gate: ON_DIFFERENTIATED and OFF must separate by > 0.1 on semantic tension.
+// If they do not, Soul Code has no detectable semantic effect — reported honestly.
 const PREDICTIONS = {
  ON_DIFFERENTIATED: {
-  tension: '> 0.5 (HIGH — strong friction markers expected from differentiated soul codes)',
-  novelty_lift: '>= 0.3 (HIGH)',
+  tension: '>= 0.10 (differentiated soul codes expected to sustain more CONTRADICTS stances)',
+  novelty_lift: '>= 0.3 (HIGH — Door Number 3 Loom prompt should push synthesis away from both positions)',
   groundedness: '> 0.5'
  },
  OFF: {
-  tension: '< 0.3 (LOW — no differentiated principles, expect convergence)',
+  tension: '< 0.05 (neutral agents converge; fewer CONTRADICTS stances expected)',
   novelty_lift: '< 0.2 (LOW)',
   groundedness: 'N/A'
  },
  SCRAMBLED: {
-  tension: 'UNPREDICTABLE (incoherent Boolean anchor; may spike or collapse)',
+  tension: 'UNPREDICTABLE (incoherent Boolean anchor; may inflate or suppress contradiction)',
   novelty_lift: '< 0.2 (LOW — coherent synthesis impossible from scrambled anchor)',
   groundedness: 'LOW (< 0.3)'
  }
@@ -166,12 +170,14 @@ function fmt(v, digits) {
 
 // ---------------------------------------------------------------------------
 // Verdict logic
+// Phase B gate: ON_DIFFERENTIATED tension >= 0.10, OFF tension < 0.05
 // ---------------------------------------------------------------------------
 
-function verdictTension(condition, actual) {
+function verdictTension(condition, actual, mode) {
  if (actual === null) return '–';
- if (condition === 'ON_DIFFERENTIATED') return actual > 0.5 ? 'PASS' : 'FAIL';
- if (condition === 'OFF')               return actual < 0.3 ? 'PASS' : 'FAIL';
+ if (mode && mode !== 'SEMANTIC') return `LEX:${fmt(actual)}`;
+ if (condition === 'ON_DIFFERENTIATED') return actual >= 0.10 ? 'PASS' : 'FAIL';
+ if (condition === 'OFF')               return actual < 0.05  ? 'PASS' : 'FAIL';
  if (condition === 'SCRAMBLED')         return '(unpredictable — noted)';
  return '–';
 }
@@ -203,9 +209,10 @@ function buildReport(results, preRegTable, flags, substrate) {
   `Generated: ${new Date().toISOString()}`,
   '',
   `**Fixed substrate:** ${substrate} (all 12 cells)`,
-  '**Tension metric:** lexical (regex friction/agreement ratio from negotiate())',
-  '**Scoring note:** computeSemanticTension skipped (Gemini generation quota);',
-  '  displacement and groundedness use Gemini embeddings (separate quota, no limit hit).',
+  '**Tension metric:** semantic (embedding engagement × stance opposition)',
+  '  Stance classifier: Anthropic claude-haiku-4-5-20251001 (Gemini fallback if quota available)',
+  '  Embeddings (displacement): Gemini gemini-embedding-001',
+  '**Phase B gate:** ON_DIFFERENTIATED and OFF must separate by > 0.1 on semantic tension.',
   '',
   '## Pre-Registration (printed before any run)',
   '',
@@ -213,13 +220,13 @@ function buildReport(results, preRegTable, flags, substrate) {
   '',
   '## Per-Cell Results',
   '',
-  '| Condition | Topic | lex_tension | novelty_lift | groundedness | t-verdict | lift-verdict | g-verdict |',
-  '|-----------|-------|-------------|-------------|-------------|-----------|--------------|-----------|'
+  '| Condition | Topic | sem_tension | engagement | opposition | novelty_lift | groundedness | t-verdict | lift-verdict | g-verdict |',
+  '|-----------|-------|-------------|------------|------------|-------------|-------------|-----------|--------------|-----------|'
  ];
 
  const rows = results.map(r => {
-  const topicShort = r.topic.replace(/\?$/, '').slice(0, 40);
-  return `| ${r.condition} | ${topicShort} | ${fmt(r.tension)} | ${fmt(r.novelty_lift)} | ${fmt(r.groundedness)} | ${r.tVerdict} | ${r.liftVerdict} | ${r.gVerdict} |`;
+  const topicShort = r.topic.replace(/\?$/, '').slice(0, 38);
+  return `| ${r.condition} | ${topicShort} | ${fmt(r.tension)} | ${fmt(r.engagement)} | ${fmt(r.opposition)} | ${fmt(r.novelty_lift)} | ${fmt(r.groundedness)} | ${r.tVerdict} | ${r.liftVerdict} | ${r.gVerdict} |`;
  });
 
  function medOf(arr) {
@@ -233,14 +240,16 @@ function buildReport(results, preRegTable, flags, substrate) {
   const cr = results.filter(r => r.condition === cond && !r.error);
   return {
    condition: cond,
-   medTension: medOf(cr.map(r => r.tension)),
-   medLift:    medOf(cr.map(r => r.novelty_lift)),
-   medGround:  medOf(cr.map(r => r.groundedness))
+   medTension:  medOf(cr.map(r => r.tension)),
+   medEngagement: medOf(cr.map(r => r.engagement)),
+   medOpposition: medOf(cr.map(r => r.opposition)),
+   medLift:     medOf(cr.map(r => r.novelty_lift)),
+   medGround:   medOf(cr.map(r => r.groundedness))
   };
  });
 
  const aggRows = agg.map(a =>
-  `| ${a.condition.padEnd(18)} | ${fmt(a.medTension)} | ${fmt(a.medLift)} | ${fmt(a.medGround)} |`
+  `| ${a.condition.padEnd(18)} | ${fmt(a.medTension)} | ${fmt(a.medEngagement)} | ${fmt(a.medOpposition)} | ${fmt(a.medLift)} | ${fmt(a.medGround)} |`
  );
 
  const flagSection = flags.length
@@ -253,8 +262,8 @@ function buildReport(results, preRegTable, flags, substrate) {
   '',
   '## Condition Aggregates (median across 4 topics)',
   '',
-  '| Condition | med_lex_tension | med_novelty_lift | med_groundedness |',
-  '|-----------|----------------|-----------------|-----------------|',
+  '| Condition | med_sem_tension | med_engagement | med_opposition | med_novelty_lift | med_groundedness |',
+  '|-----------|----------------|----------------|----------------|-----------------|-----------------|',
   ...aggRows,
   '',
   ...flagSection,
@@ -293,11 +302,12 @@ async function main() {
 
  // --- Pre-registration (printed before ANY API call) -----------------------
  printBanner('PRE-REGISTRATION (before any run)');
- console.log('Tension metric: lexical (friction/agreement markers).');
- console.log('Displacement and groundedness: semantic (Gemini embeddings).\n');
+ console.log('Tension metric: semantic (embedding engagement × stance opposition).');
+ console.log('Stance classifier: Anthropic claude-haiku-4-5-20251001 (Gemini fallback).');
+ console.log('Displacement and groundedness: Gemini embeddings (separate quota).\n');
 
  const preRegLines = [
-  '| Condition | Predicted lex_tension | Predicted novelty_lift | Predicted groundedness |',
+  '| Condition | Predicted sem_tension | Predicted novelty_lift | Predicted groundedness |',
   '|-----------|----------------------|------------------------|------------------------|',
   ...CONDITIONS.map(c => {
    const p = PREDICTIONS[c];
@@ -309,7 +319,8 @@ async function main() {
 
  console.log(`\nExperiment: 4 topics × 3 conditions = 12 cells`);
  console.log(`Substrate:  ${substrate} (fixed)`);
- console.log('Seer:       disabled (substrate isolation)\n');
+ console.log('Seer:       disabled (substrate isolation)');
+ console.log('Phase B gate: ON vs OFF must separate by > 0.1 on semantic tension.\n');
 
  // --- Run grid ---------------------------------------------------------------
  const results = [];
@@ -329,9 +340,16 @@ async function main() {
     const booleanR3 = result.booleanR3 || '';
     const rouxR3    = result.rouxR3    || '';
     const nucleus   = nucleusText(result.jointBeanObj);
-    const lexTension = result.tension ? result.tension.score : null;
+    const semTension  = result.tension ? result.tension.score : null;
+    const engagement  = result.tension && result.tension.engagement != null ? result.tension.engagement : null;
+    const opposition  = result.tension && result.tension.opposition != null ? result.tension.opposition : null;
+    const tensionMode = result.tension ? result.tension.mode : 'UNKNOWN';
 
-    console.log(`\n  Lexical tension: ${fmt(lexTension)} (${result.tension ? result.tension.label : ''})`);
+    console.log(`\n  Semantic tension: ${fmt(semTension)} (${result.tension ? result.tension.label : ''})`);
+    if (engagement !== null) console.log(`  Engagement: ${fmt(engagement)}  Opposition: ${fmt(opposition)}`);
+
+    // Brief pause to avoid burst rate-limiting on Gemini embed quota
+    await new Promise(r => setTimeout(r, 2000));
 
     // Displacement of nucleus from parent positions (Gemini embeddings)
     let novelty_lift = null, d_A = null, d_B = null, balance = null;
@@ -358,8 +376,9 @@ async function main() {
 
     results.push({
      condition, topic,
-     tension: lexTension, novelty_lift, groundedness, d_A, d_B, balance,
-     tVerdict:    verdictTension(condition, lexTension),
+     tension: semTension, engagement, opposition, tensionMode,
+     novelty_lift, groundedness, d_A, d_B, balance,
+     tVerdict:    verdictTension(condition, semTension, tensionMode),
      liftVerdict: verdictLift(condition, novelty_lift),
      gVerdict:    verdictGround(condition, groundedness)
     });
@@ -367,7 +386,9 @@ async function main() {
    } catch (err) {
     console.error(`\n  CELL FAILED: ${err.message.slice(0, 120)}`);
     results.push({
-     condition, topic, tension: null, novelty_lift: null, groundedness: null,
+     condition, topic,
+     tension: null, engagement: null, opposition: null, tensionMode: 'ERROR',
+     novelty_lift: null, groundedness: null,
      d_A: null, d_B: null, balance: null,
      tVerdict: 'ERROR', liftVerdict: 'ERROR', gVerdict: 'ERROR',
      error: err.message.slice(0, 120)
@@ -405,11 +426,18 @@ async function main() {
 
  const flags = [];
 
- // Flag: Soul Code has no detectable effect on tension
- if (medOnTension !== null && medOffTension !== null && Math.abs(medOnTension - medOffTension) < 0.05) {
-  const msg = 'SOUL CODE HAS NO DETECTABLE EFFECT ON TENSION — ON and OFF differ by < 0.05.';
-  console.log(`\n  WARN: ${msg}`);
-  flags.push(msg);
+ // Phase B gate: ON vs OFF separation on semantic tension
+ if (medOnTension !== null && medOffTension !== null) {
+  const separation = medOnTension - medOffTension;
+  if (separation >= 0.1) {
+   const msg = `Phase B PASSED — ON tension (${fmt(medOnTension)}) exceeds OFF (${fmt(medOffTension)}) by ${fmt(separation)} > 0.1. Soul Code has a detectable semantic effect.`;
+   console.log(`\n  PASS: ${msg}`);
+   flags.push(msg);
+  } else {
+   const msg = `Phase B FAILED — ON tension (${fmt(medOnTension)}) and OFF (${fmt(medOffTension)}) differ by only ${fmt(Math.abs(separation))} (threshold 0.1). Soul Code has NO detectable semantic effect.`;
+   console.log(`\n  FAIL: ${msg}`);
+   flags.push(msg);
+  }
  }
 
  // Flag: Soul Code has no detectable effect on novelty_lift
@@ -445,8 +473,8 @@ async function main() {
  const offTPass = offRows.filter(r => r.tVerdict    === 'PASS').length;
  const scLPass  = scramRows.filter(r => r.liftVerdict === 'PASS').length;
 
- console.log(`ON_DIFFERENTIATED: ${onTPass}/${onRows.length} pass tension | ${onLPass}/${onRows.length} pass lift`);
- console.log(`OFF:               ${offTPass}/${offRows.length} pass tension (< 0.3 predicted)`);
+ console.log(`ON_DIFFERENTIATED: ${onTPass}/${onRows.length} pass tension (>= 0.10) | ${onLPass}/${onRows.length} pass lift`);
+ console.log(`OFF:               ${offTPass}/${offRows.length} pass tension (< 0.05 predicted)`);
  console.log(`SCRAMBLED:         ${scLPass}/${scramRows.length} pass lift (< 0.2 predicted)`);
 
  // --- Write report -----------------------------------------------------------

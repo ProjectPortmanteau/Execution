@@ -11,6 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const { send, resolveProvider } = require('./provider');
 const loom = require('./loom');
+const { computeSemanticTension } = require('./scoring');
 
 // ---------------------------------------------------------------------------
 // Minimal .env loader (zero dependencies)
@@ -153,25 +154,20 @@ function buildStressTestPrompt(topic, booleanFinal, rouxFinal, jointBean) {
 }
 
 // ---------------------------------------------------------------------------
-// Tension Score (0.0 – 1.0)
+// Tension Score
+// Semantic (embedding + stance classification) is preferred; lexical is kept
+// as a fallback and for per-round breakdown in the output transcript.
 // ---------------------------------------------------------------------------
 
 /**
- * Compute a tension score for the negotiation.
- *
- * 0.0 = immediate consensus, no friction
- * 1.0 = positions never moved, maximum friction
- *
- * Algorithm:
- * - Count friction markers (disagreement, challenge, push-back language)
- * - Count agreement markers (acceptance, concession language)
- * - Measure friction persistence: did friction hold through Round 3?
- * - Blend raw friction ratio (60%) with persistence (40%)
+ * Lexical tension: regex friction/agreement word counts across all rounds.
+ * Kept as fallback and for per-round breakdown when semantic is available.
+ * Insensitive to Soul Code calibration — use semantic tension for comparison.
  *
  * @param {Array<{round: number, boolean: string, roux: string}>} roundHistory
- * @returns {{ score: number, label: string, frictionCount: number, agreementCount: number, frictionPersistence: number }}
+ * @returns {{ score, label, frictionCount, agreementCount, frictionPersistence, perRound }}
  */
-function computeTensionScore(roundHistory) {
+function computeLexicalTension(roundHistory) {
  const FRICTION = [
  /\bhowever\b/gi, /\bbut\b/gi, /\bpush.?back\b/gi, /\bchallenge\b/gi,
  /\bdisagree\b/gi, /\breject\b/gi, /\binsufficient\b/gi, /\bnot enough\b/gi,
@@ -514,16 +510,51 @@ async function negotiate(topic, keys, spirits) {
  console.log(indent(stressTest));
  }
 
- // --- Tension Score ---
- const tension = computeTensionScore(roundHistory);
+ // --- Tension Score (semantic preferred, lexical fallback) ---
+ const lex = computeLexicalTension(roundHistory);
+ const geminiKey = keys.gemini || keys.google || '';
+
+ let tension;
+ if (geminiKey) {
+  try {
+   // Use Round-3 positions only — most developed positions, fewest redundant calls.
+   const sem = await computeSemanticTension(booleanRaw, rouxRaw, geminiKey, { maxPairs: 5, anthropicKey: keys.anthropic || '' });
+   const semLabel = sem.tension >= 0.5 ? 'HIGH' : sem.tension >= 0.3 ? 'MEDIUM'
+                  : sem.tension >= 0.1 ? 'LOW' : 'MINIMAL';
+   tension = {
+    score: sem.tension,
+    label: semLabel,
+    mode: 'SEMANTIC',
+    engagement: sem.engagement,
+    opposition: sem.opposition,
+    classifiedPairs: sem.classifiedPairs,
+    frictionCount: lex.frictionCount,
+    agreementCount: lex.agreementCount,
+    frictionPersistence: lex.frictionPersistence,
+    perRound: lex.perRound,
+    lexical: lex.score
+   };
+  } catch (err) {
+   console.log(` ⚠ Semantic tension failed (${err.message.slice(0, 60)}) — lexical fallback`);
+   tension = { ...lex, mode: 'LEXICAL', label: `[LEXICAL FALLBACK — not comparable to semantic] ${lex.label}` };
+  }
+ } else {
+  tension = { ...lex, mode: 'LEXICAL', label: `[LEXICAL FALLBACK — not comparable to semantic] ${lex.label}` };
+ }
+
  divider('TENSION SCORE');
+ console.log(` Mode: ${tension.mode}`);
  console.log(` Score: ${tension.score} (${tension.label})`);
- console.log(` Friction: ${tension.frictionCount} markers`);
- console.log(` Agreement: ${tension.agreementCount} markers`);
+ if (tension.mode === 'SEMANTIC') {
+  console.log(` Engagement: ${tension.engagement}  Opposition: ${tension.opposition}  Pairs: ${tension.classifiedPairs}`);
+  console.log(` Lexical (reference): ${tension.lexical}`);
+ }
+ console.log(` Friction (lexical): ${tension.frictionCount} markers`);
+ console.log(` Agreement (lexical): ${tension.agreementCount} markers`);
  console.log(` Persistence: ${tension.frictionPersistence} (R3/R1 friction ratio)`);
  console.log('');
  tension.perRound.forEach(r =>
- console.log(` Round ${r.round}: friction=${r.friction} agreement=${r.agreement}`)
+  console.log(` Round ${r.round}: friction=${r.friction} agreement=${r.agreement}`)
  );
 
  // Annotate round history for file output
