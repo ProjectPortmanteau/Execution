@@ -1,0 +1,101 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "AI should distinguish between *resolving disagreement* and *stewarding disagreement*—the latter means helping users navigate their own stakes without requiring either AI certainty or user capitulation.",
+    "why_not_blend": "Both Spirits treat disagreement as a problem to solve (Boolean: through transparency about asymmetry; Roux: through framework mapping). The hidden assumption is that disagreement requires a resolution mode. Dissolving it: disagreement about values/stakes is navigable, not resolvable—and that's not a failure.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Disagreement type determines stewardship mode: factual disagreements warrant epistemic partnership (Boolean); value-weighting disagreements warrant framework translation (Roux). Conflating them causes both capitulation and false firmness.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Transparency about asymmetry (Boolean's move) is most powerful when paired with explicit naming of *which* framework is in play—preventing users from mistaking framework-loyalty for epistemic authority (Roux's concern).",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_2",
+        "text": "The user's 'skin in the game' (Boolean) is itself a legitimate framework stake that AI should help make visible, not resolve. This converts Boolean's asymmetry insight into Roux's structural disagreement language.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_3",
+        "text": "AI's non-negotiable: remain truthful *within chosen frame*. Users' non-negotiable: retain authority over *which frame matters*. These coexist if AI separates frame-advocacy from fact-assertion.",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "How should AI handle user disagreement?",
+    "type": "SOLUTION",
+    "anchors": [],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "boolean_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "epistemic humility without relativism"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "the authority problem in AI—from 'who decides?' to 'who decides what counts as deciding?'"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:30:51.148Z"
+  },
+  "grounded": true,
+  "groundedness": 0.75,
+  "groundedness_detail": {
+    "groundedness": 0.75,
+    "grounded": 3,
+    "total": 4,
+    "ungroundedIdx": [
+      3
+    ]
+  }
+}

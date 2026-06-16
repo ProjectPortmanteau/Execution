@@ -1,0 +1,105 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "The disagreement assumes 'freely distributed' and 'responsibly governed' are opposing forces; they are actually orthogonal dimensions. Open access and structured accountability are not trade-offs but complementary design problems.",
+    "why_not_blend": "Both Spirits want distributed power and informed actors. Boolean fears capability without wisdom; Roux fears wisdom concentrated in few hands. The hidden assumption was that transparency and gatekeeping must be zero-sum. Dissolving it reveals: you can have radically open *information* with radically distributed *responsibility structures*.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Open-source models with embedded governance structures (like Linux security patches or biotechnology oversight) decouple 'access to code' from 'unilateral deployment authority.'",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "The unit of distribution should not be 'the model' but 'the model + its accountability framework.' Transparency and friction apply to different layers.",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_2",
+        "text": "Risk mitigation through community red-teaming (Roux's transparency argument) and through access-tier friction (Boolean's harm reduction) both succeed when informed by the same shared safety data.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_3",
+        "text": "The real constraint is not 'free vs. controlled' but 'who participates in governance decisions?' Federated, transparent governance lets both open access and consequence-awareness scale together.",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Should open-source AI models be freely distributed?",
+    "type": "SOLUTION",
+    "anchors": [],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "CONNECTS_TO",
+        "target": "Polycentric governance (Ostrom)"
+      },
+      {
+        "rel": "ENABLES",
+        "target": "Decentralized safety auditing"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "Distribution as a design problem, not a policy binary"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:31:26.506Z"
+  },
+  "grounded": true,
+  "groundedness": 0.5,
+  "groundedness_detail": {
+    "groundedness": 0.5,
+    "grounded": 2,
+    "total": 4,
+    "ungroundedIdx": [
+      1,
+      3
+    ]
+  }
+}

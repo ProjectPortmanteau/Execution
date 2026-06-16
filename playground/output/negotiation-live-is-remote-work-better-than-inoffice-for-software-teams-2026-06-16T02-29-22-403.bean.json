@@ -1,0 +1,116 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "The disagreement dissolves when we stop asking 'which arrangement is better' and start asking 'what is the cost structure that determines who bears the friction of switching?' Both synchronicity and autonomy are legitimate; the real system design problem is making switching costs transparent and distributable.",
+    "why_not_blend": "Both Spirits treated 'remote vs. office' as a binary about work quality or power. The hidden assumption was that *someone must pay the friction cost of transitions*—Boolean assumed it could be negotiated away; Roux assumed it would always burden workers. Dissolving this assumption reveals the actual design problem: infrastructure that makes switching costs visible and shared, not hidden or unilateral.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Synchronous collaboration and autonomous deep work aren't opposed goods—they're different cognitive load states. The system design problem is *switching infrastructure*, not choosing which state is default.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Boolean's 'rotate the power' assumes negotiation overhead is free. Roux's 'who pays switching costs' exposes that assumption. A real Door Number 3 system makes *that cost visible and distributed*, not negotiated away.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_2",
+        "text": "The question 'what does this work actually require?' is structural. But *who absorbs the friction when requirements conflict* is the real governance question neither position fully addressed.",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_3",
+        "text": "Payment models and metrics that don't penalize async work (Roux's insight) + rotating decision authority (Boolean's insight) together create the conditions where 'adaptive rhythm' isn't a privilege escape hatch but a genuine infrastructure shift.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Is remote work better than in-office for software teams?",
+    "type": "SOLUTION",
+    "anchors": [
+      "PHIL-005",
+      "PHIL-002"
+    ],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "Organizational cost accounting: making friction visible as a design variable, not a hidden tax on workers"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "The autonomy/accountability tradeoff: both are possible when switching costs are distributed rather than concentrated"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:29:51.295Z"
+  },
+  "grounded": true,
+  "groundedness": 0.75,
+  "groundedness_detail": {
+    "groundedness": 0.75,
+    "grounded": 3,
+    "total": 4,
+    "ungroundedIdx": [
+      2
+    ]
+  }
+}

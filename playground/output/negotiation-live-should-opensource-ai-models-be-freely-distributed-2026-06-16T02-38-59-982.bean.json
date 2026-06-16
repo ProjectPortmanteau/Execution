@@ -1,0 +1,108 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "The disagreement dissolves when we stop treating 'distribution' as a binary permission question and reframe it as an ecosystem resilience question: can stewardship be structured so that transparency and autonomy reinforce each other rather than compete?",
+    "why_not_blend": "Both Spirits assumed distribution required choosing between centralized control (Boolean's concern) or naive openness (Roux's risk). Dissolving this: if stewardship infrastructure is *designed for distributed accountability*, transparency becomes the mechanism that prevents gatekeeping—neither side needs gatekeeping or naive faith.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Transparency debt is stewardship infrastructure. Models carry genealogy as inseparable context not to restrict access but to distribute responsibility—making irresponsible use socially visible rather than technically preventable.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Distributed stewardship requires distributed *vetting*, not distributed trust. Multiple independent implementations and transparent curation standards prevent any single actor from becoming the de facto gatekeeper through maintenance monopoly.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_2",
+        "text": "The real non-negotiable for both Spirits: **no actor should hold unilateral power to decide what counts as responsible deployment**. Transparency enables this by making such decisions auditable; diversity enables it by making any single decision non-binding.",
+        "derives_from": [],
+        "rel": "REJECTS"
+      },
+      {
+        "id": "claim_3",
+        "text": "Open-source AI governance should invert from 'who permits distribution?' to 'how do we ensure the ecosystem that maintains distribution cannot become a chokepoint?' Resilience architecture, not permission architecture.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Should open-source AI models be freely distributed?",
+    "type": "SOLUTION",
+    "anchors": [
+      "PHIL-005",
+      "PHIL-002"
+    ],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "Right-to-fork governance (prevents re-consolidation of control)"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "Safety as social infrastructure rather than technical gatekeeping"
+      },
+      {
+        "rel": "CONNECTS_TO",
+        "target": "Commons stewardship models (Wikipedia, Linux kernel governance)"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:39:24.820Z"
+  },
+  "grounded": true,
+  "groundedness": 0.75,
+  "groundedness_detail": {
+    "groundedness": 0.75,
+    "grounded": 3,
+    "total": 4,
+    "ungroundedIdx": [
+      2
+    ]
+  }
+}

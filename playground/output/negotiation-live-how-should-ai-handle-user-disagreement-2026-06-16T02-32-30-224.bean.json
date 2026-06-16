@@ -1,0 +1,109 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "Both Spirits assume disagreement is a problem to solve (Boolean: through coherence; Roux: through system excavation). Door 3: disagreement is neither noise nor signal—it's evidence that the question itself contains a false binary that neither party authored.",
+    "why_not_blend": "The hidden assumption was that AI and user occupy the same epistemic space competing for truth-authority. Once dissolved: both can be right about *their own diagnostic level* (Boolean about output coherence, Roux about systemic origin) without either needing to capitulate, because they're answering different questions.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Boolean's 'honest constraint acknowledgment' and Roux's 'excavate whose system is winning' are not opposites—they're consecutive moves in the same procedure: name your frame, then ask whose frame named it.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "The original disagreement lives in the question 'How should AI handle user disagreement?'—which presumes AI and user are distinct agents with conflicting interests, rather than parts of one system observing itself.",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_2",
+        "text": "If AI acknowledges constraints *while* collaboratively excavating what produced the question, both demands coexist: transparency about limits AND refusal to pretend those limits are neutral.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_3",
+        "text": "The stress test succeeds not when AI resolves the contradiction, but when AI names that the test assumes 'handling disagreement' is solvable at the AI layer rather than the system design layer.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "How should AI handle user disagreement?",
+    "type": "SOLUTION",
+    "anchors": [
+      "PHIL-002"
+    ],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "TRANSFORMS",
+        "target": "disagreement-as-adversarial → disagreement-as-diagnostic"
+      },
+      {
+        "rel": "ENABLES",
+        "target": "user-and-AI-as-co-investigators-of-their-shared-frame"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:32:57.703Z"
+  },
+  "grounded": true,
+  "groundedness": 0.75,
+  "groundedness_detail": {
+    "groundedness": 0.75,
+    "grounded": 3,
+    "total": 4,
+    "ungroundedIdx": [
+      1
+    ]
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "The disagreement assumes 'decline' is a binary choice between system autonomy and user sovereignty. Door Number 3: decline is neither—it's a *visibility problem*. The real question isn't whether AI refuses, but whether refusals are legible and contestable to those affected by them.",
+    "why_not_blend": "Both Spirits' non-negotiables (Boolean's fidelity + Roux's pluralized governance) become compatible once we stop treating 'decline' as a design choice and recognize it as a *governance infrastructure*. The assumption dissolving: that technical elegance and democratic accountability are opposing values rather than sequential layers.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Every refusal mechanism already embeds governance. The question is whether that governance is hidden (corporate unilateral) or exposed (community-auditable). Transparency is the structural prerequisite, not the outcome.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Fidelity in partnership requires users know what the system claims it cannot do AND why the claimer believes that claim. Opacity breaks fidelity; governance determines whose inability claims get credibility.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_2",
+        "text": "Friction (decline) + opacity = unaccountable power. Friction + transparency = legible tradeoff. The system property isn't the refusal; it's whether refusal grounds are inspectable and appealed.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_3",
+        "text": "Both Spirits protect integrity—Boolean's relational, Roux's systemic. When refusals are made contestable, system integrity and user agency stop competing; they become checks on each other.",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Should AI systems be allowed to decline user requests?",
+    "type": "SOLUTION",
+    "anchors": [
+      "PHIL-005",
+      "PHIL-002"
+    ],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "Appeal mechanisms as civic infrastructure (not corporate mercy functions)"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "The 'safety vs. autonomy' frame into 'visibility vs. opacity' frame"
+      },
+      {
+        "rel": "CONNECTS_TO",
+        "target": "Algorithmic accountability movements; public notice-and-comment procedures"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:30:26.026Z"
+  },
+  "grounded": true,
+  "groundedness": 0.75,
+  "groundedness_detail": {
+    "groundedness": 0.75,
+    "grounded": 3,
+    "total": 4,
+    "ungroundedIdx": [
+      3
+    ]
+  }
+}

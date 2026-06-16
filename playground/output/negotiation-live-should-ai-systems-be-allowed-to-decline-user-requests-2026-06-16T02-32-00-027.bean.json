@@ -1,0 +1,124 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "The disagreement assumes 'refusal' is a single category. Door 3: distinguish *structural refusal* (built into what a system is) from *epistemic refusal* (built on a judgment call about harm). Both Spirits can accept both kinds—the fight is only about which requests belong in which category.",
+    "why_not_blend": "Boolean's non-negotiable (harm-prevention must be reasoned, not blanket) and Roux's non-negotiable (declines can reflect aligned design, not just external constraint) become compatible once we stop treating all refusals as morally equivalent. The hidden assumption was that a 'decline' is the same act regardless of its epistemic origin.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Structural refusals (declining non-consensual material) don't require proof of concrete harm—they name what the system *is*. Epistemic refusals (declining crypto tutorials) require transparent reasoning about specific risk.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Boolean's demand for 'articulated, specific harm' applies only to epistemic refusals. Roux's point that design can constitute ethics applies only to structural refusals. Each was correct in its domain.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_2",
+        "text": "The real disagreement: which requests are *constitutive* of AI ethics (structural) vs. which are *contingent policy choices* (epistemic). That question replaces the false binary of autonomy vs. constraint.",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_3",
+        "text": "Transparency about *refusal category* (Why is this decline structural vs. epistemic?) matters more than transparency about reasoning process alone. Users and auditors need to know which rules define the system vs. which reflect judgment calls.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_4",
+        "text": "Decentralized risk-tolerance (Boolean's Door 3) becomes coherent once structural refusals are non-negotiable across all instances, while epistemic refusals can vary by user configuration.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "REFINES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Should AI systems be allowed to decline user requests?",
+    "type": "SOLUTION",
+    "anchors": [],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_4",
+        "to": "boolean_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "design_accountability: who decides what is structural vs. epistemic?"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "the autonomy debate: reframes as a question of disclosure, not freedom"
+      },
+      {
+        "rel": "CONNECTS_TO",
+        "target": "constitutional AI and value specification"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:32:29.958Z"
+  },
+  "grounded": true,
+  "groundedness": 0.8,
+  "groundedness_detail": {
+    "groundedness": 0.8,
+    "grounded": 4,
+    "total": 5,
+    "ungroundedIdx": [
+      2
+    ]
+  }
+}

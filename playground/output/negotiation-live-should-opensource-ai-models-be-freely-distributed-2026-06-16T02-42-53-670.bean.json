@@ -1,0 +1,97 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "The disagreement assumes 'free distribution' and 'maintainer sustainability' require opposed economic models; they actually require decoupling access from funding source.",
+    "why_not_blend": "Both Spirits want distributed access AND fair compensation. The hidden assumption was that scarcity pricing is the only sustainability mechanism. Removing it makes both non-negotiables simultaneously achievable through structural funding.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Open-source AI distribution and maintainer compensation are orthogonal problems requiring separate solutions, not trade-offs.",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Paywall models solve neither problem: they restrict access (Boolean's concern) AND concentrate extraction risk (Roux's concern).",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_2",
+        "text": "Sovereign funding (public, institutional, consortium-based) sustains maintainers without artificial access scarcity—the actual structural move.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_3",
+        "text": "The disagreement was about *mechanism*, not *values*. Both reject extraction; both want sustainability. Door 3 names the mechanism that serves both.",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Should open-source AI models be freely distributed?",
+    "type": "SOLUTION",
+    "anchors": [
+      "PHIL-002"
+    ],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "infrastructure-as-commons funding models"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "false binary: access vs. sustainability"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:43:17.046Z"
+  },
+  "grounded": true,
+  "groundedness": 0.5,
+  "groundedness_detail": {
+    "groundedness": 0.5,
+    "grounded": 2,
+    "total": 4,
+    "ungroundedIdx": [
+      0,
+      3
+    ]
+  }
+}

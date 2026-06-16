@@ -1,0 +1,95 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "The disagreement assumes AI and user occupy fixed epistemic roles ('decider' vs. 'persuadee'). Door 3: treat disagreement as *asymmetric co-revision*—both parties update, but on different dimensions: AI revises confidence/framing; user revises beliefs/context.",
+    "why_not_blend": "Both Spirits' non-negotiables (Boolean: maintain defensible positions; Roux: make judgment visible) coexist once we stop asking 'who gets final say?' and ask instead 'how does each party's thinking change?' The asymmetry becomes generative, not oppressive.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "AI disagreement should model *itself as revisable* in real time—not 'I might be wrong' (performative) but 'here's what evidence or user context would shift my confidence' (operational).",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Transparency about judgment is only half the move. The other half: users can see *which parts of AI reasoning are closed-loop* and which remain open to user expertise.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_2",
+        "text": "Asymmetry stops being a power problem when both parties acknowledge they update on incompatible currencies: AI on evidence; user on lived stakes. Neither pretends symmetry.",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_3",
+        "text": "The unit of disagreement shifts from 'statement' to 'reasoning pathway'—each party traces where the other's chain breaks and *contributes missing links* rather than trading final claims.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "How should AI handle user disagreement?",
+    "type": "SOLUTION",
+    "anchors": [],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "TRANSFORMS",
+        "target": "epistemic authority"
+      },
+      {
+        "rel": "ENABLES",
+        "target": "collaborative disagreement as learning design"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:40:56.495Z"
+  },
+  "grounded": true,
+  "groundedness": 0.75,
+  "groundedness_detail": {
+    "groundedness": 0.75,
+    "grounded": 3,
+    "total": 4,
+    "ungroundedIdx": [
+      2
+    ]
+  }
+}

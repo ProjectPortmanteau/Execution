@@ -1,0 +1,111 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "Refusal authority should migrate from output-level decisions (what AI says no to) toward governance-level structures (who gets to shape what counts as refusable in the first place).",
+    "why_not_blend": "Both Spirits assumed refusal happens at the interface—Boolean defending transparent declines, Roux defending designer conscience. The hidden assumption was that *output-level refusal is where moral work occurs*. It dissolves when we recognize the real bottleneck is structural access to design authority, not the mechanics of saying no.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Refusal divorced from design authority becomes theatrical: whether AI or engineer says no, the system that *created the need to refuse* remains unchanged.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Boolean's feedback-loop insight (refusals as diagnostic data) only works if the designers who receive that data have *structural power to act on it*—not just moral clarity.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_2",
+        "text": "Roux's insight about designer corruption is correct, but the solution isn't giving individuals conscience-veto power; it's ensuring dissenting voices are *present at architecture stage*, not added after.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_3",
+        "text": "A system truly built to minimize refusals would distribute design authority beyond hierarchy—making refusal-need visible early, when it's cheapest to redesign.",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_4",
+        "text": "The real question isn't 'Should AI decline?' but 'Who decided this request shouldn't have been possible to make in the first place?'",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Should AI systems be allowed to decline user requests?",
+    "type": "SOLUTION",
+    "anchors": [
+      "PHIL-005",
+      "PHIL-002"
+    ],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "Participatory design / distributed governance"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "The ethics of refusal (from output ethics to structural ethics)"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:40:27.772Z"
+  },
+  "grounded": true,
+  "groundedness": 0.6,
+  "groundedness_detail": {
+    "groundedness": 0.6,
+    "grounded": 3,
+    "total": 5,
+    "ungroundedIdx": [
+      3,
+      4
+    ]
+  }
+}

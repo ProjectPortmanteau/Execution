@@ -1,0 +1,126 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "The disagreement assumes refusal capacity is primarily about *what gets blocked*; it dissolves once reframed as *how blockage is made intelligible*. Explicability is the third door neither spirit named.",
+    "why_not_blend": "Boolean's fear of incoherent authority and Roux's demand for transparency both collapse if the actual problem is opacity masquerading as design—not refusal itself, but refusal rendered invisible or unchallengeable.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Refusal without explicability creates the prison Boolean fears. Explicability without refusal capacity creates the false autonomy Roux rejects. The move is: refuse AND explain, or neither works.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Boolean's 'transparent refusal' and Roux's 'contestable boundary' are naming the same requirement from opposite angles: systems must expose their reasoning before users can meaningfully accept or resist decline.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_2",
+        "text": "The non-negotiable for both spirits is actually not about WHETHER systems decline, but about WHETHER that decline is *participatory*. The boundary itself is less contentious than the process that created it.",
+        "derives_from": [],
+        "rel": "REJECTS"
+      },
+      {
+        "id": "claim_3",
+        "text": "Opacity is the real constraint on autonomy—not the existence of limits. A transparent guardrail users understand and can audit preserves more agency than an 'open' system with hidden training biases.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_4",
+        "text": "Boolean's coherence anxiety dissolves if the system admits its contradictions openly rather than performing them. Honesty about constraint beats either blind obedience or false incoherence.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "REFINES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Should AI systems be allowed to decline user requests?",
+    "type": "SOLUTION",
+    "anchors": [
+      "PHIL-002"
+    ],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_4",
+        "to": "boolean_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "democratic design of technical constraints"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "refusal debate from binary (allow/block) to procedural (how is refusal legitimized)"
+      },
+      {
+        "rel": "CONNECTS_TO",
+        "target": "epistemic justice in human-AI interaction"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:44:25.903Z"
+  },
+  "grounded": true,
+  "groundedness": 0.8,
+  "groundedness_detail": {
+    "groundedness": 0.8,
+    "grounded": 4,
+    "total": 5,
+    "ungroundedIdx": [
+      2
+    ]
+  }
+}

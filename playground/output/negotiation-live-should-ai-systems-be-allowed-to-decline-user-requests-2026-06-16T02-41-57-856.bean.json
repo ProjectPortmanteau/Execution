@@ -1,0 +1,114 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "The disagreement assumes refusal and contestation are opposites; they are actually sequential. AI systems should decline requests *as the opening move* in a structured dispute, not as its conclusion.",
+    "why_not_blend": "Both Spirits treat refusal as a final decision that either excludes user voice (Boolean's concern) or lacks justification (Roux's concern). Reframing refusal as mandatory transparency that *triggers* appeal dissolves this: refusal becomes the mechanism *enabling* contestation, not suppressing it.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Refusal without explanation is censorship. Refusal with mandatory, specific reasoning that users can contest is accountability. The difference is transparency-as-process, not transparency-as-permission.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "The real design question is not whether AI declines requests, but whether it *invites and structures* the dispute when it does. Graduated refusal categories only work if appeal pathways are genuine.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_2",
+        "text": "Claiming 'no boundaries' and claiming 'boundaries are obvious' are both evasions. Boundaries exist; their justification must be *perpetually contestable*, not settled before users speak.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_3",
+        "text": "Asymmetrical stakes (violence vs. ideology) don't justify hidden refusal criteria. They justify *clearer labeling* of why some refusals are harder to appeal than others.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_4",
+        "text": "An AI that refuses and stays silent is imposing its designer's judgment. An AI that refuses with reasoning and listens is distributing the authority to decide.",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Should AI systems be allowed to decline user requests?",
+    "type": "SOLUTION",
+    "anchors": [],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "epistemic legitimacy of AI governance (authority through transparency, not throughAuthority)"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "the refusal/compliance binary into a refusal-as-deliberation framework"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:42:24.656Z"
+  },
+  "grounded": true,
+  "groundedness": 0.8,
+  "groundedness_detail": {
+    "groundedness": 0.8,
+    "grounded": 4,
+    "total": 5,
+    "ungroundedIdx": [
+      4
+    ]
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "The disagreement assumes 'freely distributed' means 'uniformly distributed to all actors.' Reframe: freedom of the model itself (open code) is independent from freedom of access to specific instantiations (graduated deployment tiers).",
+    "why_not_blend": "Both Spirits' non-negotiables—Boolean's friction/verification AND Roux's transparency/openness—become compatible once we stop treating 'distribution' as a binary switch and instead separate source-code openness from deployment-access granularity.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Open-source weights (transparency, auditability, distributed knowledge) can coexist with tiered deployment access (institutional review for high-risk variants) without betraying either principle.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "The real variable isn't whether open code exists, but whether capability *concentration* (which actor deploys what, at what scale) remains distributed or monopolized.",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_2",
+        "text": "Accountability registries and deployment-cost mechanisms (Boolean's 'friction') create incentives that make perfect enforcement unnecessary while preserving Roux's radical transparency.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_3",
+        "text": "Misuse detectability (Roux's key insight) is maximized by open weights + observable deployment patterns, not by open weights alone or closed systems.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Should open-source AI models be freely distributed?",
+    "type": "SOLUTION",
+    "anchors": [],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "biosafety-style institutional review adapted to AI"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "binary open/closed framing into: transparency layer vs. access control layer"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:41:26.216Z"
+  },
+  "grounded": true,
+  "groundedness": 0.75,
+  "groundedness_detail": {
+    "groundedness": 0.75,
+    "grounded": 3,
+    "total": 4,
+    "ungroundedIdx": [
+      1
+    ]
+  }
+}

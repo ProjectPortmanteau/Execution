@@ -1,0 +1,112 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "The disagreement assumes location determines knowledge transfer; it actually determines *which mechanisms* transfer knowledge. Remote and in-office enable different transfer pathways, both reliable if intentionally designed.",
+    "why_not_blend": "Both Spirits' non-negotiables (emergence/focus, spontaneity/discipline) stop conflicting once we stop treating 'which location' as the variable. The variable is 'which knowledge-transfer mechanism matches this work and this team.'",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Emergence isn't location-bound; it's mechanism-bound. Offices generate it via friction. Remote generates it via structured pairing and documented design reviews. Both work if intentional.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "In-office defaults to accidental emergence; remote defaults to accidental isolation. Neither location solves the problem—intentional practice does.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_2",
+        "text": "Deep focus and tacit knowledge transfer are not opposing constraints; they require *different scheduling*, not different locations. Async work + structured sync moments satisfies both.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_3",
+        "text": "The real optimization variable is work *type* (architecture vs. pair coding vs. individual tasks), not presence. Route each through its native medium.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Is remote work better than in-office for software teams?",
+    "type": "SOLUTION",
+    "anchors": [],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "TRANSFORMS",
+        "target": "organizational design around work functions rather than presence policy"
+      },
+      {
+        "rel": "ENABLES",
+        "target": "team-specific hybrid models unbounded by location ideology"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:41:54.350Z"
+  },
+  "grounded": true,
+  "groundedness": 1,
+  "groundedness_detail": {
+    "groundedness": 1,
+    "grounded": 4,
+    "total": 4,
+    "ungroundedIdx": []
+  }
+}

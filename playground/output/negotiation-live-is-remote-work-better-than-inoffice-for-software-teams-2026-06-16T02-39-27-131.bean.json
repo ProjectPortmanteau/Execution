@@ -1,0 +1,121 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "The disagreement dissolves when we recognize that 'remote vs. in-office' is a *false proxy for the real variable: task-communication fidelity matching*. Location becomes a dependent variable, not the independent choice.",
+    "why_not_blend": "Both Spirits' non-negotiables (Boolean's structural malleability + Roux's material constraints) coexist once we stop asking 'where should work happen' and start asking 'what fidelity does this work require, and which location-tool pairing delivers it?' The assumption that location is the primary lever dissolves.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Synchronous presence is a high-bandwidth *workaround* for poor information architecture, not a solution to async coordination failures. Co-location masks system debt; it doesn't cure it.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Not all synchronous dependencies are equal. Cognitive work (pattern recognition, distributed debugging) has genuine sync requirements; organizational theater (standup rituals, status sync) has only structural ones.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_2",
+        "text": "The actionable unit is not 'team location' but 'work-phase fidelity need.' A single team oscillates between remote (documentation-heavy phases) and co-located (tacit knowledge transfer phases) based on actual cognitive demand.",
+        "derives_from": [],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_3",
+        "text": "Material constraints (timezone distribution, latency effects) and design freedom (async culture, tool choice) are not opposing forces—they're parameters in a fidelity-matching equation. Both must be measured, neither dismissed.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_4",
+        "text": "The real negotiation is precision mapping: 'What minimum fidelity unblocks this work?' Then location, tools, and rituals are optimized *downstream*, not debated upstream as ideology.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Is remote work better than in-office for software teams?",
+    "type": "SOLUTION",
+    "anchors": [
+      "PHIL-005",
+      "PHIL-002"
+    ],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_4",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "ENABLES",
+        "target": "Systems thinking (task structure → communication topology)"
+      },
+      {
+        "rel": "TRANSFORMS",
+        "target": "Organizational change (from location policy to fidelity audits)"
+      },
+      {
+        "rel": "CONNECTS_TO",
+        "target": "Information architecture (the root system both positions circle)"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:39:55.534Z"
+  },
+  "grounded": true,
+  "groundedness": 0.8,
+  "groundedness_detail": {
+    "groundedness": 0.8,
+    "grounded": 4,
+    "total": 5,
+    "ungroundedIdx": [
+      2
+    ]
+  }
+}

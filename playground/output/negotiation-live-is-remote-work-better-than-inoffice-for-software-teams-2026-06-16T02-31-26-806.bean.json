@@ -1,0 +1,110 @@
+{
+  "schema": "joint-bean/0.5",
+  "nucleus": {
+    "thesis": "The disagreement dissolves when 'better' is redefined from environment-as-default to interaction-type-as-driver: software teams should match *synchronous vs. asynchronous work modes* to task type, not assign a uniform location policy.",
+    "why_not_blend": "Both Spirits assume the question is 'where should work happen?' When it's reframed as 'which interactions require co-presence?', their non-negotiables (mentorship quality + deep work protection) become compatible design goals, not competing constraints.",
+    "claims": [
+      {
+        "id": "claim_0",
+        "text": "Serendipitous mentorship and protected focus aren't location problems—they're interaction-frequency problems. Async defaults enable focus; scheduled synchrony enables serendipity. Both can coexist.",
+        "derives_from": [
+          "boolean_r3",
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      },
+      {
+        "id": "claim_1",
+        "text": "Team maturity determines *which* interactions require synchrony, not whether remote or office is better. Junior onboarding needs high-bandwidth presence; architecture reviews need recorded async. Role drives mode, not geography.",
+        "derives_from": [
+          "boolean_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_2",
+        "text": "Intentionality burden flips by location, but both are preventable. The move is making that cost *visible and budgeted*, not hidden in 'office culture' or 'remote discipline.'",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "REFINES"
+      },
+      {
+        "id": "claim_3",
+        "text": "Scaling breaks when policy is uniform. A 40-person team with 'everyone remote' or 'everyone in-office' both fail. Task-driven co-location (architectural sprints, cohort onboarding) scales without chaos.",
+        "derives_from": [
+          "roux_r3"
+        ],
+        "rel": "SYNTHESIZES"
+      }
+    ]
+  },
+  "shell": {
+    "topic": "Is remote work better than in-office for software teams?",
+    "type": "SOLUTION",
+    "anchors": [],
+    "provenance": "Principled Playground negotiation"
+  },
+  "corona": {
+    "derives_from": [
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_0",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_1",
+        "to": "boolean_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_2",
+        "to": "roux_r3"
+      },
+      {
+        "rel": "DERIVES_FROM",
+        "from": "claim_3",
+        "to": "roux_r3"
+      }
+    ],
+    "adjacency": [
+      {
+        "rel": "TRANSFORMS",
+        "target": "work-location-policy"
+      },
+      {
+        "rel": "ENABLES",
+        "target": "interaction-design-framework"
+      },
+      {
+        "rel": "CONNECTS_TO",
+        "target": "team-maturity-stages"
+      }
+    ]
+  },
+  "echo": {
+    "participants": [
+      "Boolean",
+      "Roux"
+    ],
+    "stress_tested_by": "Seer",
+    "rounds": 3,
+    "mode": "SINGLE-BRAIN",
+    "substrate": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-06-16T02:31:53.278Z"
+  },
+  "grounded": true,
+  "groundedness": 1,
+  "groundedness_detail": {
+    "groundedness": 1,
+    "grounded": 4,
+    "total": 4,
+    "ungroundedIdx": []
+  }
+}
