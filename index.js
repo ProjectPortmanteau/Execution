@@ -4,6 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const { handleGitHubPush, syncArk, syncArkToSoil, getAllBeansFromSoil } = require('./services/githubSync');
 const { verifyGitHubSignature } = require('./utils/webhookSecurity');
+const { listPendingCandidatesWithContext } = require('./services/corpusReview');
 
 const app = express();
 
@@ -143,6 +144,18 @@ app.get('/api/all-beans', async (req, res) => {
  res.json({ status: 'OK', count: beans.length, beans });
  } catch (err) {
  res.status(500).json({ status: 'ERROR', message: err.message, beans: [] });
+ }
+});
+
+// 9. Corpus Candidate Review Gate (BEAN_CONVERTER spec 2.4)
+// Pending candidates whose provenance is still unclassified, with parent/child thread context,
+// so a reviewer can tell assistant_synthesis from assistant_generation without a separate lookup.
+app.get('/api/corpus-candidates/pending', async (req, res) => {
+ try {
+ const candidates = await listPendingCandidatesWithContext();
+ res.json({ status: 'OK', count: candidates.length, candidates });
+ } catch (err) {
+ res.status(500).json({ status: 'ERROR', message: err.message, candidates: [] });
  }
 });
 

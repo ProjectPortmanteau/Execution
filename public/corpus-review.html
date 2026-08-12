@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OPVS Genesis Engine &mdash; Corpus Candidate Review</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 0; padding: 2rem; background: #0d1117; color: #c9d1d9;
+        }
+        h1 { font-size: 1.4rem; margin-bottom: 0.25rem; }
+        p.subtitle { color: #8b949e; margin-top: 0; margin-bottom: 2rem; }
+        .candidate {
+            border: 1px solid #30363d; border-radius: 8px; padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem; background: #161b22;
+        }
+        .candidate h2 { font-size: 1rem; margin: 0 0 0.5rem 0; }
+        .meta { font-size: 0.8rem; color: #8b949e; margin-bottom: 0.75rem; }
+        .meta span { margin-right: 1rem; }
+        .thread { display: flex; flex-direction: column; gap: 0.5rem; }
+        .msg { border-left: 3px solid #30363d; padding: 0.5rem 0.75rem; border-radius: 4px; }
+        .msg.parent { border-left-color: #58a6ff; background: #0d2137; }
+        .msg.nucleus { border-left-color: #d29922; background: #2b2111; }
+        .msg.reply { border-left-color: #3fb950; background: #0d2818; }
+        .msg .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: #8b949e; margin-bottom: 0.25rem; }
+        .msg .text { white-space: pre-wrap; font-size: 0.9rem; line-height: 1.4; }
+        .empty { color: #8b949e; padding: 2rem 0; text-align: center; }
+        .missing { color: #6e7681; font-style: italic; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <h1>Corpus Candidate Review</h1>
+    <p class="subtitle">
+        Pending candidates with provenance still unclassified (decision / concept only).
+        Thread context is shown so you can tell assistant_synthesis from assistant_generation
+        without a separate lookup.
+    </p>
+    <div id="candidates">Loading&hellip;</div>
+
+    <script>
+        const escapeHtml = (s) => (s || '').replace(/[&<>"']/g, (c) => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+
+        const renderMessage = (label, cls, row) => {
+            if (!row) {
+                return `<div class="missing">${escapeHtml(label)}: none</div>`;
+            }
+            return `
+                <div class="msg ${cls}">
+                    <div class="label">${escapeHtml(label)} &middot; ${escapeHtml(row.speaker || '')}</div>
+                    <div class="text">${escapeHtml(row.content || row.raw_content || '')}</div>
+                </div>`;
+        };
+
+        const renderCandidate = ({ candidate, parent, humanReply }) => `
+            <div class="candidate">
+                <h2>${escapeHtml(candidate.proposed_type)} &mdash; ${escapeHtml(candidate.nucleus).slice(0, 120)}</h2>
+                <div class="meta">
+                    <span>provenance: ${escapeHtml(candidate.provenance)}</span>
+                    <span>classifier: ${escapeHtml(candidate.classifier_run)}</span>
+                    <span>conversation: ${escapeHtml(candidate.conversation_id)}</span>
+                </div>
+                <div class="thread">
+                    ${renderMessage('Parent', 'parent', parent)}
+                    ${renderMessage('Triggering message', 'nucleus', { speaker: candidate.raw_speaker, content: candidate.raw_content })}
+                    ${renderMessage('Human reply', 'reply', humanReply)}
+                </div>
+            </div>`;
+
+        fetch('/api/corpus-candidates/pending')
+            .then((r) => r.json())
+            .then((data) => {
+                const el = document.getElementById('candidates');
+                if (!data.candidates || data.candidates.length === 0) {
+                    el.innerHTML = '<div class="empty">No pending candidates awaiting provenance review.</div>';
+                    return;
+                }
+                el.innerHTML = data.candidates.map(renderCandidate).join('');
+            })
+            .catch((err) => {
+                document.getElementById('candidates').innerHTML =
+                    `<div class="empty">Failed to load candidates: ${escapeHtml(err.message)}</div>`;
+            });
+    </script>
+</body>
+</html>

@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "seed": "node scripts/seed-beans.js"
+    "seed": "node scripts/seed-beans.js",
+    "corpus:load-claude-chat": "node bean-converter/loaders/claudeChatLoader.js",
+    "corpus:build-threads": "node bean-converter/loaders/threadBuilder.js"
   },
   "keywords": [
     "opvs",
