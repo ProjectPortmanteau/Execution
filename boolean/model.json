@@ -1,0 +1,28 @@
+{
+  "id": "Qwen/Qwen3.5-4B",
+  "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+  "license": "apache-2.0",
+  "license_url": "https://huggingface.co/Qwen/Qwen3.5-4B/blob/main/LICENSE",
+  "license_verified": "2026-10-10",
+  "why": "Newest small Qwen line (Qwen3.8 starts at 27B). 4B is the tier mid-range phones run at 4-bit. Its hybrid Gated DeltaNet layers keep the KV cache small on device.",
+  "adapter_base": "Qwen/Qwen3.5-4B",
+  "adapter_base_note": "LoRA adapters train on this exact checkpoint and the runtime must load the same one. Qwen/Qwen3.5-4B-Base (also apache-2.0) is the alternative if training from the pretrained base.",
+  "gguf": {
+    "repo": "unsloth/Qwen3.5-4B-GGUF",
+    "revision": "e87f176479d0855a907a41277aca2f8ee7a09523",
+    "file": "Qwen3.5-4B-Q4_K_M.gguf",
+    "bytes": 2740937888,
+    "sha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4"
+  },
+  "text_only": true,
+  "chat_template_kwargs": { "enable_thinking": false },
+  "sampling": {
+    "temperature": 0.7,
+    "top_p": 0.8,
+    "top_k": 20,
+    "min_p": 0,
+    "presence_penalty": 1.5
+  },
+  "sampling_source": "Qwen3.5-4B model card, instruct (non-thinking) mode for general tasks",
+  "context_tokens": 8192
+}
