@@ -1,0 +1,6 @@
+[
+  { "tag_id": "ch01", "kind": "chapter", "chapter": 1 },
+  { "tag_id": "ch02", "kind": "chapter", "chapter": 2 },
+  { "tag_id": "ch03", "kind": "chapter", "chapter": 3 },
+  { "tag_id": "tok-tide", "kind": "bean", "bean_id": "FIX-008" }
+]
