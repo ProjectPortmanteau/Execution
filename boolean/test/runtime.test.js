@@ -8,7 +8,7 @@ const { Graph } = require('../runtime/graph');
 const { createReader, createTagRegistry, applyTap, parseTagUrl, finishBook } = require('../runtime/reader');
 const { createBoolean } = require('../runtime/agent');
 const { checkCitations } = require('../runtime/citations');
-const { llamaServer, isLocalHost } = require('../runtime/models');
+const { llamaServer, isLocalHost, MODEL } = require('../runtime/models');
 const { NOT_IN_BOOK, AHEAD_OF_READER, loadArtisticTier } = require('../runtime/constitution');
 
 const fixtures = path.join(__dirname, '..', 'fixtures');
@@ -164,11 +164,23 @@ test('llama-server adapter sends system plus messages and reads the reply', asyn
  let sent;
  const fetchImpl = async (url, init) => {
   sent = { url: String(url), body: JSON.parse(init.body) };
-  return { ok: true, json: async () => ({ choices: [{ message: { content: 'At low tide [FIX-001].' } }] }) };
+  return { ok: true, json: async () => ({ choices: [{ message: { content: '<think>\nhmm\n</think>\n\nAt low tide [FIX-001].' } }] }) };
  };
  const model = llamaServer({ fetchImpl });
  const text = await model.generate({ system: 'S', messages: [{ role: 'user', content: 'Q' }] });
- assert.equal(text, 'At low tide [FIX-001].');
+ assert.equal(text, 'At low tide [FIX-001].', 'think block stripped');
  assert.equal(sent.url, 'http://127.0.0.1:8080/v1/chat/completions');
  assert.deepEqual(sent.body.messages, [{ role: 'system', content: 'S' }, { role: 'user', content: 'Q' }]);
+ // The pinned profile's sampling and no-thinking switch go out with every request.
+ assert.deepEqual(sent.body.chat_template_kwargs, { enable_thinking: false });
+ assert.equal(sent.body.presence_penalty, MODEL.sampling.presence_penalty);
+ assert.equal(sent.body.top_k, MODEL.sampling.top_k);
+});
+
+test('pinned model is an Apache 2.0 checkpoint with a verifiable GGUF', () => {
+ assert.equal(MODEL.license, 'apache-2.0');
+ assert.match(MODEL.revision, /^[0-9a-f]{40}$/);
+ assert.match(MODEL.gguf.revision, /^[0-9a-f]{40}$/);
+ assert.match(MODEL.gguf.sha256, /^[0-9a-f]{64}$/);
+ assert.ok(Number.isInteger(MODEL.gguf.bytes));
 });

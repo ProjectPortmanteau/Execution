@@ -2,6 +2,16 @@
 
 Boolean's agent core, built from the AI Bean Slum Edition build plan and the Boolean Training Data Ledger. Plain Node.js (CommonJS), no dependencies, so the runtime code moves into the React Native app unchanged.
 
+## Base model
+
+[Qwen3.5-4B](https://huggingface.co/Qwen/Qwen3.5-4B), Apache 2.0, pinned by revision in `model.json` with its 4-bit GGUF ([unsloth/Qwen3.5-4B-GGUF](https://huggingface.co/unsloth/Qwen3.5-4B-GGUF), Q4_K_M, 2.74 GB) and that file's SHA-256.
+
+- Why: the newest small Qwen line (Qwen3.8 starts at 27B), and 4B is the tier mid-range phones run at 4-bit. Its hybrid Gated DeltaNet layers keep the KV cache small on device.
+- LoRA adapters train on this exact checkpoint. Moving to another base means retraining.
+- Qwen3.5 thinks by default. The profile turns that off with `chat_template_kwargs: {"enable_thinking": false}` and uses the card's non-thinking sampling; any think block that still comes back is stripped.
+- It ships a vision encoder (`mmproj`); Boolean is text-only and never downloads it.
+- `node scripts/boolean-model.js verify` checks the license of every pinned checkpoint on Hugging Face and fails unless all are Apache 2.0. `download <dir>` runs that check, then fetches the GGUF and verifies size and hash.
+
 This covers the parts of build phases 1 and 2 that don't wait on an open decision:
 
 | Build plan phase | What's here | What's not |
@@ -24,12 +34,14 @@ boolean/
 │   ├── agent.js              # ask(): retrieve, short-circuit, generate, check, Trail
 │   ├── reader.js             # Reader state, tag registry, taps
 │   └── models.js             # llama-server (desktop) and llama.rn (phone) adapters
+├── model.json                # Pinned base model: Qwen3.5-4B, Apache 2.0
 ├── constitution/
 │   └── artistic-tier.json    # Robert's tier, empty until he fills it
 ├── fixtures/                 # Synthetic test Beans and tags (not Portmanteau canon)
 ├── test/
 └── cli.js                    # Talk to Boolean in a terminal
 scripts/boolean-ledger.js     # Phase 1 export
+scripts/boolean-model.js      # License check and verified GGUF download
 ```
 
 ## Use
@@ -42,8 +54,9 @@ node scripts/boolean-ledger.js beans.jsonl --check   # report overrides, write n
 # Talk to Boolean (dry run prints the Sources the model would get)
 node boolean/cli.js --graph out/runtime-graph.jsonl --position 1
 
-# With a stock open model on your own machine
-llama-server -m <model>.gguf --port 8080
+# With the pinned model on your own machine
+node scripts/boolean-model.js download models/
+llama-server -m models/Qwen3.5-4B-Q4_K_M.gguf --jinja -c 8192 --port 8080
 node boolean/cli.js --graph out/runtime-graph.jsonl --model http://127.0.0.1:8080
 
 npm test
@@ -86,4 +99,4 @@ One JSON object per line. The Ledger fields come from the Ledger's converter spe
 
 ## Open, not decided here
 
-Base model family and size. iOS or Android first. Domain for tag links. SUN verification. One tag ID space or two. Whether finishing unlocks spoilers. The artistic tier's contents.
+iOS or Android first. Domain for tag links. SUN verification. One tag ID space or two. Whether finishing unlocks spoilers. The artistic tier's contents.

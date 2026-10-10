@@ -9,7 +9,8 @@
     "seed": "node scripts/seed-beans.js",
     "test": "node --test boolean/test/*.test.js",
     "boolean:ledger": "node scripts/boolean-ledger.js",
-    "boolean:talk": "node boolean/cli.js"
+    "boolean:talk": "node boolean/cli.js",
+    "boolean:model": "node scripts/boolean-model.js"
   },
   "keywords": [
     "opvs",
