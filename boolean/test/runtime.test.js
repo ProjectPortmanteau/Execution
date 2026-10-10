@@ -110,6 +110,8 @@ test('the model never sees out-of-scope, eval, or spoiler text', async () => {
   assert.ok(!system.includes(leaked), `system prompt leaked: ${leaked}`);
  }
  assert.ok(system.includes('[FIX-001]'));
+ // No ID appears in the rules that isn't one of this answer's Sources.
+ assert.ok(!/LORE-|\{example_id\}/.test(system), 'prompt plants an ID that is not a Source');
 });
 
 test('answers carry checked citations and log to the Trail', async () => {
@@ -183,4 +185,21 @@ test('pinned model is an Apache 2.0 checkpoint with a verifiable GGUF', () => {
  assert.match(MODEL.gguf.revision, /^[0-9a-f]{40}$/);
  assert.match(MODEL.gguf.sha256, /^[0-9a-f]{64}$/);
  assert.ok(Number.isInteger(MODEL.gguf.bytes));
+});
+
+test('"not in the book" with cited context counts as an answer', async () => {
+ const model = recordingModel("That isn't in the book. An unratified outline [FIX-004] has it, but it isn't canon.");
+ const boolean = createBoolean({ graph: new Graph(beans), model });
+ const answer = await boolean.ask({ question: 'Did Mara burn the lighthouse?', reader: createReader({ position: 3 }), mode: 'curtain' });
+ assert.equal(answer.kind, 'answer');
+ assert.equal(answer.supported, true);
+});
+
+test('an uncited refusal is replaced by the exact refusal', async () => {
+ const model = recordingModel("The Sources do not mention who painted it. Probably Mara's uncle. That isn't in the book.");
+ const boolean = createBoolean({ graph: new Graph(beans), model });
+ const answer = await boolean.ask({ question: 'Who painted the red door?', reader: createReader({ position: 3 }) });
+ assert.equal(answer.kind, 'not_in_book');
+ assert.equal(answer.text, NOT_IN_BOOK);
+ assert.equal(answer.supported, true);
 });

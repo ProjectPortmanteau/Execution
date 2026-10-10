@@ -21,7 +21,7 @@ const extractCitations = (text) => {
 };
 
 const normalize = (text) => String(text).trim().toLowerCase().replace(/[‘’]/g, "'");
-const isNotInBook = (text) => normalize(text).startsWith(normalize(NOT_IN_BOOK).replace(/\.$/, ''));
+const isNotInBook = (text) => normalize(text).includes(normalize(NOT_IN_BOOK).replace(/\.$/, ''));
 
 /**
  * Returns { citations, invalidCitations, supported, notInBook }.

@@ -47,12 +47,16 @@ const createBoolean = ({ graph, model, artisticTier = null, embed = null, onTrai
    const messages = [...history.slice(-HISTORY_TURNS), { role: 'user', content: question }];
    const text = (await model.generate({ system, messages })).trim();
    const check = checkCitations(text, beans);
+   // A refusal with no valid citation becomes the exact refusal, so any
+   // uncited words around it never reach the reader. "Not in the book"
+   // followed by cited context stays an answer.
+   const refusal = check.notInBook && check.citations.length === 0;
    answer = {
-    kind: check.notInBook ? 'not_in_book' : 'answer',
-    text,
+    kind: refusal ? 'not_in_book' : 'answer',
+    text: refusal ? NOT_IN_BOOK : text,
     citations: check.citations.map((id) => ({ bean_id: id, title: graph.get(id).title || null })),
-    invalidCitations: check.invalidCitations,
-    supported: check.supported,
+    invalidCitations: refusal ? [] : check.invalidCitations,
+    supported: refusal || check.supported,
    };
   }
 

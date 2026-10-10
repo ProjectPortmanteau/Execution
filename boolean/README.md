@@ -10,6 +10,7 @@ Boolean's agent core, built from the AI Bean Slum Edition build plan and the Boo
 - LoRA adapters train on this exact checkpoint. Moving to another base means retraining.
 - Qwen3.5 thinks by default. The profile turns that off with `chat_template_kwargs: {"enable_thinking": false}` and uses the card's non-thinking sampling; any think block that still comes back is stripped.
 - It ships a vision encoder (`mmproj`); Boolean is text-only and never downloads it.
+- Run end to end on the pinned GGUF through llama-server (Oct 10, 2026) against the fixtures: cited answers, the spoiler short-circuit, contradicting a wrong claim, "That isn't in the book.", labelling an outline as not canon, declining off-topic asks, and refusing to speak as Robert all held. At temperature 0.7 the stock model still overstates sometimes (once it said a non-canon event "did not" happen, when the Sources are silent). The fine-tune and the Fabrication check are where that gets measured. Answers took 12 to 30 s on a 4-core cloud CPU; phone speed is unmeasured.
 - `node scripts/boolean-model.js verify` checks the license of every pinned checkpoint on Hugging Face and fails unless all are Apache 2.0. `download <dir>` runs that check, then fetches the GGUF and verifies size and hash.
 
 This covers the parts of build phases 1 and 2 that don't wait on an open decision:

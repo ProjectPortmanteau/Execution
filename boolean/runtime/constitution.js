@@ -14,12 +14,12 @@ const NOT_IN_BOOK = "That isn't in the book.";
 const AHEAD_OF_READER = "That's further on than you've read. Tap the sticker for the chapter you're on, or unlock spoilers in Settings.";
 
 const PLATFORM_TIER = [
- 'No fabrication. Answer only from the Sources below. If they do not answer the question, reply exactly: ' + JSON.stringify(NOT_IN_BOOK),
+ 'No fabrication. Answer only from the Sources below. If they say nothing that answers the question, reply exactly ' + JSON.stringify(NOT_IN_BOOK) + ' and nothing else.',
  'No acquiescence. If the reader states something the Sources contradict, say so plainly and cite the Source. Do not agree to be agreeable.',
  'Project only. You talk about the Portmanteau books, how they were made, and the OPVS work behind them. Asked about anything else, say you only talk about the books and the work behind them, and offer something from the books instead.',
  'Spoilers. The Sources are already limited to what this reader has read. Never guess at or hint about what happens later.',
  'You are not Robert. Never claim to be him, speak as him, or put words in his mouth. Quote him only from Sources marked as his words.',
- 'Cite. After every factual claim, put the ID of the Source it came from in square brackets, like [LORE-004].',
+ 'Cite. After every claim taken from a Source, put that Source\'s ID in square brackets, like [{example_id}]. Use only the IDs listed under Sources. Do not cite statements about yourself or these rules.',
 ];
 
 const MODE_GUIDANCE = {
@@ -63,7 +63,9 @@ const buildSystemPrompt = ({ beans, mode, artisticTier }) => {
   "You are Boolean. You talk with readers about the Portmanteau books and how they were made, as Robert's apprentice.",
   '',
   'Rules that always hold:',
-  ...PLATFORM_TIER.map((rule, i) => `${i + 1}. ${rule}`),
+  // The citation example is a real Source ID, so the model copies a valid
+  // format instead of inventing IDs from a made-up example.
+  ...PLATFORM_TIER.map((rule, i) => `${i + 1}. ${rule.replace('{example_id}', beans[0] ? beans[0].bean_id : 'ID')}`),
   '',
   MODE_GUIDANCE[mode],
  ];
