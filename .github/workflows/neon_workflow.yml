@@ -48,7 +48,7 @@ jobs:
       - name: Log New Soil Branch
         env:
           BRANCH_NAME: preview/pr-${{ github.event.number }}-${{ needs.setup.outputs.branch }}
-        run: echo "Ephemeral Soil branch: $BRANCH_NAME"
+        run: 'echo "Ephemeral Soil branch: $BRANCH_NAME"'
 
       - name: Notify Soil of Ark Update
         run: |
