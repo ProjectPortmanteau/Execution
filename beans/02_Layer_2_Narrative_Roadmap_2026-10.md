@@ -80,29 +80,29 @@ trials, Halee, and the Tick. An early chapter includes a 2:47 PM timestamp.
 ### Act I
 
 ### [BEAN #CH-01-R2] Title: Chapter 1: The Relic
-- **Summary:** Chapter title and draft status are canon. "Profit Off Trash" is an alternate title from the February snapshot (unconfirmed, Feb snapshot). The snapshot's Dump Day, discarded Relic, Air Cushion, Trim and Neko salvage, and Distortion Guitar Solo details remain (unconfirmed, Feb snapshot).
+- **Summary:** Chapter title and draft status are canon. "Profit Off Trash" is an alternate title from the February snapshot. Its Dump Day, advanced aliens discarding the Relic in a sterile attic, the Air Cushion, Trim and Neko salvaging it, and the Distortion Guitar Solo remain (unconfirmed, Feb snapshot).
 - **Key Event:** The Relic enters Trim's story (unconfirmed, Feb snapshot).
-- **Lore:** Slum and Relic context (unconfirmed, Feb snapshot).
+- **Lore:** The February snapshot's Bean Economy, story as value, and Slum Taboo against jargon remain (unconfirmed, Feb snapshot).
 
 ### [BEAN #CH-02-R2] Title: Chapter 2: Boolean, The Prisoner Within
-- **Summary:** This is a prose-drafted chapter title. The February snapshot's Relic activation, Mind's Eye introduction, and Boolean's first contact remain (unconfirmed, Feb snapshot). Boolean is the simulation itself, not a prisoner inside it.
-- **Key Event:** Boolean's first words and the opening line are OPEN.
+- **Summary:** This is a prose-drafted chapter title. The February snapshot's Relic activation, overwhelming Mind's Eye, and Boolean's first contact remain (unconfirmed, Feb snapshot). Boolean is the simulation itself, not a prisoner inside it. The snapshot's warning about the Wash remains (unconfirmed, Feb snapshot).
+- **Key Event:** Boolean's first words and opening line are OPEN; the February "Don't Panic" opening is flagged as worn.
 - **Lore:** The Show and Boolean as an ADEB.
 
 ### [BEAN #CH-03-R2] Title: Chapter 3: The Heart of the Skyship
-- **Summary:** This is a prose-drafted chapter title. The February snapshot's skyship departure and Chuppa discovery and rescue remain (unconfirmed, Feb snapshot). The Ch3 draft describes the Captain, Goggles, Wick, and Roots.
-- **Key Event:** Skyship journey and Chuppa's emergence (unconfirmed, Feb snapshot).
-- **Lore:** Skyship crew as described in the Ch3 draft.
+- **Summary:** This is a prose-drafted chapter title. The February snapshot's bio-mechanical skyship departure and Chuppa's discovery in the hold remain (unconfirmed, Feb snapshot). The Ch3 draft describes the Captain, Goggles, Wick, and Roots.
+- **Key Event:** Trim uses an Heirloom Bean to free Chuppa (unconfirmed, Feb snapshot).
+- **Lore:** The February snapshot's Heirloom Bean value and first interaction between the Relic and Chuppa remain (unconfirmed, Feb snapshot).
 
 ### [BEAN #CH-04-R2] Title: Chapter 4: The Groove, Where the World Unravels
-- **Summary:** This is a prose-drafted chapter title. The February snapshot's first Groove, sensory overload, and dimensional decompression remain (unconfirmed, Feb snapshot).
+- **Summary:** This is a prose-drafted chapter title. The February snapshot's first Groove, sensory overload, dimensional decompression, and glimpse of a perfect dimension remain (unconfirmed, Feb snapshot).
 - **Key Event:** First Groove experience (unconfirmed, Feb snapshot).
-- **Lore:** Groove travel details (unconfirmed, Feb snapshot).
+- **Lore:** The February snapshot's Relic navigation tuner, frequency sickness, and comparative physics remain (unconfirmed, Feb snapshot).
 
 ### [BEAN #CH-05-R2] Title: Chapter 5: The Island of Lies (unconfirmed, Feb snapshot)
-- **Summary:** The Island of the Gods is part of Act I. The February snapshot's arrival, artificial perfection, and cultural encounter remain (unconfirmed, Feb snapshot).
+- **Summary:** The Island of the Gods is part of Act I. The February snapshot's arrival, artificial perfection, cultural encounter, and Halee's subtle influence remain (unconfirmed, Feb snapshot).
 - **Key Event:** Island of the Gods encounter (unconfirmed, Feb snapshot).
-- **Lore:** The February snapshot's "Blind People" culture remains (unconfirmed, Feb snapshot).
+- **Lore:** The February snapshot's "Blind People" culture, described as non-visual, remains (unconfirmed, Feb snapshot).
 
 ### [BEAN #CH-06-R2] Title: Chapter 6: Trials and Transformations (unconfirmed, Feb snapshot)
 - **Summary:** The Island of the Gods trials are part of Act I. The February snapshot's Sonic Labyrinth, Whisper Grove, and Guardian Logic Puzzle remain (unconfirmed, Feb snapshot).
@@ -110,9 +110,9 @@ trials, Halee, and the Tick. An early chapter includes a 2:47 PM timestamp.
 - **Lore:** Trial details (unconfirmed, Feb snapshot).
 
 ### [BEAN #CH-07-R2] Title: Chapter 7: The Price of Awakening (unconfirmed, Feb snapshot)
-- **Summary:** Act I includes Halee and the Tick. The February snapshot's Wash vision, capture, Talk, and escape details remain (unconfirmed, Feb snapshot).
+- **Summary:** Act I includes Halee and the Tick. The February snapshot's Knowledge Tree, Wash vision, capture by Inliners, psychological reprogramming in the Talk, and escape into the Academy remain (unconfirmed, Feb snapshot).
 - **Key Event:** Halee and the Tick (unconfirmed, Feb snapshot).
-- **Lore:** Tick and Talk details (unconfirmed, Feb snapshot).
+- **Lore:** The February snapshot's Tick as a glitch or scar and details of the Talk remain (unconfirmed, Feb snapshot).
 
 ### Act II
 
@@ -125,14 +125,14 @@ Wash, and the Ship Heist. The Heist connects Book 1's end to Book 2. Its chapter
 placement is OPEN.
 
 ### [BEAN #CH-08-R2] Title: Chapter 8: Induction (unconfirmed, Feb snapshot)
-- **Summary:** Conformity and environmental control. The February snapshot's orientation, Click Clique, MESS, and meeting Lexi and Beatrice remain (unconfirmed, Feb snapshot).
+- **Summary:** Conformity and environmental control. The February snapshot's orientation, Click Clique, MESS, Academy Hum, and meeting Lexi and Beatrice remain (unconfirmed, Feb snapshot).
 - **Key Event:** Conformity and environmental control.
 - **Lore:** Psychological experiments and environmental control.
 
 ### [BEAN #CH-09-R2] Title: Chapter 9: The Classical Condition (unconfirmed, Feb snapshot)
-- **Summary:** Classical and operant conditioning in the Skinner Box Groove. The February snapshot's additional Gods' escape-plan material remains (unconfirmed, Feb snapshot).
+- **Summary:** Classical and operant conditioning in the Skinner Box Groove. The February snapshot's Pavlovian-control framing remains (unconfirmed, Feb snapshot).
 - **Key Event:** Classical and operant conditioning.
-- **Lore:** Skinner Box Groove.
+- **Lore:** Skinner Box Groove; the February snapshot's Mind Setting remains (unconfirmed, Feb snapshot).
 
 ### [BEAN #CH-10-R2] Title: Chapter 10: The Cognitive Framework (unconfirmed, Feb snapshot)
 - **Summary:** The Gods' experiment focuses on cognitive biases.
@@ -140,28 +140,28 @@ placement is OPEN.
 - **Lore:** Psychological experiment (unconfirmed, Feb snapshot).
 
 ### [BEAN #CH-11-R2] Title: Chapter 11: The Language of Lies (unconfirmed, Feb snapshot)
-- **Summary:** The experiment focuses on language and propaganda. Lexi is the Siren and sings in many voices. The February snapshot's Academy Jargon, counter-frequency, and Neko temptation details remain (unconfirmed, Feb snapshot).
+- **Summary:** The experiment focuses on language and propaganda. Lexi is the Siren and sings in many voices. The February snapshot's Academy Jargon versus Slum Trash Talk, Lexi counter-frequency and outburst, and Neko temptation details remain (unconfirmed, Feb snapshot).
 - **Key Event:** Language and propaganda.
 - **Lore:** The February snapshot's Academy Jargon remains (unconfirmed, Feb snapshot).
 
 ### [BEAN #CH-12-R2] Title: Chapter 12: The Freudian Time Slip (unconfirmed, Feb snapshot)
-- **Summary:** The experiment focuses on repressed memory. The February snapshot's memory of Trim's father or origin remains (unconfirmed, Feb snapshot).
+- **Summary:** The experiment focuses on repressed memory. The February snapshot's Groove manifesting repressed fears and Trim's memory of his father or origin remain (unconfirmed, Feb snapshot).
 - **Key Event:** Repressed memory.
-- **Lore:** Soundgarden's "The Day I Tried to Live" is placed here.
+- **Lore:** The February snapshot's Legacy Networks remain (unconfirmed, Feb snapshot). Soundgarden's "The Day I Tried to Live" is placed here.
 
 ### [BEAN #CH-13-R2] Title: Chapter 13: The Behavioral Sink (unconfirmed, Feb snapshot)
-- **Summary:** The experiment is the Behavioral Sink (Calhoun). The February snapshot's simulation of a collapsing "perfect" society remains (unconfirmed, Feb snapshot).
+- **Summary:** The experiment is the Behavioral Sink (Calhoun). The February snapshot's simulation of a collapsing "perfect" society and critique of static perfection remain (unconfirmed, Feb snapshot).
 - **Key Event:** Behavioral Sink experiment.
 - **Lore:** Calhoun.
 
 ### [BEAN #CH-14-R2] Title: Chapter 14: The Talk, Part 2 (unconfirmed, Feb snapshot)
-- **Summary:** The Talk Part 2 is the culminating assault. The February snapshot's psychoacoustics, MESS, and Boolean intervention details remain (unconfirmed, Feb snapshot).
+- **Summary:** The Talk Part 2 is the culminating assault. The February snapshot's advanced psychoacoustics, MESS, and Boolean intervention details remain (unconfirmed, Feb snapshot).
 - **Key Event:** The Talk Part 2.
-- **Lore:** The February snapshot's Tick resistance detail remains (unconfirmed, Feb snapshot).
+- **Lore:** The February snapshot's Tick as a counter-rhythm remains (unconfirmed, Feb snapshot).
 
 ### [BEAN #CH-15-R2] Title: Chapter 15: Squashing Bugs
-- **Summary:** Trim witnesses the Wash. The February snapshot's viewing-platform and observer details remain (unconfirmed, Feb snapshot).
-- **Key Event:** Witnessing the Wash.
+- **Summary:** Trim witnesses the Wash. The February snapshot's viewing platform, observers watching, and Boolean's Mucus Music turning to screaming remain (unconfirmed, Feb snapshot).
+- **Key Event:** Witnessing the Wash and deciding to escape; the February snapshot's vow to burn it down remains (unconfirmed, Feb snapshot).
 - **Lore:** The Wash.
 
 ### Act III
@@ -175,6 +175,9 @@ The Spread and the Grunge bring nihilism that sickens the utopia and infiltrates
 Band's dreams. Boo is sick. The Band works through trust by sharing dreams, which lets
 them protect Trim from dream psychosis. Neko's unshared dream is that he is the Lead,
 not support.
+
+The February snapshot's description of the Spread as isolation and fractured shared
+reality, and its framing of connection as a bridge, remain (unconfirmed, Feb snapshot).
 
 Trim dreamwalks in the sick utopia's subconscious, guided by Flare, a moth-featured
 Dimensional Sherpa, through dream interpretation and psychoanalysis. The clue is to go

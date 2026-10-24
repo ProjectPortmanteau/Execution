@@ -49,5 +49,7 @@
 - Marine's Vow framing.
 - Calibration versus fine-tuning language.
 - February Ch10's Relic revealing "raw data" and letting Trim "see the code" conflicts with the canon Mind's Eye as a simulacra interpreter without an underlying referent. (found by agent)
+- February Ch6's claim that Chuppa demonstrates Fray-connected abilities is held; the current canon defines his emergence through biological substrate, frontal cortex evolution, and executive function growth. (found by agent)
+- February Ch9's Gods' escape plan to sacrifice the simulation is not established by canon, which says the simulation began as the Gods' attempt to escape their dimension. (found by agent)
 - February Ch23's 47Hz Keystone frequency is not in canon, which defines the Keystone as an internal state and a chord. (found by agent)
 - February Ch20's claim that the Fray is watched from "Outside" is not supported by canon. (found by agent)
