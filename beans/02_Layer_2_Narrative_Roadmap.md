@@ -3,15 +3,19 @@ id: layer-2
 title: "Narrative Roadmap"
 layer: 2
 bean_count: 25
-status: verified
+status: archived
 last_updated: 2026-02-14
+superseded_by: beans/02_Layer_2_Narrative_Roadmap_2026-10.md
+snapshot_of: 2026-02-14
 ---
+
+> **SNAPSHOT, Feb 14 2026.** Archived. Kept as part of the public build record. Current roadmap: [beans/02_Layer_2_Narrative_Roadmap_2026-10.md](02_Layer_2_Narrative_Roadmap_2026-10.md). What changed: [beans/02_Layer_2_CHANGELOG.md](02_Layer_2_CHANGELOG.md).
 
 # 02_Layer_2_Narrative_Roadmap.md
 **Project:** Portmanteau: Awakened (Book 1)
 **Layer:** 2 (The Narrative Roadmap)
 **Function:** Structural Spine / Chapter Outlines
-**Status:** Canonical / Ready for Execution (Layer 3)
+**Status:** ~~Canonical / Ready for Execution (Layer 3)~~ Archived snapshot.
 
 ---
 

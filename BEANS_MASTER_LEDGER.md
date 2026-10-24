@@ -1,13 +1,13 @@
 # BEANS MASTER LEDGER
 
-Last updated: 2026-02-10 (by @ProjectPortmanteau via Copilot)
+Last updated: 2026-10-24 (by @ProjectPortmanteau via Copilot)
 
 This ledger indexes the per-layer Bean files and key project artifacts in this repository.
 
 ## Overview
 - Purpose: Human- and machine-readable index for Beans (Layers 0–6) and related project files.
-- Status: Updated. Layers 0–6 committed. All 85 Beans reconciled. Ark consolidated with recursive CTEs.
-- Total Beans: **85** across 7 layers (0–6).
+- Status: Updated. Layers 0–6 committed. Active and archived Beans are reconciled. Ark consolidated with recursive CTEs.
+- Total Beans: **75 active, 25 archived** across 7 layers (0–6).
 
 ---
 
@@ -25,11 +25,11 @@ This ledger indexes the per-layer Bean files and key project artifacts in this r
  - Beans: BLUE-001, ACT-002, ACT-003, ACT-004, THEME-005, THEME-006, THEME-007, CHARACTER-ARC-022, CHARACTER-ARC-023
  - Status: committed
 
-- Layer 2 Narrative Roadmap (25 Beans)
- - File: beans/02_Layer_2_Narrative_Roadmap.md
- - URL: https://github.com/ProjectPortmanteau/Execution/blob/main/beans/02_Layer_2_Narrative_Roadmap.md
- - Beans: CH-01 through CH-25
- - Status: committed
+- Layer 2 Narrative Roadmap (15 active, 25 archived Beans)
+ - Archived snapshot: beans/02_Layer_2_Narrative_Roadmap.md
+ - Status: archived; Beans: CH-01 through CH-25
+ - Current draft: beans/02_Layer_2_Narrative_Roadmap_2026-10.md
+ - Status: draft; Beans: CH-01-R2 through CH-15-R2
 
 - Layer 3 Execution & Scene Construction (8 Beans)
  - File: beans/03_Layer_3_Execution.md
