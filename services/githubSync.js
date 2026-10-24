@@ -185,14 +185,15 @@ const syncArk = async (options = {}) => {
  */
 const persistBeanToSoil = async (dbClient, bean) => {
  const query = `
- INSERT INTO beans (user_id, title, content, type, layer, bean_id, source_path, last_synced_at)
- VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
+ INSERT INTO beans (user_id, title, content, type, layer, bean_id, source_path, status, last_synced_at)
+ VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
  ON CONFLICT (source_path) WHERE source_path IS NOT NULL
  DO UPDATE SET
  title = EXCLUDED.title,
  content = EXCLUDED.content,
  layer = EXCLUDED.layer,
  bean_id = EXCLUDED.bean_id,
+ status = EXCLUDED.status,
  last_synced_at = NOW()
  RETURNING id, title, source_path
  `;
@@ -202,8 +203,9 @@ const persistBeanToSoil = async (dbClient, bean) => {
  const content = bean.content || '';
  const type = 'ARK'; // Beans synced from GitHub Ark
  const beanId = bean.bean_id || null;
+ const status = ['archived', 'draft'].includes(bean.status) ? bean.status : 'active';
 
- const values = [SYSTEM_USER_ID, title, content, type, layer, beanId, bean.path];
+ const values = [SYSTEM_USER_ID, title, content, type, layer, beanId, bean.path, status];
  const res = await dbClient.query(query, values);
  return res.rows[0];
 };
@@ -246,6 +248,7 @@ const syncArkToSoil = async (options = {}) => {
  content: section.content,
  layer: fileBean.layer,
  bean_id: section.id,
+ status: fileBean.status,
  });
  persistResults.persisted++;
  persistResults.details.push({
