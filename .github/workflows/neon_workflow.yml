@@ -44,9 +44,11 @@ jobs:
           api_key: ${{ secrets.NEON_API_KEY }}
           expires_at: ${{ env.EXPIRES_AT }}
 
-      # PFE SIGNAL: This is where we run migrations to "seed" the new branch
-      - name: Log New Soil URL
-        run: echo "Ephemeral Soil created at ${{ steps.create_neon_branch.outputs.db_url_with_pooler }}"
+      # This step logs the branch name only.
+      - name: Log New Soil Branch
+        env:
+          BRANCH_NAME: preview/pr-${{ github.event.number }}-${{ needs.setup.outputs.branch }}
+        run: echo "Ephemeral Soil branch: $BRANCH_NAME"
 
       - name: Notify Soil of Ark Update
         run: |

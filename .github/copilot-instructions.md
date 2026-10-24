@@ -12,8 +12,9 @@ The repository serves as a version-controlled knowledge base using a structured 
 
 - **Primary Format**: Markdown documentation with YAML frontmatter
 - **Version Control**: Git/GitHub
-- **Backend**: Node.js/Express
-- **Database**: PostgreSQL (Neon), with Drizzle ORM
+- **Backend**: Node.js (CommonJS) with Express
+- **Database**: PostgreSQL (Neon) via raw SQL with the `pg` driver; no ORM
+- **Frontend**: Static HTML in `public/`. `public/dashboard.html` loads `public/App.tsx` directly without a build step, so the dashboard does not currently run.
 - **Auth**: GitHub OAuth via NeonAuth
 - **CI/CD**: GitHub Actions (Neon branch-per-PR workflow)
 - **Structure**: Layer-based modular system ("Beans") 85 Beans across 7 layers

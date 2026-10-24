@@ -8,28 +8,27 @@ Contact: robertmiller@illportstudios.com
 
 ## Security Architecture
 
-This project handles sensitive data through several mechanisms:
+This repository contains several security-related integration points. The protections below describe current code, not guarantees about external deployment configuration.
 
 ### API Keys (BYOK Model)
-- User-provided LLM API keys are stored in session memory only (never persisted to database or disk)
-- Keys are isolated per session no cross-session access
-- Keys are transmitted over HTTPS only
+- BYOK key handling and session storage are not implemented in this repository. Session-only storage, session isolation, and HTTPS-only transmission are not established by the current application code.
+- The repository therefore cannot guarantee that user-provided LLM keys are never stored or logged.
 
 ### GitHub Webhooks
-- All webhook payloads are verified via HMAC-SHA256 signature validation
-- The webhook secret is stored as a GitHub repository secret, never in code
+- When `GITHUB_WEBHOOK_SECRET` is set, the GitHub webhook route verifies the payload with HMAC-SHA256. If it is unset, verification is disabled.
+- The application reads the secret from an environment variable. This repository does not establish where that environment variable is stored.
 
 ### Database
-- PostgreSQL connections use SSL with certificate verification
-- No user credentials are stored in the application database
-- Authentication is handled via NeonAuth (delegated to GitHub OAuth)
+- The application database client does not configure SSL or certificate verification. SSL settings differ in other repository code, so this repository does not establish consistent certificate verification.
+- The schema includes user email addresses and synced profile fields. It does not define password credential fields; this does not establish what may be stored in an external deployment.
+- NeonAuth is intended to handle GitHub OAuth externally. This repository contains a callback stub, not the token exchange or session-creation implementation.
 
 ### Rate Limiting
-- All mutation endpoints are rate-limited (sliding window)
-- Webhook endpoints have burst-friendly limits to accommodate GitHub's delivery patterns
+- Rate limiting is not yet implemented (tracked as a TODO in `index.js`).
+- Webhook endpoints do not have a rate limit configured in this repository.
 
 ## What This Repository Does NOT Do
-- Store or log user API keys
-- Process payments or financial data
-- Store personally identifiable information beyond GitHub OAuth profile data
-- Execute arbitrary user-provided code
+- BYOK key handling is not implemented, so the application provides no guarantee about key storage or logging.
+- The current application code does not implement payment processing.
+- The feedback endpoint accepts names, email addresses, and messages and stores them in process memory. The schema also defines a feedback table with those fields. The deployed persistence behavior depends on its configuration.
+- The current application code does not provide a feature to execute arbitrary user-submitted code.
