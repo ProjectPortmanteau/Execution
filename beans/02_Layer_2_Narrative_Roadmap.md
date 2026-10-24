@@ -9,7 +9,7 @@ superseded_by: beans/02_Layer_2_Narrative_Roadmap_2026-10.md
 snapshot_of: 2026-02-14
 ---
 
-> **SNAPSHOT, Feb 14 2026.** Archived. Kept as part of the public build record. Current roadmap: [beans/02_Layer_2_Narrative_Roadmap_2026-10.md](02_Layer_2_Narrative_Roadmap_2026-10.md). What changed: [beans/02_Layer_2_CHANGELOG.md](02_Layer_2_CHANGELOG.md).
+> **SNAPSHOT, Feb 14 2026.** Archived. Kept as part of the public build record. Current roadmap: [beans/02_Layer_2_Narrative_Roadmap_2026-10.md](02_Layer_2_Narrative_Roadmap_2026-10.md). What changed: [docs/narrative/02_Layer_2_CHANGELOG.md](../docs/narrative/02_Layer_2_CHANGELOG.md).
 
 # 02_Layer_2_Narrative_Roadmap.md
 **Project:** Portmanteau: Awakened (Book 1)

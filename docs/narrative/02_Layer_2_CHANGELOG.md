@@ -11,6 +11,7 @@
 - Feb: Chapter 1 was titled "Profit Off Trash". Current: The prose-drafted title is "The Relic"; the February title remains an unconfirmed alternate.
 - Feb: Chapter 2 titled Boolean as "The Prisoner Within" and supplied "Don't Panic" as his first line. Current: The canon keeps the prose-drafted title but defines Boolean as the simulation itself; first words and opening line are OPEN.
 - Feb: Chapter 3 was "The Heartbeat of the Skyship". Current: The prose-drafted title is "The Heart of the Skyship"; the Ch3 draft also identifies the skyship crew.
+- Feb: Beatrice appears by name only. Current: She is a bass player whose space-fold reads pre-existing geometric folds, with a defection arc catalyzed by Lexi's defiance.
 - Feb: Mind's Eye and the Relic could reveal raw code and data. Current: The Mind's Eye is a perceptual HUD and simulacra interpreter; language has no underlying referent.
 - Feb: Act II centered on ACL Passkey fragments and a sequence of lessons. Current: Chapters 8 to 15 are curated psychological experiments, then the ratings reveal. Ship Heist is in Act II, with chapter placement OPEN.
 - Feb: Chuppa had Fray-connected abilities. Current: His arc is biological emergence, Jekyll and Hyde, with frontal cortex and executive function growth.

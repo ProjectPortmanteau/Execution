@@ -49,6 +49,8 @@ const LAYER_MAP = {
  'ark': 6, 'consolidated': 6, 'layer 6': 6, 'layer6': 6,
 };
 
+const BEAN_ID_PATTERN = '[A-Z]+(?:-[A-Z0-9]+)+';
+
 /**
  * Resolve a layer value to a valid V6.1 layer number (0–6).
  * Accepts numbers, numeric strings, or legacy layer name strings.
@@ -79,7 +81,7 @@ const normalizeLayer = (raw) => {
  */
 const extractBeanIds = (text) => {
  const beans = [];
- const pattern = /\[BEAN\s+#([A-Z]+-\d+)\]\s*(?:Title:\s*)?(.+)/gi;
+ const pattern = new RegExp(`\\[BEAN\\s+#(${BEAN_ID_PATTERN})\\]\\s*(?:Title:\\s*)?(.+)`, 'gi');
  let match;
  while ((match = pattern.exec(text)) !== null) {
  beans.push({ id: match[1].toUpperCase(), title: match[2].trim() });
@@ -98,7 +100,7 @@ const extractBeanIds = (text) => {
  * @returns {{ id: string, title: string, content: string }[]}
  */
 const splitBeansFromFile = (text) => {
- const beanPattern = /\[BEAN\s+#([A-Z]+-\d+)\]\s*(?:Title:\s*)?(.+)/gi;
+ const beanPattern = new RegExp(`\\[BEAN\\s+#(${BEAN_ID_PATTERN})\\]\\s*(?:Title:\\s*)?(.+)`, 'gi');
  const matches = [];
  let match;
 
