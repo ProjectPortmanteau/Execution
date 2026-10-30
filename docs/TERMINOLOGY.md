@@ -244,7 +244,7 @@ Source for the first four entries: the essay "Consciousness is the Map" (v3, Apr
 - **Status:** Extension.
 
 ### Structured Absence
-- **Definition:** Missing information carries structure. Mode 2 (Organizing): the absence organizes into a detectable form that the model holding the gap cannot perceive. Mode 1 (Fraying) has no definition on record.
+- **Definition:** Information missing from a system whose absence has detectable geometric or statistical structure: it has an address, a shape, and a signature. Two modes at the attention boundary. Mode 1, Fraying: coherence degrading at the edges, the early signal rather than total loss. Mode 2, Organizing: the missing information structures into a detectable form that the model holding the gap cannot perceive. The theoretical ground of UDAM.
 - **Prior art:** Donald Rubin, missing-not-at-random data (1976); Abraham Wald's analysis of returning bombers; Conan Doyle's dog that did nothing in the night-time.
 - **Divergence:** Applies structured missingness to what a language model cannot see in its own context.
 - **Status:** Extension.
@@ -305,10 +305,10 @@ Source for the first four entries: the essay "Consciousness is the Map" (v3, Apr
 - **Status:** Renamed. Cite Licklider.
 
 ### Dyadic Coherence Threshold (DCT)
-- **Definition:** A naturalistic measure of human-AI cognitive bandwidth.
-- **Prior art:** Herbert Clark and Susan Brennan, "Grounding in Communication" (1991); interpersonal neural synchrony research.
-- **Divergence:** Proposes a threshold for a human-AI pair.
-- **Status:** Aspiration until the measurement is specified.
+- **Definition:** The measurable gap between when a human detects coherence loss and when the AI's output degrades, with the human-AI dyad as the unit of analysis. Also described as a naturalistic measure of human-AI cognitive bandwidth.
+- **Prior art:** Herbert Clark and Susan Brennan, "Grounding in Communication" (1991); takeover-time research on human supervision of automation; interpersonal neural synchrony research.
+- **Divergence:** Makes the dyad, not the model, the unit of measurement, and uses the human's earlier detection as the reference.
+- **Status:** Extension. The measurement protocol is not yet published.
 
 ### RMM collaboration method
 - **Definition:** Four tenets. Give the AI a Why. Principled Scholar, not sycophant. Ethics equals Optimization. Cognitive Symbiote.
@@ -323,16 +323,21 @@ Source for the first four entries: the essay "Consciousness is the Map" (v3, Apr
 - **Status:** Renamed (early).
 
 ### CWAP (Context Window Artifact Protocol)
-- **Definition:** Each conversation is an artifact-producing unit: structured compression at close, producing a seed rather than a summary, and forward-carry of intellectual state into the next session.
+- **Definition:** Stage 1 of UDAM. Each conversation is an artifact-producing unit: structured compression at close, producing a seed rather than a summary, and forward-carry of intellectual state into the next session.
 - **Prior art:** Niklas Luhmann's Zettelkasten; the military after-action review; MemGPT (Charles Packer et al., 2023) for LLM memory management.
 - **Divergence:** The session is the unit, compression at close is mandatory and structured, and the seed carries state to regenerate from rather than a recap.
 - **Status:** Extension.
 
 ### UDAM (User-Defined Attention-to-Memory)
-- **Definition:** The user, not the model, decides what is promoted from attention into durable memory.
-- **Prior art:** Nelson Cowan's attention-as-gate models of working memory; user-curated memory in note tools and assistant products.
-- **Divergence:** Promotion authority sits with the user by rule.
-- **Status:** Extension. Definition inferred from the expansion; confirm.
+- **Definition:** A three-stage framework for building persistent memory from human detection of AI incoherence. Stage 1, [CWAP](#cwap-context-window-artifact-protocol): manual compression artifacts that re-seed the next session. Stage 2, [URFD](#urfd-user-reinforcement-of-fraying-detection): the human's detection of coherence failure becomes a labeled training instance. Stage 3: an automated persistent memory system trained on URFD data that detects fraying before the human does. Human trigger frequency is the quality metric: as the system improves, users trigger less. Each stage is independently useful. Source: UDAM working paper, 2026-04-17.
+- **Prior art:** Learning from human interventions, where a human takeover becomes a labeled correction (HG-DAgger, Kelly et al., 2019); disengagement rate as the quality metric for autonomous vehicles; active learning. On the memory side, MemGPT and retrieval augmentation, which the paper positions against.
+- **Divergence:** Carries intervention learning into LLM context coherence: a one-word trigger at the attention boundary, a structured-absence recovery artifact per event, and the human's earlier detection treated as ground truth.
+- **Status:** Extension.
+
+### URFD (User Reinforcement of Fraying Detection)
+- **Definition:** Stage 2 of UDAM. When a user detects incoherence, they type the trigger word "Fraying." The system identifies the structured absence and generates a CWAP-format recovery artifact. The conversation state at the trigger, the identified absence, and the recovery are logged as one labeled training instance. The human who notices fraying becomes the teacher.
+- **Prior art:** See UDAM.
+- **Status:** Extension.
 
 ---
 
@@ -502,8 +507,8 @@ Two senses are in use; see [Open terminology decisions](#9-open-terminology-deci
 - **Prior art:** For Story Genesis, the series bible and the continuity editor.
 - **Status:** Product term.
 
-### PEP Talk
-- **Definition:** Candidate detection: flags a possible principle once five or more implicit decisions are logged, and surfaces the Observation/Experience Gap to the user.
+### PEP Talk (Principle Emergence Protocol)
+- **Definition:** Makes implicit principles explicit through Trail observation: flags a candidate principle once five or more implicit decisions are logged, and surfaces the Observation/Experience Gap to the user. Paired with the MDS.
 - **Prior art:** Revealed preference; inverse reinforcement learning (Andrew Ng and Stuart Russell, 2000).
 - **Divergence:** Applied to a creator's own creative decisions.
 - **Status:** Extension.
@@ -550,7 +555,7 @@ Two senses are in use; see [Open terminology decisions](#9-open-terminology-deci
 - **Status:** Extension.
 
 ### RISS (Resonance and Integrity Scoring System), V6.1 "Immune Connectome"
-- **Definition:** Reputation for the Sentient Economy. Resonance rises when others use or build on your ideas; Integrity rises when you collaborate fairly and credit sources. 64 configurable parameters and nine core mechanics: Triple-Signal Novelty Detection, Edge Quality Typing, Influence Decay, Dynamic Ceiling / Fountain Effect, White Knight Protocol, Juries of Integrity, Versioned Lineage Crystallization, the Roux Condition, Distinguished Service Badges.
+- **Definition:** Reputation for the Sentient Economy. Also expanded as Reputation Immune Scoring System; see open decisions. Resonance rises when others use or build on your ideas; Integrity rises when you collaborate fairly and credit sources. 64 configurable parameters and nine core mechanics: Triple-Signal Novelty Detection, Edge Quality Typing, Influence Decay, Dynamic Ceiling / Fountain Effect, White Knight Protocol, Juries of Integrity, Versioned Lineage Crystallization, the Roux Condition, Distinguished Service Badges.
 - **Prior art:** Artificial immune systems (Stephanie Forrest et al., 1994); time-decayed reputation and ranking; Ostrom's design principles for commons, including graduated sanctions; Slashdot meta-moderation.
 - **Divergence:** Integrity is scored separately from popularity, and influence decay serves as the graduated sanction.
 - **Status:** Extension. Several mechanics have no definition here; see [Named but undefined](#10-named-but-undefined).
@@ -598,6 +603,7 @@ These need a ruling from RMM. Until then, use the term with the qualifier shown.
 11. **Roux Condition:** platform invariant or crystallization gate.
 12. **Collapse point:** physical mechanism or metaphor.
 13. **BYOK vs. downloadable Spirits.** The README presents BYOK as the AI strategy; the current Spirit direction ships adapters that run on the user's hardware. State whether BYOK remains.
+14. **RISS has two expansions:** Resonance and Integrity Scoring System (LORE-001) and Reputation Immune Scoring System (June 2026 glossary).
 
 ---
 
@@ -605,7 +611,6 @@ These need a ruling from RMM. Until then, use the term with the qualifier shown.
 
 Recorded as coinages with no working definition in this repository or in the record used for this file:
 
-- Structured Absence, Mode 1 (Fraying)
 - Principled Scholar
 - Ethics equals Optimization
 - SEST
