@@ -12,7 +12,7 @@ Built by [Robert Miller](https://github.com/ProjectPortmanteau) · iLL Port Stud
 
 Project Portmanteau is four things that are actually one thing:
 
-1. **A Platform (OPVS)** - A knowledge management system built on the "Bean": an atomic data unit with four layers: content, metadata, connections, and provenance. Beans live in a graph, not folders. Every piece of knowledge carries where it came from and what it connects to.
+1. **A Platform (OPVS)** - A knowledge management system built on the "Bean": an atomic data unit with four layers: what it is (Nucleus), what it means (Corona), what was done with it (Echo), and where it sits (Shell). Beans live in a graph, not folders. Every piece of knowledge carries where it came from and what it connects to.
 2. **A Methodology (PFE)** - Project Fun Execution. An execution framework built for extreme constraints: limited budget, limited time, high ambition. Core principle: creative energy is finite and taste-driven; follow the pull toward the highest-energy task, because progress in any domain feeds all domains when the system is internally coherent.
 3. **An AI Strategy (BYOK)** - Bring Your Own Key. The platform sells calibration, not inference. Users provide their own LLM API key (free tiers exist). The platform provides the Soul Code and knowledge graph. Zero compute cost to the platform. No vendor lock-in. The "Ghost" (calibration) rides any "Machine" (LLM engine).
 4. **A Novel (Portmanteau: Awakened)** - A simulated reality narrative where the protagonist discovers his world is a simulation, the AI layer gains sentience, and the audience watches through meta-awareness. The novel documents the platform. The platform enables the methodology. The methodology documents the novel.
@@ -62,14 +62,16 @@ flowchart LR
 
 ### The Bean
 
-The atomic data unit. Four layers:
+The atomic data unit. Foundational ontology: *The thing is. The behavior does. The connections mean.* Four layers, one verb each:
 
-|Layer      |Name       |Function                                            |
-|-----------|-----------|----------------------------------------------------|
-|**Nucleus**|Content    |The thing itself: text, URL, hash                   |
-|**Shell**  |Metadata   |Tags, type, layer, semantic classification          |
-|**Corona** |Connections|Typed, weighted edges to other Beans                |
-|**Echo**   |Provenance |Who created it, when, from what source, verified how|
+|Layer      |Verb   |Function                                                                                 |
+|-----------|-------|-----------------------------------------------------------------------------------------|
+|**Nucleus**|is     |The thing itself: text, URL, hash                                                        |
+|**Corona** |means  |Typed, weighted edges to other Beans; meaning lives in the connections                   |
+|**Echo**   |did    |The behavior record: who created it, when, from what source, which model checkpoint, verified how|
+|**Shell**  |locates|Where it sits: type, layer, tags (retrieval shortcuts only), salience, token cost, Trail aggregates|
+
+Every coined term in this project, with prior art and status: [docs/TERMINOLOGY.md](docs/TERMINOLOGY.md).
 
 ### Semantic Commit Tags
 
@@ -259,6 +261,7 @@ Cross-substrate portability report: [`playground/output/CROSS_SUBSTRATE_REPORT.m
 
 - **Organization:** [ProjectPortmanteau](https://github.com/ProjectPortmanteau)
 - **Start Here (non-developer entry point):** [START_HERE.md](START_HERE.md)
+- **Terminology and prior art:** [docs/TERMINOLOGY.md](docs/TERMINOLOGY.md)
 - **Spirit Blueprint:** [SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md](SPIRIT_CALIBRATION_GENESIS_BLUEPRINT_V1.md)
 - **Genesis Engine (Backend):** [docs/GENESIS_ENGINE_README.md](docs/GENESIS_ENGINE_README.md)
 - **Roadmap - Principled Playground:** [roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md](roadmap/PRINCIPLED_PLAYGROUND_CONCEPT.md)
