@@ -30,10 +30,12 @@ Think of it as **ERP for storytelling**. The same way Enterprise Resource Planni
 
 The atomic unit of OPVS is called a **Bean**. Every idea, asset, and decision in the system is a Bean. Each Bean has four layers:
 
-- **Nucleus** - the raw content (a scene, a character note, a concept, a code commit)
-- **Shell** - standardized metadata (type, state, layer, priority)
-- **Corona** - relational edges (how this Bean connects to every other Bean in the graph)
-- **Echo** - immutable provenance (who created it, when, from what source, verified how)
+- **Nucleus** (is) - the thing itself (a scene, a character note, a concept, a code commit)
+- **Corona** (means) - relational edges; the Bean's meaning lives in how it connects to every other Bean
+- **Echo** (did) - the behavior record (who created it, when, from what source, which model, verified how)
+- **Shell** (locates) - where it sits (type, layer, tags, salience, cost)
+
+The short version: *the thing is, the behavior does, the connections mean.* Every term used in this project is defined, with its closest prior art, in [docs/TERMINOLOGY.md](docs/TERMINOLOGY.md).
 
 There are currently **85 Beans** in the live knowledge graph, organized across 7 layers (Philosophy, Blueprint, Narrative, Execution, Lore, Process, Archive).
 
