@@ -3,7 +3,8 @@
 ## 2026-10 Terminology
 - `docs/TERMINOLOGY.md` published: canonical definitions for every coined term, each mapped to its closest prior art with a divergence note and status (Original, Extension, Renamed, Aspiration, Aphorism, Product term, Borrowed)
 - README and START_HERE Bean descriptions updated to the current four-verb canon: Nucleus is, Corona means, Echo did, Shell locates
-- Fourteen open terminology decisions recorded for RMM's ruling
+- Sixteen open terminology decisions recorded for RMM's ruling
+- Source check: dated papers, quotations, and attributed findings verified against sources; each entry carries a Check line
 
 ## 2026-02 Landing Page Redesign & Repository Streamlining
 - Landing page redesigned: hero section, four-pillar layout, status table, principles grid, resource links, feedback form
